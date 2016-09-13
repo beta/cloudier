@@ -12,6 +12,13 @@ public class PreferenceUtil {
 
     private final static String PREF_KEY = "net.kyouko.cloudier.pref";
 
+    public final static String PREF_ACCOUNT_ACCESS_TOKEN = "account.access_token";
+    public final static String PREF_ACCOUNT_EXPIRES_IN = "account.expires_in";
+    public final static String PREF_ACCOUNT_REFRESH_TOKEN = "account.refresh_token";
+    public final static String PREF_ACCOUNT_USERNAME = "account.username";
+
+    public final static String PREF_HAS_AUTHORIZED = "has_authorized";
+
 
     private SharedPreferences preferences;
 

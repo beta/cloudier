@@ -7,4 +7,6 @@
 
     <string name="title.action.refresh">Refresh</string>
 
+    <string name="text.info.auth_success">Authorization succeeded</string>
+
 </resources>

@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import net.kyouko.cloudier.R;
+import net.kyouko.cloudier.util.AuthUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,6 +27,8 @@ public class HomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         initView();
+
+        checkAuthorization();
 
         swipeRefreshLayout.post(new Runnable() {
             @Override
@@ -56,6 +59,15 @@ public class HomeActivity extends AppCompatActivity {
                 fetchHomeTimeline();
             }
         });
+    }
+
+
+    private void checkAuthorization() {
+        if (AuthUtil.hasAuthorized(this)) {
+            // TODO: load account
+        } else {
+            AuthUtil.startAuth(this);
+        }
     }
 
 
