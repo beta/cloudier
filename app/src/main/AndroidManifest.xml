@@ -18,7 +18,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".ui.activity.AuthActivity"
+            android:label="@string/title.activity.auth">
+        </activity>
     </application>
 
 </manifest>
