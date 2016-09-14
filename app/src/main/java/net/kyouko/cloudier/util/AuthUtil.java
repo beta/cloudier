@@ -48,6 +48,7 @@ public class AuthUtil {
         account.expiresIn = pref.getString(PreferenceUtil.PREF_ACCOUNT_EXPIRES_IN);
         account.refreshToken = pref.getString(PreferenceUtil.PREF_ACCOUNT_REFRESH_TOKEN);
         account.username = pref.getString(PreferenceUtil.PREF_ACCOUNT_USERNAME);
+        account.openId = pref.getString(PreferenceUtil.PREF_ACCOUNT_OPEN_ID);
 
         return account;
     }
@@ -66,6 +67,7 @@ public class AuthUtil {
                 .set(PreferenceUtil.PREF_ACCOUNT_EXPIRES_IN, String.valueOf(account.expiresIn))
                 .set(PreferenceUtil.PREF_ACCOUNT_REFRESH_TOKEN, account.refreshToken)
                 .set(PreferenceUtil.PREF_ACCOUNT_USERNAME, account.username)
+                .set(PreferenceUtil.PREF_ACCOUNT_OPEN_ID, account.openId)
                 .set(PreferenceUtil.PREF_HAS_AUTHORIZED, true)
                 .save();
     }
@@ -93,6 +95,7 @@ public class AuthUtil {
         account.expiresIn = params.get("expires_in");
         account.refreshToken = params.get("refresh_token");
         account.username = params.get("name");
+        account.openId = params.get("openid");
 
         return account;
     }

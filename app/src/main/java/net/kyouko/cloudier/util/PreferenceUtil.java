@@ -12,12 +12,19 @@ public class PreferenceUtil {
 
     private final static String PREF_KEY = "net.kyouko.cloudier.pref";
 
+    public final static String PREF_APP_HAS_INITIAL_SETUP = "app.has_initial_setup";
+
     public final static String PREF_ACCOUNT_ACCESS_TOKEN = "account.access_token";
     public final static String PREF_ACCOUNT_EXPIRES_IN = "account.expires_in";
     public final static String PREF_ACCOUNT_REFRESH_TOKEN = "account.refresh_token";
     public final static String PREF_ACCOUNT_USERNAME = "account.username";
+    public final static String PREF_ACCOUNT_OPEN_ID = "account.open_id";
 
     public final static String PREF_HAS_AUTHORIZED = "has_authorized";
+
+    public final static String PREF_IMAGE_QUALITY_OVER_CELLULAR = "image.quality_over_cellular";
+    public final static String PREF_IMAGE_QUALITY_OVER_WIFI = "image.quality_over_wifi";
+    public final static String PREF_IMAGE_SOURCE = "image.source";
 
 
     private SharedPreferences preferences;
@@ -111,6 +118,16 @@ public class PreferenceUtil {
      */
     public String getString(String key, String defaultValue) {
         return preferences.getString(key, defaultValue);
+    }
+
+
+    /**
+     * Returns a {@link PreferenceEditor} for editing preferences.
+     *
+     * @return a {@link PreferenceEditor} for editing preferences.
+     */
+    public PreferenceEditor edit() {
+        return new PreferenceEditor(preferences.edit());
     }
 
 

@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="black">#000000</color>
+    <color name="black_87alpha">#DF000000</color>
+    <color name="black_54alpha">#8A000000</color>
+    <color name="white">#FFFFFF</color>
+
     <color name="light_blue_500">#03A9F4</color>
     <color name="light_blue_700">#0288D1</color>
     <color name="light_blue_a400">#00B0FF</color>
+
+    <color name="grey_50">#FAFAFA</color>
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_300">#E0E0E0</color>
 
 </resources>

@@ -11,5 +11,6 @@ public class Account {
     public String expiresIn;
     public String refreshToken;
     public String username;
+    public String openId;
 
 }

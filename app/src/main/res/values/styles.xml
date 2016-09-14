@@ -5,6 +5,7 @@
         <item name="colorPrimary">@color/light_blue_500</item>
         <item name="colorPrimaryDark">@color/light_blue_700</item>
         <item name="colorAccent">@color/light_blue_a400</item>
+        <item name="android:windowBackground">@color/grey_50</item>
     </style>
 
 </resources>

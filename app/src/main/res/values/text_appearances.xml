@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="PrimaryText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/black_87alpha</item>
+    </style>
+
+    <style name="PrimaryTitle" parent="PrimaryText">
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="SecondaryText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/black_54alpha</item>
+    </style>
+
+</resources>

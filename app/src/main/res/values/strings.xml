@@ -7,6 +7,10 @@
 
     <string name="title.action.refresh">Refresh</string>
 
+    <string name="title.action.retry">Retry</string>
+
     <string name="text.info.auth_success">Authorization succeeded</string>
+
+    <string name="text.error.failed_to_fetch_account">Failed to fetch account info</string>
 
 </resources>
