@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <com.facebook.drawee.view.SimpleDraweeView
+                <ImageView
                     android:id="@+id/source_image"
                     style="@style/TweetCard.Source.Image"
                     android:layout_width="120dp"

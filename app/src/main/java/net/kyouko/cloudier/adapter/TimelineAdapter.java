@@ -1,14 +1,21 @@
 package net.kyouko.cloudier.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.model.Timeline;
@@ -26,10 +33,18 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
     private Context context;
     private Timeline timeline;
 
+    private int defaultSourceCardColor;
+    private int defaultTextColor;
+    private int imagePlaceholderColor;
+
 
     public TimelineAdapter(Context context, Timeline timeline) {
         this.context = context;
         this.timeline = timeline;
+
+        defaultSourceCardColor = context.getResources().getColor(R.color.grey_100);
+        defaultTextColor = context.getResources().getColor(R.color.black_87alpha);
+        imagePlaceholderColor = context.getResources().getColor(R.color.grey_300);
     }
 
 
@@ -42,7 +57,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
 
 
     @Override
-    public void onBindViewHolder(TweetViewHolder holder, int position) {
+    public void onBindViewHolder(final TweetViewHolder holder, int position) {
         Tweet tweet = timeline.tweets.get(position);
 
         holder.avatar.setImageURI(ImageUtil.getInstance(context).parseImageUrl(tweet.avatarUrl));
@@ -60,14 +75,42 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
         }
 
         if (tweet.sourceTweet != null) {
+            holder.sourceCard.setCardBackgroundColor(defaultSourceCardColor);
+            holder.sourceNickname.setTextColor(defaultTextColor);
+            holder.sourceContent.setTextColor(defaultTextColor);
+
             holder.sourceCard.setVisibility(View.VISIBLE);
             holder.sourceNickname.setText(tweet.sourceTweet.nickname);
             holder.sourceContent.setText(tweet.sourceTweet.content);
 
             if (tweet.sourceTweet.imageUrls != null && !tweet.sourceTweet.imageUrls.isEmpty()) {
-                holder.sourceImage.setImageURI(ImageUtil.getInstance(context).
-                        parseImageUrl(tweet.sourceTweet.imageUrls.get(0)));
                 holder.sourceImage.setVisibility(View.VISIBLE);
+
+                Picasso.with(context)
+                        .load(ImageUtil.getInstance(context)
+                                .parseImageUrl(tweet.sourceTweet.imageUrls.get(0)))
+                        .placeholder(new ColorDrawable(imagePlaceholderColor))
+                        .into(holder.sourceImage, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                BitmapDrawable drawable = (BitmapDrawable) holder.sourceImage.getDrawable();
+                                Bitmap bitmap = drawable.getBitmap();
+
+                                Palette palette = Palette.from(bitmap).generate();
+
+                                holder.sourceCard.setCardBackgroundColor(
+                                        palette.getDarkMutedColor(defaultSourceCardColor));
+                                holder.sourceNickname.setTextColor(
+                                        palette.getLightMutedColor(defaultTextColor));
+                                holder.sourceContent.setTextColor(
+                                        palette.getLightMutedColor(defaultTextColor));
+                            }
+
+                            @Override
+                            public void onError() {
+                                // Ignore
+                            }
+                        });
             } else {
                 holder.sourceImage.setVisibility(View.GONE);
             }
@@ -98,7 +141,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
         @BindView(R.id.image) SimpleDraweeView image;
         @BindView(R.id.source_card) CardView sourceCard;
         @BindView(R.id.source_wrapper) View sourceWrapper;
-        @BindView(R.id.source_image) SimpleDraweeView sourceImage;
+        @BindView(R.id.source_image) ImageView sourceImage;
         @BindView(R.id.source_nickname) TextView sourceNickname;
         @BindView(R.id.source_content) TextView sourceContent;
         @BindView(R.id.button_comment) View commentButton;

@@ -59,7 +59,8 @@
     </style>
 
     <style name="TweetCard.Source.Image" parent="">
-        <item name="placeholderImage">@color/grey_300</item>
+        <item name="android:background">@color/grey_300</item>
+        <item name="android:scaleType">centerCrop</item>
     </style>
 
     <style name="TweetCard.Source.Details" parent="">
