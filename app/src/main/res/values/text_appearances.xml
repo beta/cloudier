@@ -6,7 +6,7 @@
     </style>
 
     <style name="PrimaryTitle" parent="PrimaryText">
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="SecondaryText" parent="TextAppearance.AppCompat">

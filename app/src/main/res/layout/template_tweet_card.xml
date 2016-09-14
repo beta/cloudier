@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
+    android:id="@+id/card"
     style="@style/TweetCard"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -61,7 +62,56 @@
             android:id="@+id/image"
             style="@style/TweetCard.Image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/source_card"
+            style="@style/TweetCard.Source"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:id="@+id/source_wrapper"
+                style="@style/TweetCard.Source.Wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/source_image"
+                    style="@style/TweetCard.Source.Image"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"/>
+
+                <LinearLayout
+                    style="@style/TweetCard.Source.Details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/source_nickname"
+                        style="@style/TweetCard.Source.Nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="beta"/>
+
+                    <TextView
+                        android:id="@+id/source_content"
+                        style="@style/TweetCard.Source.Content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
 
         <RelativeLayout
             android:id="@+id/actions"
@@ -81,6 +131,7 @@
                     android:src="@drawable/ic_comment_black_54alpha_24dp"/>
 
                 <TextView
+                    android:id="@+id/comment_count"
                     style="@style/TweetCard.Actions.Action.WithText.Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -103,6 +154,7 @@
                     android:src="@drawable/ic_repeat_black_54alpha_24dp"/>
 
                 <TextView
+                    android:id="@+id/retweet_count"
                     style="@style/TweetCard.Actions.Action.WithText.Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

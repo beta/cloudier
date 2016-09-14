@@ -13,4 +13,6 @@
 
     <string name="text.error.failed_to_fetch_account">Failed to fetch account info</string>
 
+    <string name="text.pattern.username">\@%s</string>
+
 </resources>

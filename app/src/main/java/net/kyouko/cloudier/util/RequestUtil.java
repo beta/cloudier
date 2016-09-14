@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 
 import net.kyouko.cloudier.api.BooleanConverter;
 import net.kyouko.cloudier.api.CustomConverterFactory;
+import net.kyouko.cloudier.api.MapDeserializer;
 import net.kyouko.cloudier.api.TencentWeiboApi;
 import net.kyouko.cloudier.model.Account;
 
@@ -65,6 +66,7 @@ public class RequestUtil {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(boolean.class, new BooleanConverter())
                 .registerTypeAdapter(Boolean.class, new BooleanConverter())
+                .registerTypeAdapter(Map.class, new MapDeserializer())
                 .create();
 
         Retrofit retrofit = new Retrofit.Builder()

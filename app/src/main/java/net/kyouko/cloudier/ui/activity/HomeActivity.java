@@ -5,16 +5,20 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import net.kyouko.cloudier.R;
+import net.kyouko.cloudier.adapter.TimelineAdapter;
 import net.kyouko.cloudier.api.TencentWeiboApi;
 import net.kyouko.cloudier.model.Account;
+import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.User;
 import net.kyouko.cloudier.util.AuthUtil;
 import net.kyouko.cloudier.util.ImageUtil;
@@ -36,6 +40,9 @@ public class HomeActivity extends AppCompatActivity {
     @BindView(R.id.recycler) RecyclerView recyclerView;
 
     private User currentUser;
+
+    private Timeline timeline = new Timeline();
+    private TimelineAdapter adapter;
 
 
     @Override
@@ -60,6 +67,7 @@ public class HomeActivity extends AppCompatActivity {
     private void initView() {
         initToolbar();
         initSwipeRefreshLayout();
+        initRecyclerView();
     }
 
 
@@ -80,6 +88,15 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
+    private void initRecyclerView() {
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        adapter = new TimelineAdapter(this, timeline);
+        recyclerView.setAdapter(adapter);
+    }
+
+
     private void checkAuthorization() {
         if (AuthUtil.hasAuthorized(this)) {
             getAccountInfo();
@@ -93,8 +110,8 @@ public class HomeActivity extends AppCompatActivity {
         Account account = AuthUtil.readAccount(this);
 
         TencentWeiboApi api = RequestUtil.getApiInstance();
-        Call<User> user = api.getUser(RequestUtil.createOAuthParams(this), account.username);
-        user.enqueue(new Callback<User>() {
+        Call<User> userCall = api.getUser(RequestUtil.createOAuthParams(this), account.username);
+        userCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 currentUser = response.body();
@@ -125,7 +142,23 @@ public class HomeActivity extends AppCompatActivity {
 
 
     private void fetchHomeTimeline() {
-        // TODO
+        TencentWeiboApi api = RequestUtil.getApiInstance();
+        Call<Timeline> timelineCall = api.getHomeLatestTimeline(RequestUtil.createOAuthParams(this));
+        timelineCall.enqueue(new Callback<Timeline>() {
+            @Override
+            public void onResponse(Call<Timeline> call, Response<Timeline> response) {
+                timeline.tweets.clear();
+                timeline.tweets.addAll(response.body().tweets);
+
+                adapter.notifyDataSetChanged();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+
+            @Override
+            public void onFailure(Call<Timeline> call, Throwable t) {
+                Log.e("error", t.getLocalizedMessage());
+            }
+        });
     }
 
 }
