@@ -36,8 +36,8 @@
 
             <com.facebook.drawee.view.SimpleDraweeView
                 android:id="@+id/avatar"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 fresco:roundAsCircle="true"
                 fresco:roundingBorderColor="@color/white"
                 fresco:roundingBorderWidth="1dp"/>
