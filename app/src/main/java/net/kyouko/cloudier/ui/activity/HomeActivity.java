@@ -8,12 +8,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
+
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.api.TencentWeiboApi;
 import net.kyouko.cloudier.model.Account;
 import net.kyouko.cloudier.model.User;
 import net.kyouko.cloudier.util.AuthUtil;
+import net.kyouko.cloudier.util.ImageUtil;
 import net.kyouko.cloudier.util.RequestUtil;
 
 import butterknife.BindView;
@@ -26,6 +30,8 @@ public class HomeActivity extends AppCompatActivity {
 
     @BindView(R.id.coordinator) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.avatar) SimpleDraweeView draweeAvatar;
+    @BindView(R.id.title) TextView textTitle;
     @BindView(R.id.srl) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.recycler) RecyclerView recyclerView;
 
@@ -59,6 +65,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void initToolbar() {
         setSupportActionBar(toolbar);
+        setTitle(null);
     }
 
 
@@ -75,14 +82,14 @@ public class HomeActivity extends AppCompatActivity {
 
     private void checkAuthorization() {
         if (AuthUtil.hasAuthorized(this)) {
-            getCurrentUserInfo();
+            getAccountInfo();
         } else {
             AuthUtil.startAuth(this);
         }
     }
 
 
-    private void getCurrentUserInfo() {
+    private void getAccountInfo() {
         Account account = AuthUtil.readAccount(this);
 
         TencentWeiboApi api = RequestUtil.getApiInstance();
@@ -91,6 +98,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 currentUser = response.body();
+                updateAccountInfo();
                 fetchHomeTimeline();
             }
 
@@ -101,12 +109,18 @@ public class HomeActivity extends AppCompatActivity {
                         .setAction(R.string.title_action_retry, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                getCurrentUserInfo();
+                                getAccountInfo();
                             }
                         })
                         .show();
             }
         });
+    }
+
+
+    private void updateAccountInfo() {
+        draweeAvatar.setImageURI(ImageUtil.getInstance(this).parseImageUrl(currentUser.avatarUrl));
+        textTitle.setText(currentUser.nickname);
     }
 
 
