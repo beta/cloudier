@@ -114,11 +114,11 @@ public class TweetDetailActivity extends AppCompatActivity implements
             actionBarSize = toolbar.getHeight();
         }
 
-        actionBarSize -= swipeRefreshLayout.getProgressCircleDiameter();
+        actionBarSize -= swipeRefreshLayout.getProgressCircleDiameter() / 2;
 
         swipeEndPosition = actionBarSize + 64 * displayMetrics.density;
 
-        swipeRefreshLayout.setProgressViewOffset(false, (int) actionBarSize, (int) swipeEndPosition);
+        swipeRefreshLayout.setProgressViewOffset(true, (int) actionBarSize, (int) swipeEndPosition);
         swipeRefreshLayout.setEnabled(false);
     }
 
