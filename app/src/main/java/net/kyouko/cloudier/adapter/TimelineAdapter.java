@@ -22,6 +22,9 @@ import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.Tweet;
 import net.kyouko.cloudier.util.ImageUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -30,8 +33,15 @@ import butterknife.ButterKnife;
  */
 public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetViewHolder> {
 
+    public interface OnViewImagesListener {
+        void onViewImages(List<String> imageUrls);
+    }
+
+
     private Context context;
     private Timeline timeline;
+
+    private OnViewImagesListener onViewImagesListener;
 
     private int defaultSourceCardColor;
     private int defaultTextColor;
@@ -62,7 +72,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
 
     @Override
     public void onBindViewHolder(final TweetViewHolder holder, int position) {
-        Tweet tweet = timeline.tweets.get(position);
+        final Tweet tweet = timeline.tweets.get(position);
 
         holder.avatar.setImageURI(ImageUtil.getInstance(context).parseImageUrl(tweet.avatarUrl));
         holder.nickname.setText(tweet.nickname);
@@ -81,6 +91,19 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
                     .placeholder(new ColorDrawable(imagePlaceholderColor))
                     .into(holder.image);
             holder.image.setVisibility(View.VISIBLE);
+
+            holder.imageMask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (onViewImagesListener != null) {
+                        List<String> imageUrls = new ArrayList<>();
+                        for (String imageUrl : tweet.imageUrls) {
+                            imageUrls.add(ImageUtil.getInstance(context).parseImageUrl(imageUrl));
+                        }
+                        onViewImagesListener.onViewImages(imageUrls);
+                    }
+                }
+            });
 
             if (tweet.imageUrls.size() > 1) {
                 holder.imageCount.setVisibility(View.VISIBLE);
@@ -154,6 +177,11 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
     }
 
 
+    public void setOnViewImagesListener(OnViewImagesListener onViewImagesListener) {
+        this.onViewImagesListener = onViewImagesListener;
+    }
+
+
     public class TweetViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.card) CardView card;
@@ -164,6 +192,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
         @BindView(R.id.space_below_content) View spaceBelowContent;
         @BindView(R.id.image_wrapper) View imageWrapper;
         @BindView(R.id.image) ImageView image;
+        @BindView(R.id.image_mask) View imageMask;
         @BindView(R.id.image_count) TextView imageCount;
         @BindView(R.id.space_below_image) View spaceBelowImage;
         @BindView(R.id.source_card) CardView sourceCard;

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.adapter.TimelineAdapter;
@@ -24,13 +25,17 @@ import net.kyouko.cloudier.util.AuthUtil;
 import net.kyouko.cloudier.util.ImageUtil;
 import net.kyouko.cloudier.util.RequestUtil;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements
+        TimelineAdapter.OnViewImagesListener {
 
     @BindView(R.id.coordinator) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -93,6 +98,7 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new TimelineAdapter(this, timeline);
+        adapter.setOnViewImagesListener(this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -159,6 +165,12 @@ public class HomeActivity extends AppCompatActivity {
                 Log.e("error", t.getLocalizedMessage());
             }
         });
+    }
+
+
+    @Override
+    public void onViewImages(List<String> imageUrls) {
+        new ImageViewer.Builder(this, (ArrayList<String>) imageUrls).show();
     }
 
 }
