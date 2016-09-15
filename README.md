@@ -1,4 +1,4 @@
-# <img src="http://i.imgur.com/O20n2Xs.png" width="32px" height="32px"/> Cloudier
+# <img src="http://i.imgur.com/O20n2Xs.png" width="32px" height="32px"/> Cloudier [![Gitter](https://badges.gitter.im/betakuang/cloudier.svg)](https://gitter.im/betakuang/cloudier?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 Cloudier is an open-source Android client for Tencent Weibo. 
 
