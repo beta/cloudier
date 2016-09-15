@@ -33,6 +33,10 @@ import butterknife.ButterKnife;
  */
 public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetViewHolder> {
 
+    public interface OnViewTweetListener {
+        void onViewTweet(Tweet tweet);
+    }
+
     public interface OnViewImagesListener {
         void onViewImages(List<String> imageUrls);
     }
@@ -41,6 +45,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
     private Context context;
     private Timeline timeline;
 
+    private OnViewTweetListener onViewTweetListener;
     private OnViewImagesListener onViewImagesListener;
 
     private int defaultSourceCardColor;
@@ -73,6 +78,15 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
     @Override
     public void onBindViewHolder(final TweetViewHolder holder, int position) {
         final Tweet tweet = timeline.tweets.get(position);
+
+        holder.card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onViewTweetListener != null) {
+                    onViewTweetListener.onViewTweet(tweet);
+                }
+            }
+        });
 
         holder.avatar.setImageURI(ImageUtil.getInstance(context).parseImageUrl(tweet.avatarUrl));
         holder.nickname.setText(tweet.nickname);
@@ -174,6 +188,11 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
     @Override
     public int getItemCount() {
         return timeline.tweets.size();
+    }
+
+
+    public void setOnViewTweetListener(OnViewTweetListener onViewTweetListener) {
+        this.onViewTweetListener = onViewTweetListener;
     }
 
 

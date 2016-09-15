@@ -4,6 +4,7 @@
     <string name="app_name">Cloudier</string>
 
     <string name="title.activity.auth">Account Authorization</string>
+    <string name="title.activity.tweet_detail">Tweet Detail</string>
 
     <string name="title.action.refresh">Refresh</string>
 

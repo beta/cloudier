@@ -60,12 +60,14 @@
 
         <include
             android:id="@+id/space_below_content"
-            layout="@layout/template_tweet_card_space"/>
+            layout="@layout/template_tweet_card_space"
+            android:visibility="gone"/>
 
         <RelativeLayout
             android:id="@+id/image_wrapper"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
 
             <net.kyouko.cloudier.widget.AspectRatioImageView
                 android:id="@+id/image"
@@ -97,13 +99,15 @@
 
         <include
             android:id="@+id/space_below_image"
-            layout="@layout/template_tweet_card_space"/>
+            layout="@layout/template_tweet_card_space"
+            android:visibility="gone"/>
 
         <android.support.v7.widget.CardView
             android:id="@+id/source_card"
             style="@style/TweetCard.Source"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:visibility="gone">
 
             <LinearLayout
                 android:id="@+id/source_wrapper"

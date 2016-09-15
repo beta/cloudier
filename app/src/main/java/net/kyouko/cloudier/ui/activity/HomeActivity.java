@@ -1,5 +1,6 @@
 package net.kyouko.cloudier.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -20,6 +21,7 @@ import net.kyouko.cloudier.adapter.TimelineAdapter;
 import net.kyouko.cloudier.api.TencentWeiboApi;
 import net.kyouko.cloudier.model.Account;
 import net.kyouko.cloudier.model.Timeline;
+import net.kyouko.cloudier.model.Tweet;
 import net.kyouko.cloudier.model.User;
 import net.kyouko.cloudier.util.AuthUtil;
 import net.kyouko.cloudier.util.ImageUtil;
@@ -35,7 +37,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity implements
-        TimelineAdapter.OnViewImagesListener {
+        TimelineAdapter.OnViewImagesListener, TimelineAdapter.OnViewTweetListener {
 
     @BindView(R.id.coordinator) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -98,6 +100,7 @@ public class HomeActivity extends AppCompatActivity implements
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new TimelineAdapter(this, timeline);
+        adapter.setOnViewTweetListener(this);
         adapter.setOnViewImagesListener(this);
         recyclerView.setAdapter(adapter);
     }
@@ -165,6 +168,13 @@ public class HomeActivity extends AppCompatActivity implements
                 Log.e("error", t.getLocalizedMessage());
             }
         });
+    }
+
+
+    @Override
+    public void onViewTweet(Tweet tweet) {
+        Intent intent = new Intent(this, TweetDetailActivity.class);
+        startActivity(intent);
     }
 
 
