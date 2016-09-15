@@ -16,6 +16,7 @@
     <string name="text.info.auth_success">Authorization succeeded</string>
 
     <string name="text.error.failed_to_fetch_account">Failed to fetch account info</string>
+    <string name="text.error.failed_to_fetch_timeline">Failed to fetch timeline</string>
 
     <string name="text.pattern.username">\@%s</string>
 

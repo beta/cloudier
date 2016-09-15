@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -166,7 +165,15 @@ public class HomeActivity extends AppCompatActivity implements
 
             @Override
             public void onFailure(Call<Timeline> call, Throwable t) {
-                Log.e("error", t.getLocalizedMessage());
+                Snackbar.make(coordinatorLayout, R.string.text_error_failed_to_fetch_timeline,
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.title_action_retry, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                fetchHomeTimeline();
+                            }
+                        })
+                        .show();
             }
         });
     }
