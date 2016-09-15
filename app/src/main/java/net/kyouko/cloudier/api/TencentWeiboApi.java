@@ -30,4 +30,10 @@ public interface TencentWeiboApi {
             "&pageflag=0&pagetime=0&reqnum=20&type=0&contenttype=0")
     Call<Timeline> getHomeLatestTimeline(@QueryMap Map<String, String> oAuthParams);
 
+
+    @GET("api/statuses/home_timeline" + CONSTANT_PARAMS +
+            "&pageflag=1&reqnum=20&type=0&contenttype=0")
+    Call<Timeline> getMoreHomeTimeline(@QueryMap Map<String, String> oAuthParams,
+                                       @Query("pagetime") String lastTweetTimestamp);
+
 }

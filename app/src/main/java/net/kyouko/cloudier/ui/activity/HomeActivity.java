@@ -21,6 +21,7 @@ import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.adapter.TimelineAdapter;
 import net.kyouko.cloudier.api.TencentWeiboApi;
+import net.kyouko.cloudier.event.LoadMoreEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.model.Account;
@@ -106,7 +107,7 @@ public class HomeActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchHomeTimeline();
+                loadHomeTimeline();
             }
         });
     }
@@ -140,7 +141,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onResponse(Call<User> call, Response<User> response) {
                 currentUser = response.body();
                 updateAccountInfo();
-                fetchHomeTimeline();
+                loadHomeTimeline();
             }
 
             @Override
@@ -165,7 +166,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-    private void fetchHomeTimeline() {
+    private void loadHomeTimeline() {
         TencentWeiboApi api = RequestUtil.getApiInstance();
         Call<Timeline> timelineCall = api.getHomeLatestTimeline(RequestUtil.createOAuthParams(this));
         timelineCall.enqueue(new Callback<Timeline>() {
@@ -186,7 +187,39 @@ public class HomeActivity extends AppCompatActivity {
                         .setAction(R.string.title_action_retry, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                fetchHomeTimeline();
+                                loadHomeTimeline();
+                            }
+                        })
+                        .show();
+            }
+        });
+    }
+
+
+    @Subscribe
+    public void loadMoreHomeTimeline(LoadMoreEvent event) {
+        TencentWeiboApi api = RequestUtil.getApiInstance();
+        Call<Timeline> timelineCall = api.getMoreHomeTimeline(RequestUtil.createOAuthParams(this),
+                timeline.tweets.get(timeline.tweets.size() - 1).timestamp);
+        timelineCall.enqueue(new Callback<Timeline>() {
+            @Override
+            public void onResponse(Call<Timeline> call, Response<Timeline> response) {
+                timeline.tweets.addAll(response.body().tweets);
+                timeline.users.putAll(response.body().users);
+
+                adapter.notifyDataSetChanged();
+                adapter.completeLoadingMore();
+            }
+
+            @Override
+            public void onFailure(Call<Timeline> call, Throwable t) {
+                adapter.completeLoadingMore();
+                Snackbar.make(coordinatorLayout, R.string.text_error_failed_to_fetch_timeline,
+                        Snackbar.LENGTH_SHORT)
+                        .setAction(R.string.title_action_retry, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                loadMoreHomeTimeline(new LoadMoreEvent());
                             }
                         })
                         .show();

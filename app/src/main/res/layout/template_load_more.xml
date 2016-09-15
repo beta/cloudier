@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    style="@style/LoadMoreButton.Wrapper"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <FrameLayout
+        android:id="@+id/button"
+        style="@style/LoadMoreButton">
+
+        <TextView
+            style="@style/LoadMoreButton.Text"
+            android:text="@string/title.button.load_more"/>
+
+    </FrameLayout>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@style/LoadMoreButton.Progress"
+        android:visibility="gone"/>
+
+</FrameLayout>
