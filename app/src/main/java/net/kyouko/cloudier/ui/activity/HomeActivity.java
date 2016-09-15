@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -172,10 +173,12 @@ public class HomeActivity extends AppCompatActivity implements
 
 
     @Override
-    public void onViewTweet(Tweet tweet) {
+    public void onViewTweet(Tweet tweet, View card) {
         Intent intent = new Intent(this, TweetDetailActivity.class);
         intent.putExtra("TWEET", tweet);
-        startActivity(intent);
+        ActivityOptionsCompat options = ActivityOptionsCompat
+                .makeSceneTransitionAnimation(this, card, "card");
+        startActivity(intent, options.toBundle());
     }
 
 

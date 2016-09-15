@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
 public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetViewHolder> {
 
     public interface OnViewTweetListener {
-        void onViewTweet(Tweet tweet);
+        void onViewTweet(Tweet tweet, View card);
     }
 
     public interface OnViewImagesListener {
@@ -79,7 +79,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
             @Override
             public void onClick(View view) {
                 if (onViewTweetListener != null) {
-                    onViewTweetListener.onViewTweet(tweet);
+                    onViewTweetListener.onViewTweet(tweet, holder.card);
                 }
             }
         });
