@@ -174,6 +174,7 @@ public class HomeActivity extends AppCompatActivity implements
     @Override
     public void onViewTweet(Tweet tweet) {
         Intent intent = new Intent(this, TweetDetailActivity.class);
+        intent.putExtra("TWEET", tweet);
         startActivity(intent);
     }
 

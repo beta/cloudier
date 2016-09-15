@@ -51,8 +51,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
     private int defaultSourceCardColor;
     private int defaultTextColor;
     private int imagePlaceholderColor;
-    private int defaultImageIndicatorColor;
-    private int defaultImageIndicatorTextColor;
 
 
     public TimelineAdapter(Context context, Timeline timeline) {
@@ -62,8 +60,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
         defaultSourceCardColor = context.getResources().getColor(R.color.grey_100);
         defaultTextColor = context.getResources().getColor(R.color.black_87alpha);
         imagePlaceholderColor = context.getResources().getColor(R.color.grey_300);
-        defaultImageIndicatorColor = context.getResources().getColor(R.color.black);
-        defaultImageIndicatorTextColor = context.getResources().getColor(R.color.white);
     }
 
 

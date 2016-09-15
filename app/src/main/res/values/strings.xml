@@ -10,6 +10,9 @@
 
     <string name="title.action.retry">Retry</string>
 
+    <string name="title.tab.comments">Comments</string>
+    <string name="title.tab.retweets">Retweets</string>
+
     <string name="text.info.auth_success">Authorization succeeded</string>
 
     <string name="text.error.failed_to_fetch_account">Failed to fetch account info</string>

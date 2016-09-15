@@ -2,6 +2,7 @@ package net.kyouko.cloudier.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  *
  * @author beta
  */
-public class SourceTweet {
+public class SourceTweet implements Serializable {
 
     @SerializedName("id")
     public String id;

@@ -2,12 +2,14 @@ package net.kyouko.cloudier.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Class for a piece of tweet.
  *
  * @author beta
  */
-public class Tweet extends SourceTweet {
+public class Tweet extends SourceTweet implements Serializable {
 
     public final static int STATUS_NORMAL = 0;
     public final static int STATUS_DELETED_BY_SYSTEM = 1;
