@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/wrapper"
+        style="@style/TweetCard.Wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/header"
+            style="@style/TweetCard.Header"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:orientation="horizontal">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/avatar"
+                style="@style/TweetCard.Header.Avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/spacing_normal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/nickname"
+                    style="@style/TweetCard.Header.Nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="beta"/>
+
+                <TextView
+                    android:id="@+id/username"
+                    style="@style/TweetCard.Header.Username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_minimum"
+                    tools:text="\@Bitex_"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/content"
+            style="@style/TweetCard.Content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."/>
+
+        <include
+            android:id="@+id/space_below_content"
+            layout="@layout/template_tweet_card_space"
+            android:visibility="gone"/>
+
+        <RelativeLayout
+            android:id="@+id/image_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <net.kyouko.cloudier.widget.AspectRatioImageView
+                android:id="@+id/image"
+                style="@style/TweetCard.Image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <View
+                android:id="@+id/image_mask"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/image"
+                android:layout_alignEnd="@+id/image"
+                android:layout_alignStart="@+id/image"
+                android:layout_alignTop="@+id/image"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"/>
+
+            <TextView
+                android:id="@+id/image_count"
+                style="@style/TweetCard.Image.Indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/image"
+                android:layout_alignEnd="@+id/image"
+                tools:text="4"/>
+
+        </RelativeLayout>
+
+        <include
+            android:id="@+id/space_below_image"
+            layout="@layout/template_tweet_card_space"
+            android:visibility="gone"/>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/source_card"
+            style="@style/TweetCard.Source"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/source_wrapper"
+                style="@style/TweetCard.Source.Wrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/source_image"
+                    style="@style/TweetCard.Source.Image"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"/>
+
+                <LinearLayout
+                    style="@style/TweetCard.Source.Details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/source_nickname"
+                        style="@style/TweetCard.Source.Nickname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        tools:text="beta"/>
+
+                    <TextView
+                        android:id="@+id/source_content"
+                        style="@style/TweetCard.Source.Content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/spacing_small"
+                        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <RelativeLayout
+            android:id="@+id/actions"
+            style="@style/TweetCard.Actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/button_comment"
+                style="@style/TweetCard.Actions.Action.WithText"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_comment_black_54alpha_24dp"/>
+
+                <TextView
+                    android:id="@+id/comment_count"
+                    style="@style/TweetCard.Actions.Action.WithText.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:text="42"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/button_retweet"
+                style="@style/TweetCard.Actions.Action.WithText"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_toEndOf="@id/button_comment">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_repeat_black_54alpha_24dp"/>
+
+                <TextView
+                    android:id="@+id/retweet_count"
+                    style="@style/TweetCard.Actions.Action.WithText.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    tools:text="7"/>
+
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/button_share"
+                style="@style/TweetCard.Actions.Action"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="@dimen/spacing_small"
+                android:layout_toStartOf="@+id/button_menu">
+
+                <ImageView
+                    style="@style/TweetCard.Actions.Action.Icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_share_black_54alpha_24dp"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/button_menu"
+                style="@style/TweetCard.Actions.Action"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true">
+
+                <ImageView
+                    style="@style/TweetCard.Actions.Action.Icon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_more_vert_black_54alpha_24dp"/>
+
+            </FrameLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</merge>
