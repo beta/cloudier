@@ -36,7 +36,6 @@
                 android:id="@+id/card_wrapper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/spacing_small"
                 app:layout_scrollFlags="scroll">
 
                 <include
