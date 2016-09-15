@@ -143,6 +143,8 @@ public class TweetCardUtil {
             Picasso.with(context)
                     .load(ImageUtil.getInstance(context).parseImageUrl(imageUrls.get(0)))
                     .placeholder(new ColorDrawable(imagePlaceholderColor))
+                    .fit()
+                    .centerCrop()
                     .into(image);
             image.setVisibility(View.VISIBLE);
 
@@ -197,6 +199,8 @@ public class TweetCardUtil {
                         .load(ImageUtil.getInstance(context)
                                 .parseImageUrl(sourceTweet.imageUrls.get(0)))
                         .placeholder(new ColorDrawable(imagePlaceholderColor))
+                        .fit()
+                        .centerCrop()
                         .into(sourceImage, new Callback() {
                             @Override
                             public void onSuccess() {
