@@ -38,6 +38,7 @@
                 android:id="@+id/avatar"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
+                android:layout_marginStart="24dp"
                 fresco:roundAsCircle="true"
                 fresco:roundingBorderColor="@color/white"
                 fresco:roundingBorderWidth="1dp"/>
@@ -46,7 +47,7 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="48dp"
+                android:layout_marginStart="28dp"
                 android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
                 android:textColor="@color/white"/>
 
