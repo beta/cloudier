@@ -34,23 +34,30 @@
     <style name="TweetCard.Content" parent="">
         <item name="android:paddingStart">@dimen/spacing_normal</item>
         <item name="android:paddingEnd">@dimen/spacing_normal</item>
-        <item name="android:paddingBottom">@dimen/spacing_normal</item>
         <item name="android:textAppearance">@style/PrimaryText</item>
     </style>
 
     <style name="TweetCard.Image" parent="">
-        <item name="placeholderImage">@color/grey_300</item>
-        <item name="viewAspectRatio">1.78</item>
+        <item name="android:src">@color/grey_300</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="aspectRatio">1.78</item>
+        <item name="dominantMeasurement">width</item>
+    </style>
+
+    <style name="TweetCard.Image.Indicator" parent="">
+        <item name="android:layout_margin">@dimen/spacing_normal</item>
+        <item name="android:background">@drawable/background_indicator</item>
+        <item name="android:drawableStart">@drawable/ic_collections_white_18dp</item>
+        <item name="android:drawablePadding">@dimen/spacing_tiny</item>
+        <item name="android:textAppearance">@style/PrimaryText</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="TweetCard.Source" parent="CardView.Light">
-        <item name="android:layout_marginStart">@dimen/spacing_normal</item>
-        <item name="android:layout_marginEnd">@dimen/spacing_normal</item>
-
         <item name="cardBackgroundColor">@color/grey_100</item>
-        <item name="cardCornerRadius">2dp</item>
+        <item name="cardCornerRadius">0dp</item>
         <item name="cardElevation">0dp</item>
-        <item name="cardMaxElevation">12dp</item>
+        <item name="cardMaxElevation">0dp</item>
     </style>
 
     <style name="TweetCard.Source.Wrapper" parent="">

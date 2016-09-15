@@ -36,6 +36,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
     private int defaultSourceCardColor;
     private int defaultTextColor;
     private int imagePlaceholderColor;
+    private int defaultImageIndicatorColor;
+    private int defaultImageIndicatorTextColor;
 
 
     public TimelineAdapter(Context context, Timeline timeline) {
@@ -45,6 +47,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
         defaultSourceCardColor = context.getResources().getColor(R.color.grey_100);
         defaultTextColor = context.getResources().getColor(R.color.black_87alpha);
         imagePlaceholderColor = context.getResources().getColor(R.color.grey_300);
+        defaultImageIndicatorColor = context.getResources().getColor(R.color.black);
+        defaultImageIndicatorTextColor = context.getResources().getColor(R.color.white);
     }
 
 
@@ -63,18 +67,33 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
         holder.avatar.setImageURI(ImageUtil.getInstance(context).parseImageUrl(tweet.avatarUrl));
         holder.nickname.setText(tweet.nickname);
         holder.username.setText(context.getString(R.string.text_pattern_username, tweet.username));
+
+        boolean hasContent = (tweet.content.length() > 0);
+        holder.content.setVisibility(hasContent ? View.VISIBLE : View.GONE);
         holder.content.setText(tweet.content);
 
-        if (tweet.imageUrls != null && !tweet.imageUrls.isEmpty()) {
-            holder.image.setImageURI(
-                    ImageUtil.getInstance(context).parseImageUrl(tweet.imageUrls.get(0))
-            );
+        boolean hasImages = (tweet.imageUrls != null && !tweet.imageUrls.isEmpty());
+        if (hasImages) {
+            holder.imageWrapper.setVisibility(View.VISIBLE);
+
+            Picasso.with(context)
+                    .load(ImageUtil.getInstance(context).parseImageUrl(tweet.imageUrls.get(0)))
+                    .placeholder(new ColorDrawable(imagePlaceholderColor))
+                    .into(holder.image);
             holder.image.setVisibility(View.VISIBLE);
+
+            if (tweet.imageUrls.size() > 1) {
+                holder.imageCount.setVisibility(View.VISIBLE);
+                holder.imageCount.setText(String.valueOf(tweet.imageUrls.size()));
+            } else {
+                holder.imageCount.setVisibility(View.GONE);
+            }
         } else {
-            holder.image.setVisibility(View.GONE);
+            holder.imageWrapper.setVisibility(View.GONE);
         }
 
-        if (tweet.sourceTweet != null) {
+        boolean hasSourceTweet = (tweet.sourceTweet != null);
+        if (hasSourceTweet) {
             holder.sourceCard.setCardBackgroundColor(defaultSourceCardColor);
             holder.sourceNickname.setTextColor(defaultTextColor);
             holder.sourceContent.setTextColor(defaultTextColor);
@@ -118,6 +137,10 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
             holder.sourceCard.setVisibility(View.GONE);
         }
 
+        holder.spaceBelowContent.setVisibility((hasContent && (hasImages || hasSourceTweet)) ?
+                View.VISIBLE : View.GONE);
+        holder.spaceBelowImage.setVisibility((hasImages && hasSourceTweet) ? View.VISIBLE : View.GONE);
+
         holder.commentCount.setText(String.valueOf(tweet.commentCount));
         holder.commentCount.setVisibility((tweet.commentCount > 0) ? View.VISIBLE : View.GONE);
         holder.retweetCount.setText(String.valueOf(tweet.retweetCount));
@@ -138,7 +161,11 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
         @BindView(R.id.nickname) TextView nickname;
         @BindView(R.id.username) TextView username;
         @BindView(R.id.content) TextView content;
-        @BindView(R.id.image) SimpleDraweeView image;
+        @BindView(R.id.space_below_content) View spaceBelowContent;
+        @BindView(R.id.image_wrapper) View imageWrapper;
+        @BindView(R.id.image) ImageView image;
+        @BindView(R.id.image_count) TextView imageCount;
+        @BindView(R.id.space_below_image) View spaceBelowImage;
         @BindView(R.id.source_card) CardView sourceCard;
         @BindView(R.id.source_wrapper) View sourceWrapper;
         @BindView(R.id.source_image) ImageView sourceImage;
