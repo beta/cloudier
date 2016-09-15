@@ -27,6 +27,7 @@ import net.kyouko.cloudier.ui.fragment.TweetListFragment;
 import net.kyouko.cloudier.util.TweetCardUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,6 +43,7 @@ public class TweetDetailActivity extends AppCompatActivity implements
     @BindView(R.id.card) CardView cardView;
 
     private SourceTweet tweet;
+    private HashMap<String, String> users;
 
 
     @Override
@@ -134,7 +136,8 @@ public class TweetDetailActivity extends AppCompatActivity implements
 
     private void getTweet() {
         tweet = (SourceTweet) getIntent().getSerializableExtra("TWEET");
-        TweetCardUtil.displayTweet(tweet, cardView);
+        users = (HashMap<String, String>) getIntent().getSerializableExtra("USERS");
+        TweetCardUtil.displayTweet(tweet, users, cardView);
     }
 
 
@@ -144,6 +147,7 @@ public class TweetDetailActivity extends AppCompatActivity implements
 
         if (event.type == ViewTweetEvent.TYPE_TWEET) {
             intent.putExtra("TWEET", event.tweet);
+            intent.putExtra("USERS", event.users);
             if (event.card != null) {
                 ActivityOptionsCompat options = ActivityOptionsCompat
                         .makeSceneTransitionAnimation(this, event.card.cardView, "card");

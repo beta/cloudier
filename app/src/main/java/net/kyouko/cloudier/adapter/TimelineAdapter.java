@@ -50,7 +50,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.TweetV
     public void onBindViewHolder(final TweetViewHolder holder, int position) {
         final Tweet tweet = timeline.tweets.get(position);
 
-        TweetCardUtil.displayTweet(tweet, holder.card, true);
+        TweetCardUtil.displayTweet(tweet, timeline.users, holder.card, true);
     }
 
 

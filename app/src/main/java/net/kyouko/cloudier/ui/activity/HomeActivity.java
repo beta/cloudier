@@ -173,6 +173,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onResponse(Call<Timeline> call, Response<Timeline> response) {
                 timeline.tweets.clear();
                 timeline.tweets.addAll(response.body().tweets);
+                timeline.users.putAll(response.body().users);
 
                 adapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
@@ -200,6 +201,7 @@ public class HomeActivity extends AppCompatActivity {
 
         if (event.type == ViewTweetEvent.TYPE_TWEET) {
             intent.putExtra("TWEET", event.tweet);
+            intent.putExtra("USERS", event.users);
             if (event.card != null) {
                 ActivityOptionsCompat options = ActivityOptionsCompat
                         .makeSceneTransitionAnimation(this, event.card.cardView, "card");

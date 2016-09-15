@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Class for a timeline of tweets.
@@ -22,6 +21,6 @@ public class Timeline {
     @SerializedName("info")
     public List<Tweet> tweets = new ArrayList<>();
     @SerializedName("user")
-    public Map<String, String> users = new HashMap<>();
+    public HashMap<String, String> users = new HashMap<>();
 
 }

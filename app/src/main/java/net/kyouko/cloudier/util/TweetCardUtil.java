@@ -6,6 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
+import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import net.kyouko.cloudier.model.SourceTweet;
 import net.kyouko.cloudier.model.Tweet;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -85,14 +87,14 @@ public class TweetCardUtil {
         }
 
 
-        void displayTweet(final SourceTweet tweet, boolean clickable) {
+        void displayTweet(final SourceTweet tweet, final HashMap<String, String> users, boolean clickable) {
             final Context context = cardView.getContext();
 
             if (clickable) {
                 wrapper.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        CloudierApplication.getBus().post(new ViewTweetEvent(tweet, Card.this));
+                        CloudierApplication.getBus().post(new ViewTweetEvent(tweet, users, Card.this));
                     }
                 });
             }
@@ -103,7 +105,12 @@ public class TweetCardUtil {
 
             boolean hasContent = (tweet.content.length() > 0);
             content.setVisibility(hasContent ? View.VISIBLE : View.GONE);
-            content.setText(tweet.content);
+
+            SpannableStringBuilder tweetContent = TextUtil.addLinkToUrlsInText(context,
+                    tweet.originalContent, false);
+            tweetContent = TextUtil.addLinkToTopicsInText(context, tweetContent, false);
+            tweetContent = NicknameUtil.replaceUsernameWithNicknameInContent(tweetContent, users);
+            content.setText(tweetContent);
 
             boolean hasImages = (tweet.imageUrls != null && !tweet.imageUrls.isEmpty());
             if (hasImages) {
@@ -114,7 +121,7 @@ public class TweetCardUtil {
 
             boolean hasSourceTweet = (tweet instanceof Tweet && ((Tweet) tweet).sourceTweet != null);
             if (hasSourceTweet) {
-                displaySourceTweet(((Tweet) tweet).sourceTweet);
+                displaySourceTweet(((Tweet) tweet).sourceTweet, users);
             } else {
                 sourceCard.setVisibility(View.GONE);
             }
@@ -161,7 +168,8 @@ public class TweetCardUtil {
         }
 
 
-        private void displaySourceTweet(final SourceTweet sourceTweet) {
+        private void displaySourceTweet(final SourceTweet sourceTweet,
+                                        final HashMap<String, String> users) {
             sourceCard.setCardBackgroundColor(defaultSourceCardColor);
             sourceNickname.setTextColor(defaultTextColor);
             sourceContent.setTextColor(defaultTextColor);
@@ -170,12 +178,17 @@ public class TweetCardUtil {
             sourceWrapper.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    CloudierApplication.getBus().post(new ViewTweetEvent(sourceTweet, null));
+                    CloudierApplication.getBus().post(new ViewTweetEvent(sourceTweet, users, null));
                 }
             });
 
             sourceNickname.setText(sourceTweet.nickname);
-            sourceContent.setText(sourceTweet.content);
+
+            SpannableStringBuilder tweetContent = TextUtil.addLinkToUrlsInText(context,
+                    sourceTweet.originalContent, false);
+            tweetContent = TextUtil.addLinkToTopicsInText(context, tweetContent, false);
+            tweetContent = NicknameUtil.replaceUsernameWithNicknameInContent(tweetContent, users);
+            sourceContent.setText(tweetContent);
 
             if (sourceTweet.imageUrls != null && !sourceTweet.imageUrls.isEmpty()) {
                 sourceImage.setVisibility(View.VISIBLE);
@@ -213,14 +226,16 @@ public class TweetCardUtil {
     }
 
 
-    public static Card displayTweet(SourceTweet tweet, CardView cardView) {
-        return displayTweet(tweet, cardView, false);
+    public static Card displayTweet(SourceTweet tweet, HashMap<String, String> users,
+                                    CardView cardView) {
+        return displayTweet(tweet, users, cardView, false);
     }
 
 
-    public static Card displayTweet(SourceTweet tweet, CardView cardView, boolean clickable) {
+    public static Card displayTweet(SourceTweet tweet, HashMap<String, String> users,
+                                    CardView cardView, boolean clickable) {
         Card card = new Card(cardView);
-        card.displayTweet(tweet, clickable);
+        card.displayTweet(tweet, users, clickable);
         return card;
     }
 
