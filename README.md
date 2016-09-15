@@ -4,7 +4,7 @@ Cloudier is an open-source Android client for Tencent Weibo.
 
 ## Download
 
-Cloudier is currently working in progress. You can find alpha versions from [Releases] page. Try at your own risk.
+Cloudier is currently working in progress. You can find alpha versions from [Releases](https://github.com/beta/cloudier/releases) page. Try at your own risk.
 
 ## Credits
 
