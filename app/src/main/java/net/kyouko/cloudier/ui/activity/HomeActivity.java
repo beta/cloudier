@@ -14,21 +14,23 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.otto.Subscribe;
 import com.stfalcon.frescoimageviewer.ImageViewer;
 
+import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.adapter.TimelineAdapter;
 import net.kyouko.cloudier.api.TencentWeiboApi;
+import net.kyouko.cloudier.event.ViewImageEvent;
+import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.model.Account;
 import net.kyouko.cloudier.model.Timeline;
-import net.kyouko.cloudier.model.Tweet;
 import net.kyouko.cloudier.model.User;
 import net.kyouko.cloudier.util.AuthUtil;
 import net.kyouko.cloudier.util.ImageUtil;
 import net.kyouko.cloudier.util.RequestUtil;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,8 +38,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends AppCompatActivity implements
-        TimelineAdapter.OnViewImagesListener, TimelineAdapter.OnViewTweetListener {
+public class HomeActivity extends AppCompatActivity {
 
     @BindView(R.id.coordinator) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
@@ -71,6 +72,22 @@ public class HomeActivity extends AppCompatActivity implements
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        CloudierApplication.getBus().register(this);
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        CloudierApplication.getBus().unregister(this);
+    }
+
+
     private void initView() {
         initToolbar();
         initSwipeRefreshLayout();
@@ -100,8 +117,6 @@ public class HomeActivity extends AppCompatActivity implements
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new TimelineAdapter(this, timeline);
-        adapter.setOnViewTweetListener(this);
-        adapter.setOnViewImagesListener(this);
         recyclerView.setAdapter(adapter);
     }
 
@@ -179,19 +194,31 @@ public class HomeActivity extends AppCompatActivity implements
     }
 
 
-    @Override
-    public void onViewTweet(Tweet tweet, View card) {
+    @Subscribe
+    public void viewTweet(ViewTweetEvent event) {
         Intent intent = new Intent(this, TweetDetailActivity.class);
-        intent.putExtra("TWEET", tweet);
-        ActivityOptionsCompat options = ActivityOptionsCompat
-                .makeSceneTransitionAnimation(this, card, "card");
-        startActivity(intent, options.toBundle());
+
+        if (event.type == ViewTweetEvent.TYPE_TWEET) {
+            intent.putExtra("TWEET", event.tweet);
+            if (event.card != null) {
+                ActivityOptionsCompat options = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(this, event.card.cardView, "card");
+                startActivity(intent, options.toBundle());
+            } else {
+                startActivity(intent);
+            }
+        } else if (event.type == ViewTweetEvent.TYPE_ID) {
+            intent.putExtra("TWEET_ID", event.tweetId);
+            startActivity(intent);
+        }
     }
 
 
-    @Override
-    public void onViewImages(List<String> imageUrls) {
-        new ImageViewer.Builder(this, (ArrayList<String>) imageUrls).show();
+    @Subscribe
+    public void viewImages(ViewImageEvent event) {
+        new ImageViewer.Builder(this, (ArrayList<String>) event.imageUrls)
+                .setStartPosition(event.startPosition)
+                .show();
     }
 
 }

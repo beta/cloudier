@@ -13,6 +13,11 @@
         <item name="cardMaxElevation">8dp</item>
     </style>
 
+    <style name="TweetCard.Wrapper" parent="">
+        <item name="android:clickable">true</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+
     <style name="TweetCard.Header" parent="">
         <item name="android:padding">@dimen/spacing_normal</item>
     </style>

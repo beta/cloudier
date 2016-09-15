@@ -3,6 +3,7 @@ package net.kyouko.cloudier;
 import android.app.Application;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.squareup.otto.Bus;
 
 import net.kyouko.cloudier.util.ImageUtil;
 import net.kyouko.cloudier.util.PreferenceUtil;
@@ -14,6 +15,9 @@ import net.kyouko.cloudier.util.PreferenceUtil;
  */
 public class CloudierApplication extends Application {
 
+    private static Bus bus;
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -23,6 +27,19 @@ public class CloudierApplication extends Application {
         if (!hasInitialSetup()) {
             performInitialSetup();
         }
+    }
+
+
+    public static Bus getBus() {
+        if (bus == null) {
+            synchronized (CloudierApplication.class) {
+                if (bus == null) {
+                    bus = new Bus();
+                }
+            }
+        }
+
+        return bus;
     }
 
 

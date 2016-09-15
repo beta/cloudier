@@ -9,6 +9,8 @@
     android:transitionName="card">
 
     <LinearLayout
+        android:id="@+id/wrapper"
+        style="@style/TweetCard.Wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
