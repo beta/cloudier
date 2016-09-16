@@ -25,6 +25,13 @@
     <string name="text.error.failed_to_fetch_comments">Failed to fetch comments</string>
     <string name="text.error.failed_to_fetch_retweets">Failed to fetch retweets</string>
 
+    <string name="text.time.just_now">Just now</string>
+    <string name="text.time.1_second_ago">1 second ago</string>
+    <string name="text.time.seconds_ago">%d seconds ago</string>
+    <string name="text.time.1_minute_ago">1 minute ago</string>
+    <string name="text.time.minutes_ago">%d minutes ago</string>
+    <string name="text.time.yesterday">Yesterday %s</string>
+
     <string name="text.pattern.username">\@%s</string>
 
 </resources>

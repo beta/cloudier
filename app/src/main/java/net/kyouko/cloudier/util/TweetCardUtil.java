@@ -42,6 +42,7 @@ public class TweetCardUtil {
         @BindView(R.id.wrapper) View wrapper;
         @BindView(R.id.avatar) SimpleDraweeView avatar;
         @BindView(R.id.nickname) TextView nickname;
+        @BindView(R.id.time) TextView time;
         @BindView(R.id.content) TextView content;
         @BindView(R.id.image_wrapper) View imageWrapper;
         @BindView(R.id.image) ImageView image;
@@ -79,6 +80,7 @@ public class TweetCardUtil {
 
             avatar.setImageURI(ImageUtil.getInstance(context).parseImageUrl(tweet.avatarUrl));
             nickname.setText(tweet.nickname);
+            time.setText(DateTimeUtil.getDateTimeDescription(context, tweet.timestamp));
 
             boolean hasContent = (tweet.content.length() > 0);
             content.setVisibility(hasContent ? View.VISIBLE : View.GONE);

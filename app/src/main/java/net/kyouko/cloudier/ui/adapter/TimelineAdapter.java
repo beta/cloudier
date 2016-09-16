@@ -100,9 +100,9 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
 
     private void bindTweetViewHolder(TweetViewHolder holder, Tweet tweet) {
         if (minimized) {
-            TweetCardUtil.displayTweetMinimized(tweet, timeline.users, holder.card, true);
+            TweetCardUtil.displayTweetMinimized(tweet, timeline.users, holder.card, clickable);
         } else {
-            TweetCardUtil.displayTweet(tweet, timeline.users, holder.card, true);
+            TweetCardUtil.displayTweet(tweet, timeline.users, holder.card, clickable);
         }
     }
 

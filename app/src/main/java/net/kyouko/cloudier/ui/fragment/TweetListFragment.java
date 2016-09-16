@@ -61,11 +61,7 @@ public class TweetListFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        if (tweetType == Tweet.TYPE_COMMENT) {
-            adapter = new TimelineAdapter(getContext(), timeline, false, true);
-        } else if (tweetType == Tweet.TYPE_RETWEET) {
-            adapter = new TimelineAdapter(getContext(), timeline, true, true);
-        }
+        adapter = new TimelineAdapter(getContext(), timeline, true, true);
         adapter.setTweetType(tweetType);
         recyclerView.setAdapter(adapter);
     }
