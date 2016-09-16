@@ -105,6 +105,21 @@
             layout="@layout/template_tweet_card_space"
             android:visibility="gone"/>
 
+        <FrameLayout
+            android:id="@+id/deleted_source"
+            style="@style/TweetCard.Source.Deleted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/TweetCard.Source.Deleted.Text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/text.info.source_tweet_deleted"/>
+
+        </FrameLayout>
+
         <android.support.v7.widget.CardView
             android:id="@+id/source_card"
             style="@style/TweetCard.Source"

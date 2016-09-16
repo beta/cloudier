@@ -50,6 +50,7 @@ public class TweetCardUtil {
         @BindView(R.id.image_mask) View imageMask;
         @BindView(R.id.image_count) TextView imageCount;
         @BindView(R.id.space_below_image) View spaceBelowImage;
+        @BindView(R.id.deleted_source) View deletedSourceCard;
         @BindView(R.id.source_card) CardView sourceCard;
         @BindView(R.id.source_wrapper) View sourceWrapper;
         @BindView(R.id.source_image) ImageView sourceImage;
@@ -125,6 +126,7 @@ public class TweetCardUtil {
             if (sourceTweetShown) {
                 displaySourceTweet(((Tweet) tweet).sourceTweet, users);
             } else {
+                deletedSourceCard.setVisibility(View.GONE);
                 sourceCard.setVisibility(View.GONE);
             }
 
@@ -174,6 +176,12 @@ public class TweetCardUtil {
 
         private void displaySourceTweet(final SourceTweet sourceTweet,
                                         final HashMap<String, String> users) {
+            if (sourceTweet.status != Tweet.STATUS_NORMAL) {
+                deletedSourceCard.setVisibility(View.VISIBLE);
+                sourceCard.setVisibility(View.GONE);
+                return;
+            }
+
             sourceCard.setCardBackgroundColor(defaultSourceCardColor);
             sourceNickname.setTextColor(defaultTextColor);
             sourceContent.setTextColor(defaultTextColor);

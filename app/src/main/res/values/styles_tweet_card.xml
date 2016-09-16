@@ -58,6 +58,15 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="TweetCard.Source.Deleted" parent="">
+        <item name="android:padding">@dimen/spacing_normal</item>
+        <item name="android:background">@color/grey_100</item>
+    </style>
+
+    <style name="TweetCard.Source.Deleted.Text" parent="">
+        <item name="android:background">@color/grey_100</item>
+    </style>
+
     <style name="TweetCard.Source" parent="CardView.Light">
         <item name="cardBackgroundColor">@color/grey_100</item>
         <item name="cardCornerRadius">0dp</item>

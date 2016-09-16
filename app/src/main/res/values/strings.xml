@@ -17,6 +17,7 @@
     <string name="text.info.auth_success">Authorization succeeded</string>
     <string name="text.info.no_more_comments">No more comments</string>
     <string name="text.info.no_more_retweets">No more retweets</string>
+    <string name="text.info.source_tweet_deleted">This tweet has been deleted.</string>
 
     <string name="text.error.failed_to_fetch_account">Failed to fetch account info</string>
     <string name="text.error.failed_to_fetch_timeline">Failed to fetch timeline</string>
