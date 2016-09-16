@@ -1,4 +1,4 @@
-package net.kyouko.cloudier.adapter;
+package net.kyouko.cloudier.ui.adapter;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;

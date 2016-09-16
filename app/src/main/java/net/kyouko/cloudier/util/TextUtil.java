@@ -5,7 +5,7 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.view.View;
 
-import net.kyouko.cloudier.style.ClickableWithoutUnderlineSpan;
+import net.kyouko.cloudier.ui.style.ClickableWithoutUnderlineSpan;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:visibility="gone">
 
-            <net.kyouko.cloudier.widget.AspectRatioImageView
+            <net.kyouko.cloudier.ui.widget.AspectRatioImageView
                 android:id="@+id/image"
                 style="@style/TweetCard.Image"
                 android:layout_width="match_parent"

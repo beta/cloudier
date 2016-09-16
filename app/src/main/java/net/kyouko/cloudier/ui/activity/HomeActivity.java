@@ -19,7 +19,7 @@ import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
-import net.kyouko.cloudier.adapter.TimelineAdapter;
+import net.kyouko.cloudier.ui.adapter.TimelineAdapter;
 import net.kyouko.cloudier.api.TencentWeiboApi;
 import net.kyouko.cloudier.event.LoadMoreEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;

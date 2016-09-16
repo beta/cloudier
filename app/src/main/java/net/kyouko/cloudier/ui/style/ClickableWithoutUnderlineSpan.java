@@ -1,4 +1,4 @@
-package net.kyouko.cloudier.style;
+package net.kyouko.cloudier.ui.style;
 
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;

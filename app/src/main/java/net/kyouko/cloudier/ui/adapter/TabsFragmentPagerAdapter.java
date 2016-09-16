@@ -1,4 +1,4 @@
-package net.kyouko.cloudier.adapter;
+package net.kyouko.cloudier.ui.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

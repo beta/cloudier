@@ -1,4 +1,4 @@
-package net.kyouko.cloudier.widget;
+package net.kyouko.cloudier.ui.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;

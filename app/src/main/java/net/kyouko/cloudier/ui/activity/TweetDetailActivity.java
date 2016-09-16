@@ -19,10 +19,10 @@ import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
-import net.kyouko.cloudier.adapter.TabsFragmentPagerAdapter;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.model.SourceTweet;
+import net.kyouko.cloudier.ui.adapter.TabsFragmentPagerAdapter;
 import net.kyouko.cloudier.ui.fragment.TweetListFragment;
 import net.kyouko.cloudier.util.TweetCardUtil;
 
