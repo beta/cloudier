@@ -33,7 +33,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
     private Context context;
     private Timeline timeline;
     private boolean clickable = false;
-    private boolean minimize = false;
+    private boolean minimized = false;
 
     private boolean hasTweetType = false;
     private int tweetType = Tweet.TYPE_ORIGINAL;
@@ -56,7 +56,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
         this.context = context;
         this.timeline = timeline;
         this.clickable = clickable;
-        this.minimize = minimized;
+        this.minimized = minimized;
 
         defaultSourceCardColor = context.getResources().getColor(R.color.grey_100);
         defaultTextColor = context.getResources().getColor(R.color.black_87alpha);
@@ -69,8 +69,12 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ITEM_TYPE_TWEET) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.template_tweet_card, parent, false);
+            View view;
+            if (minimized) {
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.template_tweet_card_mini, parent, false);
+            } else {
+                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.template_tweet_card, parent, false);
+            }
             return new TweetViewHolder(view);
         } else {
             View view = LayoutInflater.from(parent.getContext())
@@ -95,7 +99,11 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
 
 
     private void bindTweetViewHolder(TweetViewHolder holder, Tweet tweet) {
-        TweetCardUtil.displayTweet(tweet, timeline.users, holder.card, true, minimize);
+        if (minimized) {
+            TweetCardUtil.displayTweetMinimized(tweet, timeline.users, holder.card, true);
+        } else {
+            TweetCardUtil.displayTweet(tweet, timeline.users, holder.card, true);
+        }
     }
 
 
