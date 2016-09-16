@@ -18,6 +18,8 @@ public class PreferenceUtil {
     public final static String PREF_ACCOUNT_EXPIRES_IN = "account.expires_in";
     public final static String PREF_ACCOUNT_REFRESH_TOKEN = "account.refresh_token";
     public final static String PREF_ACCOUNT_USERNAME = "account.username";
+    public final static String PREF_ACCOUNT_NICKNAME = "account.nickname";
+    public final static String PREF_ACCOUNT_AVATAR_URL = "account.avatar_url";
     public final static String PREF_ACCOUNT_OPEN_ID = "account.open_id";
 
     public final static String PREF_HAS_AUTHORIZED = "has_authorized";

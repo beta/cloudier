@@ -2,6 +2,8 @@ package net.kyouko.cloudier.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -12,18 +14,25 @@ import android.webkit.WebViewClient;
 
 import net.kyouko.cloudier.Config;
 import net.kyouko.cloudier.R;
+import net.kyouko.cloudier.api.TencentWeiboApi;
 import net.kyouko.cloudier.model.Account;
+import net.kyouko.cloudier.model.User;
 import net.kyouko.cloudier.util.AuthUtil;
 import net.kyouko.cloudier.util.MessageUtil;
+import net.kyouko.cloudier.util.RequestUtil;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AuthActivity extends AppCompatActivity {
 
+    @BindView(R.id.coordinator) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.webview) WebView webView;
 
@@ -82,8 +91,7 @@ public class AuthActivity extends AppCompatActivity {
             @Override
             public void onAuthSuccess(Account account) {
                 AuthUtil.saveAccount(AuthActivity.this, account);
-                MessageUtil.showToast(AuthActivity.this, R.string.text_info_auth_success);
-                startActivity(new Intent(AuthActivity.this, HomeActivity.class));
+                loadAccountInfo(account);
             }
         }));
     }
@@ -97,6 +105,36 @@ public class AuthActivity extends AppCompatActivity {
         } catch (UnsupportedEncodingException ex) {
             // Ignore
         }
+    }
+
+
+    private void loadAccountInfo(final Account account) {
+        TencentWeiboApi api = RequestUtil.getApiInstance();
+        Call<User> userCall = api.getUser(RequestUtil.createOAuthParams(this), account.username);
+        userCall.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                account.nickname = response.body().nickname;
+                account.avatarUrl = response.body().avatarUrl;
+
+                AuthUtil.saveAccount(AuthActivity.this, account);
+                MessageUtil.showToast(AuthActivity.this, R.string.text_info_auth_success);
+                startActivity(new Intent(AuthActivity.this, HomeActivity.class));
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Snackbar.make(coordinatorLayout, R.string.text_error_failed_to_fetch_account,
+                        Snackbar.LENGTH_INDEFINITE)
+                        .setAction(R.string.title_action_retry, new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                loadAccountInfo(account);
+                            }
+                        })
+                        .show();
+            }
+        });
     }
 
 

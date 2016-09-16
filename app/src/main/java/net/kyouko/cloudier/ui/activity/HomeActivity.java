@@ -124,6 +124,10 @@ public class HomeActivity extends AppCompatActivity {
 
     private void checkAuthorization() {
         if (AuthUtil.hasAuthorized(this)) {
+            Account account = AuthUtil.readAccount(this);
+            draweeAvatar.setImageURI(ImageUtil.getInstance(this).parseImageUrl(account.avatarUrl));
+            textTitle.setText(account.nickname);
+
             getAccountInfo();
         } else {
             AuthUtil.startAuth(this);
@@ -132,7 +136,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
     private void getAccountInfo() {
-        Account account = AuthUtil.readAccount(this);
+        final Account account = AuthUtil.readAccount(this);
 
         TencentWeiboApi api = RequestUtil.getApiInstance();
         Call<User> userCall = api.getUser(RequestUtil.createOAuthParams(this), account.username);
@@ -140,6 +144,11 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 currentUser = response.body();
+
+                account.nickname = currentUser.nickname;
+                account.avatarUrl = currentUser.avatarUrl;
+                AuthUtil.saveAccount(HomeActivity.this, account);
+
                 updateAccountInfo();
                 loadHomeTimeline();
             }
