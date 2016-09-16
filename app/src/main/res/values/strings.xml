@@ -15,9 +15,14 @@
     <string name="title.tab.retweets">Retweets</string>
 
     <string name="text.info.auth_success">Authorization succeeded</string>
+    <string name="text.info.no_more_comments">No more comments</string>
+    <string name="text.info.no_more_retweets">No more retweets</string>
 
     <string name="text.error.failed_to_fetch_account">Failed to fetch account info</string>
     <string name="text.error.failed_to_fetch_timeline">Failed to fetch timeline</string>
+    <string name="text.error.failed_to_fetch_tweet">Failed to fetch tweet detail</string>
+    <string name="text.error.failed_to_fetch_comments">Failed to fetch comments</string>
+    <string name="text.error.failed_to_fetch_retweets">Failed to fetch retweets</string>
 
     <string name="text.pattern.username">\@%s</string>
 

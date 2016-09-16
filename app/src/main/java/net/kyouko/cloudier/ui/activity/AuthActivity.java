@@ -110,7 +110,7 @@ public class AuthActivity extends AppCompatActivity {
 
     private void loadAccountInfo(final Account account) {
         TencentWeiboApi api = RequestUtil.getApiInstance();
-        Call<User> userCall = api.getUser(RequestUtil.createOAuthParams(this), account.username);
+        Call<User> userCall = api.getUser(RequestUtil.getOAuthParams(this), account.username);
         userCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {

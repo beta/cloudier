@@ -26,6 +26,7 @@ public class RequestUtil {
 
     private static TencentWeiboApi apiInstance;
 
+    private static Map<String, String> oAuthParams;
 
     /**
      * Creates a {@link Map} of OAuth parameters from account information of logged in user.
@@ -33,14 +34,20 @@ public class RequestUtil {
      * @param context {@link Context} used to read user account.
      * @return a {@link Map} of OAuth parameters.
      */
-    public static Map<String, String> createOAuthParams(Context context) {
-        Account account = AuthUtil.readAccount(context);
+    public static Map<String, String> getOAuthParams(Context context) {
+        if (oAuthParams == null) {
+            synchronized (RequestUtil.class) {
+                if (oAuthParams == null) {
+                    Account account = AuthUtil.readAccount(context);
 
-        Map<String, String> params = new HashMap<>();
-        params.put("access_token", account.accessToken);
-        params.put("openid", account.openId);
+                    oAuthParams = new HashMap<>();
+                    oAuthParams.put("access_token", account.accessToken);
+                    oAuthParams.put("openid", account.openId);
+                }
+            }
+        }
 
-        return params;
+        return oAuthParams;
     }
 
 

@@ -5,5 +5,5 @@ package net.kyouko.cloudier.event;
  *
  * @author beta
  */
-public class LoadMoreEvent {
+public class LoadMoreTweetsEvent {
 }

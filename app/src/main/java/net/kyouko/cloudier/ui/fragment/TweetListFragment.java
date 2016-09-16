@@ -2,11 +2,19 @@ package net.kyouko.cloudier.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import net.kyouko.cloudier.R;
+import net.kyouko.cloudier.model.Timeline;
+import net.kyouko.cloudier.model.Tweet;
+import net.kyouko.cloudier.ui.adapter.TimelineAdapter;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Fragment for displaying a list of tweets.
@@ -15,9 +23,61 @@ import net.kyouko.cloudier.R;
  */
 public class TweetListFragment extends Fragment {
 
+    @BindView(R.id.recycler) RecyclerView recyclerView;
+
+    private Timeline timeline;
+    private int tweetType = Tweet.TYPE_COMMENT;
+
+    private TimelineAdapter adapter;
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        timeline = (Timeline) getArguments().getSerializable("TIMELINE");
+        tweetType = getArguments().getInt("TYPE");
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_tweet_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_tweet_list, container, false);
+
+        ButterKnife.bind(this, view);
+
+        initView();
+
+        return view;
+    }
+
+
+    private void initView() {
+        initRecyclerView();
+    }
+
+
+    private void initRecyclerView() {
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        if (tweetType == Tweet.TYPE_COMMENT) {
+            adapter = new TimelineAdapter(getContext(), timeline, false, true);
+        } else if (tweetType == Tweet.TYPE_RETWEET) {
+            adapter = new TimelineAdapter(getContext(), timeline, true, true);
+        }
+        adapter.setTweetType(tweetType);
+        recyclerView.setAdapter(adapter);
+    }
+
+
+    public void refreshTweetList() {
+        adapter.notifyDataSetChanged();
+    }
+
+
+    public void completeLoadingMore() {
+        adapter.completeLoadingMore();
     }
 
 }

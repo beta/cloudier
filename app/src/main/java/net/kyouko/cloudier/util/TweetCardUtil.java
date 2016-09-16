@@ -87,7 +87,8 @@ public class TweetCardUtil {
         }
 
 
-        void displayTweet(final SourceTweet tweet, final HashMap<String, String> users, boolean clickable) {
+        void displayTweet(final SourceTweet tweet, final HashMap<String, String> users,
+                          boolean clickable, boolean minimized) {
             final Context context = cardView.getContext();
 
             if (clickable) {
@@ -120,15 +121,16 @@ public class TweetCardUtil {
             }
 
             boolean hasSourceTweet = (tweet instanceof Tweet && ((Tweet) tweet).sourceTweet != null);
-            if (hasSourceTweet) {
+            boolean sourceTweetShown = !minimized && hasSourceTweet;
+            if (sourceTweetShown) {
                 displaySourceTweet(((Tweet) tweet).sourceTweet, users);
             } else {
                 sourceCard.setVisibility(View.GONE);
             }
 
-            spaceBelowContent.setVisibility((hasContent && (hasImages || hasSourceTweet)) ?
+            spaceBelowContent.setVisibility((hasContent && (hasImages || sourceTweetShown)) ?
                     View.VISIBLE : View.GONE);
-            spaceBelowImage.setVisibility((hasImages && hasSourceTweet) ? View.VISIBLE : View.GONE);
+            spaceBelowImage.setVisibility((hasImages && sourceTweetShown) ? View.VISIBLE : View.GONE);
 
             commentCount.setText(String.valueOf(tweet.commentCount));
             commentCount.setVisibility((tweet.commentCount > 0) ? View.VISIBLE : View.GONE);
@@ -238,8 +240,14 @@ public class TweetCardUtil {
 
     public static Card displayTweet(SourceTweet tweet, HashMap<String, String> users,
                                     CardView cardView, boolean clickable) {
+        return displayTweet(tweet, users, cardView, clickable, false);
+    }
+
+
+    public static Card displayTweet(SourceTweet tweet, HashMap<String, String> users,
+                                    CardView cardView, boolean clickable, boolean minimized) {
         Card card = new Card(cardView);
-        card.displayTweet(tweet, users, clickable);
+        card.displayTweet(tweet, users, clickable, minimized);
         return card;
     }
 

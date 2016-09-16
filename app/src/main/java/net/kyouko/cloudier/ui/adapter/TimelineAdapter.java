@@ -12,7 +12,8 @@ import android.widget.ProgressBar;
 
 import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
-import net.kyouko.cloudier.event.LoadMoreEvent;
+import net.kyouko.cloudier.event.LoadMoreTweetsEvent;
+import net.kyouko.cloudier.event.LoadMoreTweetsWithTypeEvent;
 import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.Tweet;
 import net.kyouko.cloudier.util.TweetCardUtil;
@@ -31,6 +32,11 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
 
     private Context context;
     private Timeline timeline;
+    private boolean clickable = false;
+    private boolean minimize = false;
+
+    private boolean hasTweetType = false;
+    private int tweetType = Tweet.TYPE_ORIGINAL;
 
     private LoadMoreViewHolder loadMoreViewHolder;
 
@@ -42,8 +48,15 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
 
 
     public TimelineAdapter(Context context, Timeline timeline) {
+        this(context, timeline, true, false);
+    }
+
+
+    public TimelineAdapter(Context context, Timeline timeline, boolean clickable, boolean minimized) {
         this.context = context;
         this.timeline = timeline;
+        this.clickable = clickable;
+        this.minimize = minimized;
 
         defaultSourceCardColor = context.getResources().getColor(R.color.grey_100);
         defaultTextColor = context.getResources().getColor(R.color.black_87alpha);
@@ -82,7 +95,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
 
 
     private void bindTweetViewHolder(TweetViewHolder holder, Tweet tweet) {
-        TweetCardUtil.displayTweet(tweet, timeline.users, holder.card, true);
+        TweetCardUtil.displayTweet(tweet, timeline.users, holder.card, true, minimize);
     }
 
 
@@ -118,7 +131,11 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
                         holder.button.setVisibility(View.GONE);
                         holder.button.setClickable(true);
 
-                        CloudierApplication.getBus().post(new LoadMoreEvent());
+                        if (!hasTweetType) {
+                            CloudierApplication.getBus().post(new LoadMoreTweetsEvent());
+                        } else {
+                            CloudierApplication.getBus().post(new LoadMoreTweetsWithTypeEvent(tweetType));
+                        }
                     }
                 });
     }
@@ -148,6 +165,12 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
     @Override
     public int getItemCount() {
         return (timeline.tweets.size() + (timeline.tweets.isEmpty() ? 0 : 1));
+    }
+
+
+    public void setTweetType(int tweetType) {
+        this.tweetType = tweetType;
+        this.hasTweetType = true;
     }
 
 

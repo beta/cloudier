@@ -2,6 +2,7 @@ package net.kyouko.cloudier.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  *
  * @author beta
  */
-public class Timeline {
+public class Timeline implements Serializable {
 
     public final static int PAGE_FLAG_LATEST = 0;
     public final static int PAGE_FLAG_DOWN = 1;

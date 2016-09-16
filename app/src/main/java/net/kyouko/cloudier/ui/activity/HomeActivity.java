@@ -19,14 +19,14 @@ import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
-import net.kyouko.cloudier.ui.adapter.TimelineAdapter;
 import net.kyouko.cloudier.api.TencentWeiboApi;
-import net.kyouko.cloudier.event.LoadMoreEvent;
+import net.kyouko.cloudier.event.LoadMoreTweetsEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.model.Account;
 import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.User;
+import net.kyouko.cloudier.ui.adapter.TimelineAdapter;
 import net.kyouko.cloudier.util.AuthUtil;
 import net.kyouko.cloudier.util.ImageUtil;
 import net.kyouko.cloudier.util.RequestUtil;
@@ -139,7 +139,7 @@ public class HomeActivity extends AppCompatActivity {
         final Account account = AuthUtil.readAccount(this);
 
         TencentWeiboApi api = RequestUtil.getApiInstance();
-        Call<User> userCall = api.getUser(RequestUtil.createOAuthParams(this), account.username);
+        Call<User> userCall = api.getUser(RequestUtil.getOAuthParams(this), account.username);
         userCall.enqueue(new Callback<User>() {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
@@ -177,7 +177,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void loadHomeTimeline() {
         TencentWeiboApi api = RequestUtil.getApiInstance();
-        Call<Timeline> timelineCall = api.getHomeLatestTimeline(RequestUtil.createOAuthParams(this));
+        Call<Timeline> timelineCall = api.getHomeLatestTimeline(RequestUtil.getOAuthParams(this));
         timelineCall.enqueue(new Callback<Timeline>() {
             @Override
             public void onResponse(Call<Timeline> call, Response<Timeline> response) {
@@ -206,9 +206,9 @@ public class HomeActivity extends AppCompatActivity {
 
 
     @Subscribe
-    public void loadMoreHomeTimeline(LoadMoreEvent event) {
+    public void loadMoreHomeTimeline(LoadMoreTweetsEvent event) {
         TencentWeiboApi api = RequestUtil.getApiInstance();
-        Call<Timeline> timelineCall = api.getMoreHomeTimeline(RequestUtil.createOAuthParams(this),
+        Call<Timeline> timelineCall = api.getMoreHomeTimeline(RequestUtil.getOAuthParams(this),
                 timeline.tweets.get(timeline.tweets.size() - 1).timestamp);
         timelineCall.enqueue(new Callback<Timeline>() {
             @Override
@@ -228,7 +228,7 @@ public class HomeActivity extends AppCompatActivity {
                         .setAction(R.string.title_action_retry, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                loadMoreHomeTimeline(new LoadMoreEvent());
+                                loadMoreHomeTimeline(new LoadMoreTweetsEvent());
                             }
                         })
                         .show();
