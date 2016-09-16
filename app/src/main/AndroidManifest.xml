@@ -29,6 +29,10 @@
             android:name=".ui.activity.TweetDetailActivity"
             android:label="@string/title.activity.tweet_detail">
         </activity>
+        <activity
+            android:name=".ui.activity.ComposerActivity"
+            android:label="@string/title.activity.new_tweet">
+        </activity>
     </application>
 
 </manifest>

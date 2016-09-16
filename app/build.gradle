@@ -39,4 +39,5 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.4'
     compile 'com.facebook.fresco:fresco:0.13.0'
     compile 'com.github.stfalcon:frescoimageviewer:0.2.0'
+    compile 'com.github.florent37:viewanimator:1.0.4'
 }

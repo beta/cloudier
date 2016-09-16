@@ -2,15 +2,19 @@ package net.kyouko.cloudier.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -25,8 +29,10 @@ import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.model.Account;
 import net.kyouko.cloudier.model.Timeline;
+import net.kyouko.cloudier.model.Tweet;
 import net.kyouko.cloudier.model.User;
 import net.kyouko.cloudier.ui.adapter.TimelineAdapter;
+import net.kyouko.cloudier.ui.widget.listener.RecyclerViewDisabler;
 import net.kyouko.cloudier.util.AuthUtil;
 import net.kyouko.cloudier.util.ImageUtil;
 import net.kyouko.cloudier.util.RequestUtil;
@@ -41,17 +47,24 @@ import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity {
 
+    private final static int REQUEST_COMPOSER = 0;
+
+
     @BindView(R.id.coordinator) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.avatar) SimpleDraweeView draweeAvatar;
     @BindView(R.id.title) TextView textTitle;
     @BindView(R.id.srl) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.recycler) RecyclerView recyclerView;
+    @BindView(R.id.fab) FloatingActionButton fab;
 
+    private Account account;
     private User currentUser;
 
     private Timeline timeline = new Timeline();
     private TimelineAdapter adapter;
+
+    private RecyclerViewDisabler recyclerViewDisabler;
 
 
     @Override
@@ -93,6 +106,7 @@ public class HomeActivity extends AppCompatActivity {
         initToolbar();
         initSwipeRefreshLayout();
         initRecyclerView();
+        initFab();
     }
 
 
@@ -107,6 +121,7 @@ public class HomeActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                adapter.hideComposer();
                 loadHomeTimeline();
             }
         });
@@ -117,14 +132,27 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        recyclerViewDisabler = new RecyclerViewDisabler();
+        recyclerView.addOnItemTouchListener(recyclerViewDisabler);
+
         adapter = new TimelineAdapter(this, timeline);
         recyclerView.setAdapter(adapter);
     }
 
 
+    private void initFab() {
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                createNewTweet();
+            }
+        });
+    }
+
+
     private void checkAuthorization() {
         if (AuthUtil.hasAuthorized(this)) {
-            Account account = AuthUtil.readAccount(this);
+            account = AuthUtil.readAccount(this);
             draweeAvatar.setImageURI(ImageUtil.getInstance(this).parseImageUrl(account.avatarUrl));
             textTitle.setText(account.nickname);
 
@@ -234,6 +262,76 @@ public class HomeActivity extends AppCompatActivity {
                         .show();
             }
         });
+    }
+
+
+    private void createNewTweet() {
+        fab.setEnabled(false);
+        recyclerViewDisabler.setDisabled(true);
+        swipeRefreshLayout.setEnabled(false);
+
+        recyclerView.scrollToPosition(0);
+        adapter.showComposer(account);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(HomeActivity.this, ComposerActivity.class);
+                CardView composerCard = adapter.getComposerCard();
+                if (composerCard != null) {
+                    ActivityOptionsCompat options = ActivityOptionsCompat
+                            .makeSceneTransitionAnimation(HomeActivity.this, composerCard, "card");
+                    startActivityForResult(intent, REQUEST_COMPOSER, options.toBundle());
+                } else {
+                    startActivityForResult(intent, REQUEST_COMPOSER);
+                }
+            }
+        }, 400);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_COMPOSER) {
+            String content = data.getStringExtra("CONTENT");
+            ((EditText) adapter.getComposerCard().findViewById(R.id.content)).setText(content);
+
+            if (resultCode == RESULT_OK) {
+                final boolean hasTweet = data.hasExtra("TWEET");
+                if (hasTweet) {
+                    Tweet tweet = (Tweet) data.getSerializableExtra("TWEET");
+                    timeline.tweets.add(0, tweet);
+                    timeline.users.putAll(tweet.users);
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.hideComposer();
+                        if (hasTweet) {
+                            adapter.notifyItemChanged(0);
+                        } else {
+                            adapter.notifyItemRemoved(0);
+                        }
+
+                        fab.setEnabled(true);
+                        recyclerViewDisabler.setDisabled(false);
+                        swipeRefreshLayout.setEnabled(true);
+                    }
+                }, 350);
+            } else if (resultCode == RESULT_CANCELED) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.hideComposer();
+                        adapter.notifyItemRemoved(0);
+
+                        fab.setEnabled(true);
+                        recyclerViewDisabler.setDisabled(false);
+                        swipeRefreshLayout.setEnabled(true);
+                    }
+                }, 350);
+            }
+        }
     }
 
 

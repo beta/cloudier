@@ -11,6 +11,8 @@
     <color name="light_blue_700">#0288D1</color>
     <color name="light_blue_a400">#00B0FF</color>
 
+    <color name="red_500">#F44336</color>
+
     <color name="grey_50">#FAFAFA</color>
     <color name="grey_100">#F5F5F5</color>
     <color name="grey_200">#EEEEEE</color>

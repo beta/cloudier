@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:id="@+id/card"
+    style="@style/TweetCard"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:transitionName="card">
+
+    <LinearLayout
+        android:id="@+id/wrapper"
+        style="@style/TweetCard.Composer.Wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/header"
+            style="@style/TweetCard.Header"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:orientation="horizontal">
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/avatar"
+                style="@style/TweetCard.Header.Avatar"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/spacing_normal"
+                android:layout_toEndOf="@+id/avatar"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/nickname"
+                    style="@style/TweetCard.Header.Nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:text="beta"/>
+
+                <TextView
+                    android:id="@+id/username"
+                    style="@style/TweetCard.Header.Username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_minimum"
+                    tools:text="\@Bitex_"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/content"
+            style="@style/TweetCard.Content.Composer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <RelativeLayout
+            android:id="@+id/actions"
+            style="@style/TweetCard.Actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:id="@+id/button_add_image"
+                style="@style/TweetCard.Actions.Action"
+                android:layout_width="40dp"
+                android:layout_height="40dp">
+
+                <ImageView
+                    style="@style/TweetCard.Actions.Action.Icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_image_black_54alpha_24dp"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/button_add_friend"
+                style="@style/TweetCard.Actions.Action"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_toEndOf="@+id/button_add_image">
+
+                <ImageView
+                    style="@style/TweetCard.Actions.Action.Icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_person_black_54alpha_24dp"/>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/button_add_topic"
+                style="@style/TweetCard.Actions.Action"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_toEndOf="@+id/button_add_friend">
+
+                <ImageView
+                    style="@style/TweetCard.Actions.Action.Icon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_label_black_54alpha_24dp"/>
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/word_count"
+                style="@style/TweetCard.Actions.WordCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="140"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

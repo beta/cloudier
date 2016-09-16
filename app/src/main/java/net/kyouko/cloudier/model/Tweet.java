@@ -3,6 +3,7 @@ package net.kyouko.cloudier.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Map;
 
 /**
  * Class for a piece of tweet.
@@ -28,5 +29,7 @@ public class Tweet extends SourceTweet implements Serializable {
 
     @SerializedName("source")
     public SourceTweet sourceTweet;
+    @SerializedName("user")
+    public Map<String, String> users;
 
 }

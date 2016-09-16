@@ -3,19 +3,25 @@ package net.kyouko.cloudier.ui.adapter;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.event.LoadMoreTweetsEvent;
 import net.kyouko.cloudier.event.LoadMoreTweetsWithTypeEvent;
+import net.kyouko.cloudier.model.Account;
 import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.Tweet;
+import net.kyouko.cloudier.util.ImageUtil;
 import net.kyouko.cloudier.util.TweetCardUtil;
 
 import butterknife.BindView;
@@ -27,6 +33,7 @@ import butterknife.ButterKnife;
 public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseViewHolder> {
 
     private final static int ITEM_TYPE_TWEET = 0;
+    private final static int ITEM_TYPE_COMPOSER = 1;
     private final static int ITEM_TYPE_LOAD_MORE = 99;
 
 
@@ -34,6 +41,10 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
     private Timeline timeline;
     private boolean clickable = false;
     private boolean minimized = false;
+
+    private Account account;
+    private boolean showComposer = false;
+    private CardView composerCard;
 
     private boolean hasTweetType = false;
     private int tweetType = Tweet.TYPE_ORIGINAL;
@@ -68,33 +79,57 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
 
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == ITEM_TYPE_TWEET) {
+        if (viewType == ITEM_TYPE_COMPOSER) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.template_composer_card, parent, false);
+            return new ComposerViewHolder(view);
+        } else if (viewType == ITEM_TYPE_TWEET) {
             View view;
             if (minimized) {
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.template_tweet_card_mini, parent, false);
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.template_tweet_card_mini, parent, false);
             } else {
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.template_tweet_card, parent, false);
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.template_tweet_card, parent, false);
             }
             return new TweetViewHolder(view);
-        } else {
+        } else if (viewType == ITEM_TYPE_LOAD_MORE) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.template_load_more, parent, false);
             return new LoadMoreViewHolder(view);
         }
+
+        return null;
     }
 
 
     @Override
     public void onBindViewHolder(final BaseViewHolder holder, int position) {
         switch (getItemViewType(position)) {
-            case ITEM_TYPE_TWEET:
-                Tweet tweet = timeline.tweets.get(position);
-                bindTweetViewHolder((TweetViewHolder) holder, tweet);
+            case ITEM_TYPE_COMPOSER:
+                bindComposerViewHolder((ComposerViewHolder) holder);
                 break;
             case ITEM_TYPE_LOAD_MORE:
                 bindLoadMoreViewHolder((LoadMoreViewHolder) holder);
                 break;
+            case ITEM_TYPE_TWEET:
+            default:
+                position -= (showComposer ? 1 : 0);
+                Tweet tweet = timeline.tweets.get(position);
+                bindTweetViewHolder((TweetViewHolder) holder, tweet);
+                break;
         }
+    }
+
+
+    private void bindComposerViewHolder(ComposerViewHolder holder) {
+        composerCard = holder.card;
+
+        holder.avatar.setImageURI(Uri.parse(ImageUtil.getInstance(context).
+                parseImageUrl(account.avatarUrl)));
+        holder.nickname.setText(account.nickname);
+        holder.username.setText(context.getString(R.string.text_pattern_username, account.username));
+        holder.content.setText(null);
     }
 
 
@@ -159,11 +194,31 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
     }
 
 
+    public void showComposer(Account account) {
+        this.account = account;
+        showComposer = true;
+        notifyItemInserted(0);
+    }
+
+
+    public void hideComposer() {
+        showComposer = false;
+    }
+
+
+    public CardView getComposerCard() {
+        return composerCard;
+    }
+
+
     @Override
     public int getItemViewType(int position) {
-        boolean shouldShowLoadMoreButton = !timeline.tweets.isEmpty();
-        if (position == timeline.tweets.size()) {
-            return (shouldShowLoadMoreButton ? ITEM_TYPE_LOAD_MORE : ITEM_TYPE_TWEET);
+        boolean showLoadMore = !timeline.tweets.isEmpty();
+
+        if (showComposer && position == 0) {
+            return ITEM_TYPE_COMPOSER;
+        } else if (showLoadMore && position == (getItemCount() - 1)) {
+            return ITEM_TYPE_LOAD_MORE;
         } else {
             return ITEM_TYPE_TWEET;
         }
@@ -172,7 +227,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
 
     @Override
     public int getItemCount() {
-        return (timeline.tweets.size() + (timeline.tweets.isEmpty() ? 0 : 1));
+        return (timeline.tweets.size() + (showComposer ? 1 : 0) +
+                (!timeline.tweets.isEmpty() ? 1 : 0));
     }
 
 
@@ -186,6 +242,23 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
 
         public BaseViewHolder(View itemView) {
             super(itemView);
+        }
+
+    }
+
+
+    public class ComposerViewHolder extends BaseViewHolder {
+
+        @BindView(R.id.card) CardView card;
+        @BindView(R.id.avatar) ImageView avatar;
+        @BindView(R.id.nickname) TextView nickname;
+        @BindView(R.id.username) TextView username;
+        @BindView(R.id.content) EditText content;
+
+        public ComposerViewHolder(View itemView) {
+            super(itemView);
+
+            ButterKnife.bind(this, itemView);
         }
 
     }
