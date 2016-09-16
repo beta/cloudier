@@ -119,7 +119,10 @@ public class AuthActivity extends AppCompatActivity {
 
                 AuthUtil.saveAccount(AuthActivity.this, account);
                 MessageUtil.showToast(AuthActivity.this, R.string.text_info_auth_success);
-                startActivity(new Intent(AuthActivity.this, HomeActivity.class));
+
+                Intent intent = new Intent(AuthActivity.this, HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
             }
 
             @Override
