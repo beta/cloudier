@@ -110,7 +110,7 @@
 
     <style name="TweetCard.Actions.Action" parent="">
         <item name="android:minWidth">40dp</item>
-        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
         <item name="android:clickable">true</item>
     </style>
 
@@ -123,6 +123,7 @@
         <item name="android:orientation">horizontal</item>
         <item name="android:paddingStart">10dp</item>
         <item name="android:paddingEnd">10dp</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 
     <style name="TweetCard.Actions.Action.WithText.Text" parent="">
