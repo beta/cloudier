@@ -220,10 +220,13 @@ public class ComposerActivity extends AppCompatActivity {
                         case TYPE_NEW:
                         default:
                             sendTweet();
+                            break;
                         case TYPE_COMMENT:
                             comment();
+                            break;
                         case TYPE_RETWEET:
                             retweet();
+                            break;
                     }
                 }
             });
