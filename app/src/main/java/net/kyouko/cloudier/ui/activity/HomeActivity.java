@@ -118,6 +118,13 @@ public class HomeActivity extends AppCompatActivity {
     private void initToolbar() {
         setSupportActionBar(toolbar);
         setTitle(null);
+
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recyclerView.smoothScrollToPosition(0);
+            }
+        });
     }
 
 
