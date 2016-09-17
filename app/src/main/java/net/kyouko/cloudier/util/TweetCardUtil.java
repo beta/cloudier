@@ -13,6 +13,8 @@ import com.squareup.picasso.Picasso;
 
 import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
+import net.kyouko.cloudier.event.CommentTweetEvent;
+import net.kyouko.cloudier.event.RetweetTweetEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.model.SourceTweet;
@@ -37,9 +39,9 @@ public class TweetCardUtil {
         public CardView cardView;
         @BindView(R.id.wrapper) View wrapper;
         @BindView(R.id.avatar) SimpleDraweeView avatar;
-        @BindView(R.id.nickname) TextView nickname;
-        @BindView(R.id.time) TextView time;
-        @BindView(R.id.content) TextView content;
+        @BindView(R.id.nickname) public TextView nickname;
+        @BindView(R.id.time) public TextView time;
+        @BindView(R.id.content) public TextView content;
         @BindView(R.id.image_wrapper) View imageWrapper;
         @BindView(R.id.image) ImageView image;
         @BindView(R.id.image_mask) View imageMask;
@@ -139,9 +141,9 @@ public class TweetCardUtil {
         @BindView(R.id.deleted_source) View deletedSourceCard;
         @BindView(R.id.source_card) CardView sourceCard;
         @BindView(R.id.source_wrapper) View sourceWrapper;
-        @BindView(R.id.source_nickname) TextView sourceNickname;
-        @BindView(R.id.source_time) TextView sourceTime;
-        @BindView(R.id.source_content) TextView sourceContent;
+        @BindView(R.id.source_nickname) public TextView sourceNickname;
+        @BindView(R.id.source_time) public TextView sourceTime;
+        @BindView(R.id.source_content) public TextView sourceContent;
         @BindView(R.id.source_image) ImageView sourceImage;
         @BindView(R.id.button_comment) View commentButton;
         @BindView(R.id.comment_count) TextView commentCount;
@@ -185,7 +187,7 @@ public class TweetCardUtil {
             boolean hasContent = (tweet.content.length() > 0);
             boolean hasImages = (tweet.imageUrls != null && !tweet.imageUrls.isEmpty());
 
-            boolean hasSourceTweet = (tweet instanceof Tweet && ((Tweet) tweet).sourceTweet != null);
+            final boolean hasSourceTweet = (tweet instanceof Tweet && ((Tweet) tweet).sourceTweet != null);
             if (hasSourceTweet) {
                 displaySourceTweet(((Tweet) tweet).sourceTweet, users);
             } else {
@@ -201,6 +203,37 @@ public class TweetCardUtil {
             commentCount.setVisibility((tweet.commentCount > 0) ? View.VISIBLE : View.GONE);
             retweetCount.setText(String.valueOf(tweet.retweetCount));
             retweetCount.setVisibility((tweet.retweetCount > 0) ? View.VISIBLE : View.GONE);
+
+            commentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (hasSourceTweet) {
+                        CloudierApplication.getBus().post(new CommentTweetEvent(
+                                ((Tweet) tweet).sourceTweet, sourceContent.getText().toString(),
+                                context.getString(R.string.text_pattern_comment, tweet.username,
+                                        tweet.originalContent),
+                                Card.this, false));
+                    } else {
+                        CloudierApplication.getBus().post(new CommentTweetEvent(tweet,
+                                content.getText().toString(), Card.this));
+                    }
+                }
+            });
+            retweetButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (hasSourceTweet) {
+                        CloudierApplication.getBus().post(new RetweetTweetEvent(
+                                ((Tweet) tweet).sourceTweet, sourceContent.getText().toString(),
+                                context.getString(R.string.text_pattern_comment, tweet.username,
+                                        tweet.originalContent),
+                                Card.this, false));
+                    } else {
+                        CloudierApplication.getBus().post(new RetweetTweetEvent(tweet,
+                                content.getText().toString(), Card.this));
+                    }
+                }
+            });
         }
 
 

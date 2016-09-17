@@ -7,6 +7,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -15,13 +16,16 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
 import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
+import net.kyouko.cloudier.event.CommentTweetEvent;
 import net.kyouko.cloudier.event.LoadMoreTweetsWithTypeEvent;
+import net.kyouko.cloudier.event.RetweetTweetEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.model.SourceTweet;
@@ -43,6 +47,10 @@ import retrofit2.Response;
 
 public class TweetDetailActivity extends AppCompatActivity implements
         AppBarLayout.OnOffsetChangedListener {
+
+    private final static int REQUEST_COMPOSER_COMMENT = 0;
+    private final static int REQUEST_COMPOSER_RETWEET = 1;
+
 
     @BindView(R.id.coordinator) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.srl) SwipeRefreshLayout swipeRefreshLayout;
@@ -397,6 +405,62 @@ public class TweetDetailActivity extends AppCompatActivity implements
         new ImageViewer.Builder(this, (ArrayList<String>) event.imageUrls)
                 .setStartPosition(event.startPosition)
                 .show();
+    }
+
+
+    @Subscribe
+    public void commentOrRetweetTweet(CommentTweetEvent event) {
+        Intent intent = new Intent(this, ComposerActivity.class);
+
+        int requestCode;
+        if (event instanceof RetweetTweetEvent) {
+            requestCode = REQUEST_COMPOSER_RETWEET;
+            intent.putExtra("TYPE", ComposerActivity.TYPE_RETWEET);
+        } else {
+            requestCode = REQUEST_COMPOSER_COMMENT;
+            intent.putExtra("TYPE", ComposerActivity.TYPE_COMMENT);
+        }
+        intent.putExtra("TWEET", event.tweet);
+        intent.putExtra("CONTENT", event.commentContent);
+        intent.putExtra("SOURCE_CONTENT", event.sourceTweetContent);
+
+        Pair<View, String> cardPair = Pair.create((View) event.card.cardView, "card");
+        Pair<View, String> nicknamePair = Pair.create((View) event.nickname, "nickname");
+        Pair<View, String> timePair = Pair.create((View) event.time, "time");
+        Pair<View, String> contentPair = Pair.create((View) event.content, "content");
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this, cardPair, nicknamePair, timePair, contentPair
+        );
+
+        startActivityForResult(intent, requestCode, options.toBundle());
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_COMPOSER_COMMENT && resultCode == RESULT_OK) {
+            tweet.commentCount += 1;
+            ((TextView) cardView.findViewById(R.id.comment_count)).setText(String.valueOf(tweet.commentCount));
+
+            final boolean hasTweet = data.hasExtra("TWEET");
+            if (hasTweet) {
+                Tweet tweet = (Tweet) data.getSerializableExtra("TWEET");
+                commentsTimeline.tweets.add(0, tweet);
+                commentsTimeline.users.putAll(tweet.users);
+                commentsFragment.notifyItemInserted(0);
+            }
+        } else if (requestCode == REQUEST_COMPOSER_RETWEET && resultCode == RESULT_OK) {
+            tweet.retweetCount += 1;
+            ((TextView) cardView.findViewById(R.id.retweet_count)).setText(String.valueOf(tweet.retweetCount));
+
+            final boolean hasTweet = data.hasExtra("TWEET");
+            if (hasTweet) {
+                Tweet tweet = (Tweet) data.getSerializableExtra("TWEET");
+                retweetsTimeline.tweets.add(0, tweet);
+                retweetsTimeline.users.putAll(tweet.users);
+                retweetsFragment.notifyItemInserted(0);
+            }
+        }
     }
 
 }

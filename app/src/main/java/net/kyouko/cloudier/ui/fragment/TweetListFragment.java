@@ -76,4 +76,9 @@ public class TweetListFragment extends Fragment {
         adapter.completeLoadingMore();
     }
 
+
+    public void notifyItemInserted(int position) {
+        adapter.notifyItemInserted(position);
+    }
+
 }

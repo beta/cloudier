@@ -44,6 +44,7 @@
                         style="@style/TweetCard.Header.Nickname"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:transitionName="nickname"
                         tools:text="beta"/>
 
                     <TextView
@@ -52,6 +53,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
+                        android:transitionName="time"
                         tools:text="15:23"/>
 
                 </FrameLayout>
@@ -73,6 +75,7 @@
             style="@style/TweetCard.Content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:transitionName="content"
             tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."/>
 
         <include

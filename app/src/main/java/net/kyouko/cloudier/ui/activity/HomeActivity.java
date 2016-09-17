@@ -7,6 +7,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -24,7 +25,9 @@ import com.stfalcon.frescoimageviewer.ImageViewer;
 import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.api.TencentWeiboApi;
+import net.kyouko.cloudier.event.CommentTweetEvent;
 import net.kyouko.cloudier.event.LoadMoreTweetsEvent;
+import net.kyouko.cloudier.event.RetweetTweetEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.model.Account;
@@ -47,7 +50,9 @@ import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private final static int REQUEST_COMPOSER = 0;
+    private final static int REQUEST_COMPOSER_NEW_TWEET = 0;
+    private final static int REQUEST_COMPOSER_COMMENT = 1;
+    private final static int REQUEST_COMPOSER_RETWEET = 2;
 
 
     @BindView(R.id.coordinator) CoordinatorLayout coordinatorLayout;
@@ -277,22 +282,80 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Intent intent = new Intent(HomeActivity.this, ComposerActivity.class);
+                intent.putExtra("TYPE", ComposerActivity.TYPE_NEW);
                 CardView composerCard = adapter.getComposerCard();
                 if (composerCard != null) {
                     ActivityOptionsCompat options = ActivityOptionsCompat
                             .makeSceneTransitionAnimation(HomeActivity.this, composerCard, "card");
-                    startActivityForResult(intent, REQUEST_COMPOSER, options.toBundle());
+                    startActivityForResult(intent, REQUEST_COMPOSER_NEW_TWEET, options.toBundle());
                 } else {
-                    startActivityForResult(intent, REQUEST_COMPOSER);
+                    startActivityForResult(intent, REQUEST_COMPOSER_NEW_TWEET);
                 }
             }
         }, 400);
     }
 
 
+    @Subscribe
+    public void viewTweet(ViewTweetEvent event) {
+        Intent intent = new Intent(this, TweetDetailActivity.class);
+
+        if (event.type == ViewTweetEvent.TYPE_TWEET) {
+            intent.putExtra("TWEET", event.tweet);
+            intent.putExtra("USERS", event.users);
+            if (event.card != null) {
+                ActivityOptionsCompat options = ActivityOptionsCompat
+                        .makeSceneTransitionAnimation(this, event.card.cardView, "card");
+                startActivity(intent, options.toBundle());
+            } else {
+                startActivity(intent);
+            }
+        } else if (event.type == ViewTweetEvent.TYPE_ID) {
+            intent.putExtra("TWEET_ID", event.tweetId);
+            startActivity(intent);
+        }
+    }
+
+
+    @Subscribe
+    public void viewImages(ViewImageEvent event) {
+        new ImageViewer.Builder(this, (ArrayList<String>) event.imageUrls)
+                .setStartPosition(event.startPosition)
+                .show();
+    }
+
+
+    @Subscribe
+    public void commentOrRetweetTweet(CommentTweetEvent event) {
+        Intent intent = new Intent(this, ComposerActivity.class);
+
+        int requestCode;
+        if (event instanceof RetweetTweetEvent) {
+            requestCode = REQUEST_COMPOSER_RETWEET;
+            intent.putExtra("TYPE", ComposerActivity.TYPE_RETWEET);
+        } else {
+            requestCode = REQUEST_COMPOSER_COMMENT;
+            intent.putExtra("TYPE", ComposerActivity.TYPE_COMMENT);
+        }
+        intent.putExtra("TWEET", event.tweet);
+        intent.putExtra("CONTENT", event.commentContent);
+        intent.putExtra("SOURCE_CONTENT", event.sourceTweetContent);
+
+        Pair<View, String> cardPair = Pair.create((View) event.card.cardView, "card");
+        Pair<View, String> nicknamePair = Pair.create((View) event.nickname, "nickname");
+        Pair<View, String> timePair = Pair.create((View) event.time, "time");
+        Pair<View, String> contentPair = Pair.create((View) event.content, "content");
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this, cardPair, nicknamePair, timePair, contentPair
+        );
+
+        startActivityForResult(intent, requestCode, options.toBundle());
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_COMPOSER) {
+        if (requestCode == REQUEST_COMPOSER_NEW_TWEET) {
             String content = data.getStringExtra("CONTENT");
             ((EditText) adapter.getComposerCard().findViewById(R.id.content)).setText(content);
 
@@ -331,36 +394,20 @@ public class HomeActivity extends AppCompatActivity {
                     }
                 }, 350);
             }
-        }
-    }
+        } else if (requestCode == REQUEST_COMPOSER_COMMENT && resultCode == RESULT_OK) {
+            Snackbar.make(coordinatorLayout, R.string.text_info_comment_sent, Snackbar.LENGTH_SHORT)
+                    .show();
+        } else if (requestCode == REQUEST_COMPOSER_RETWEET && resultCode == RESULT_OK) {
+            final boolean hasTweet = data.hasExtra("TWEET");
+            if (hasTweet) {
+                recyclerView.scrollToPosition(0);
 
-
-    @Subscribe
-    public void viewTweet(ViewTweetEvent event) {
-        Intent intent = new Intent(this, TweetDetailActivity.class);
-
-        if (event.type == ViewTweetEvent.TYPE_TWEET) {
-            intent.putExtra("TWEET", event.tweet);
-            intent.putExtra("USERS", event.users);
-            if (event.card != null) {
-                ActivityOptionsCompat options = ActivityOptionsCompat
-                        .makeSceneTransitionAnimation(this, event.card.cardView, "card");
-                startActivity(intent, options.toBundle());
-            } else {
-                startActivity(intent);
+                Tweet tweet = (Tweet) data.getSerializableExtra("TWEET");
+                timeline.tweets.add(0, tweet);
+                timeline.users.putAll(tweet.users);
+                adapter.notifyItemInserted(0);
             }
-        } else if (event.type == ViewTweetEvent.TYPE_ID) {
-            intent.putExtra("TWEET_ID", event.tweetId);
-            startActivity(intent);
         }
-    }
-
-
-    @Subscribe
-    public void viewImages(ViewImageEvent event) {
-        new ImageViewer.Builder(this, (ArrayList<String>) event.imageUrls)
-                .setStartPosition(event.startPosition)
-                .show();
     }
 
 }

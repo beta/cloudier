@@ -79,6 +79,22 @@ public interface TencentWeiboApi {
     Call<TweetResult> postTweet(@FieldMap Map<String, String> constantParams,
                                 @FieldMap Map<String, String> oAuthParams,
                                 @Field("content") String content);
+
+
+    @FormUrlEncoded
+    @POST("api/t/comment")
+    Call<TweetResult> comment(@FieldMap Map<String, String> constantParams,
+                              @FieldMap Map<String, String> oAuthParams,
+                              @Field("reid") String tweetId,
+                              @Field("content") String content);
+
+
+    @FormUrlEncoded
+    @POST("api/t/re_add")
+    Call<TweetResult> retweet(@FieldMap Map<String, String> constantParams,
+                              @FieldMap Map<String, String> oAuthParams,
+                              @Field("reid") String tweetId,
+                              @Field("content") String content);
     // endregion
 
 }

@@ -31,7 +31,7 @@
         </activity>
         <activity
             android:name=".ui.activity.ComposerActivity"
-            android:label="@string/title.activity.new_tweet">
+            android:label="@string/title.activity.composer">
         </activity>
     </application>
 
