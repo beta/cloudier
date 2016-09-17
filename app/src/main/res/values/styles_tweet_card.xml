@@ -83,11 +83,12 @@
     </style>
 
     <style name="TweetCard.Source.Deleted" parent="">
+        <item name="android:padding">@dimen/spacing_normal</item>
         <item name="android:background">@color/grey_100</item>
     </style>
 
     <style name="TweetCard.Source.Deleted.Text" parent="">
-        <item name="android:background">@color/grey_100</item>
+        <item name="android:textAppearance">@style/SecondaryText</item>
     </style>
 
     <style name="TweetCard.Source" parent="CardView.Light">
@@ -102,11 +103,6 @@
         <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 
-    <style name="TweetCard.Source.Image" parent="">
-        <item name="android:background">@color/grey_300</item>
-        <item name="android:scaleType">centerCrop</item>
-    </style>
-
     <style name="TweetCard.Source.Details" parent="">
         <item name="android:padding">@dimen/spacing_normal</item>
     </style>
@@ -114,8 +110,18 @@
     <style name="TweetCard.Source.Nickname" parent="TweetCard.Header.Nickname">
     </style>
 
+    <style name="TweetCard.Source.Time" parent="TweetCard.Header.Time">
+    </style>
+
     <style name="TweetCard.Source.Content" parent="">
         <item name="android:textAppearance">@style/PrimaryText</item>
+    </style>
+
+    <style name="TweetCard.Source.Image" parent="">
+        <item name="android:src">@color/grey_300</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="aspectRatio">1.78</item>
+        <item name="dominantMeasurement">width</item>
     </style>
 
     <style name="TweetCard.Actions" parent="">

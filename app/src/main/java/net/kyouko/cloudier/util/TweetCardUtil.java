@@ -1,10 +1,7 @@
 package net.kyouko.cloudier.util;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.CardView;
 import android.text.SpannableStringBuilder;
 import android.view.View;
@@ -12,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import net.kyouko.cloudier.CloudierApplication;
@@ -143,18 +139,16 @@ public class TweetCardUtil {
         @BindView(R.id.deleted_source) View deletedSourceCard;
         @BindView(R.id.source_card) CardView sourceCard;
         @BindView(R.id.source_wrapper) View sourceWrapper;
-        @BindView(R.id.source_image) ImageView sourceImage;
         @BindView(R.id.source_nickname) TextView sourceNickname;
+        @BindView(R.id.source_time) TextView sourceTime;
         @BindView(R.id.source_content) TextView sourceContent;
+        @BindView(R.id.source_image) ImageView sourceImage;
         @BindView(R.id.button_comment) View commentButton;
         @BindView(R.id.comment_count) TextView commentCount;
         @BindView(R.id.button_retweet) View retweetButton;
         @BindView(R.id.retweet_count) TextView retweetCount;
         @BindView(R.id.button_share) View shareButton;
         @BindView(R.id.button_menu) View menuButton;
-
-        private int defaultSourceCardColor;
-        private int defaultTextColor;
 
 
         public Card(CardView cardView) {
@@ -169,9 +163,6 @@ public class TweetCardUtil {
         @Override
         protected void loadResources() {
             super.loadResources();
-
-            defaultSourceCardColor = context.getResources().getColor(R.color.grey_100);
-            defaultTextColor = context.getResources().getColor(R.color.black_87alpha);
         }
 
 
@@ -221,10 +212,7 @@ public class TweetCardUtil {
                 return;
             }
 
-            sourceCard.setCardBackgroundColor(defaultSourceCardColor);
-            sourceNickname.setTextColor(defaultTextColor);
-            sourceContent.setTextColor(defaultTextColor);
-
+            deletedSourceCard.setVisibility(View.GONE);
             sourceCard.setVisibility(View.VISIBLE);
             sourceWrapper.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -235,11 +223,14 @@ public class TweetCardUtil {
 
             sourceNickname.setText(sourceTweet.nickname);
 
+            sourceTime.setText(DateTimeUtil.getDateTimeDescription(context, sourceTweet.timestamp));
+
             SpannableStringBuilder tweetContent = TextUtil.addLinkToUrlsInText(context,
                     sourceTweet.originalContent, false);
             tweetContent = TextUtil.addLinkToTopicsInText(context, tweetContent, false);
             tweetContent = NicknameUtil.replaceUsernameWithNicknameInContent(tweetContent, users);
             sourceContent.setText(tweetContent);
+            sourceContent.setVisibility((tweetContent.length() > 0) ? View.VISIBLE : View.GONE);
 
             if (sourceTweet.imageUrls != null && !sourceTweet.imageUrls.isEmpty()) {
                 sourceImage.setVisibility(View.VISIBLE);
@@ -250,27 +241,7 @@ public class TweetCardUtil {
                         .placeholder(new ColorDrawable(imagePlaceholderColor))
                         .fit()
                         .centerCrop()
-                        .into(sourceImage, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                                BitmapDrawable drawable = (BitmapDrawable) sourceImage.getDrawable();
-                                Bitmap bitmap = drawable.getBitmap();
-
-                                Palette palette = Palette.from(bitmap).generate();
-
-                                sourceCard.setCardBackgroundColor(
-                                        palette.getDarkMutedColor(defaultSourceCardColor));
-                                sourceNickname.setTextColor(
-                                        palette.getLightMutedColor(defaultTextColor));
-                                sourceContent.setTextColor(
-                                        palette.getLightMutedColor(defaultTextColor));
-                            }
-
-                            @Override
-                            public void onError() {
-                                // Ignore
-                            }
-                        });
+                        .into(sourceImage);
             } else {
                 sourceImage.setVisibility(View.GONE);
             }
