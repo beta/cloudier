@@ -3,6 +3,7 @@ package net.kyouko.cloudier.api;
 import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.Tweet;
 import net.kyouko.cloudier.model.TweetResult;
+import net.kyouko.cloudier.model.Update;
 import net.kyouko.cloudier.model.User;
 import net.kyouko.cloudier.util.RequestUtil;
 
@@ -29,16 +30,48 @@ public interface TencentWeiboApi {
     Call<User> getUser(@QueryMap Map<String, String> oAuthParams, @Query("name") String username);
     // endregion
 
+
+    // region Update
+    int UPDATE_TYPE_MENTIONS = 6;
+    int UPDATE_TYPE_FOLLOWERS = 8;
+
+
+    @GET("api/info/update?" + RequestUtil.CONSTANT_PARAMS + "op=0")
+    Call<Update> getUpdates(@QueryMap Map<String, String> oAuthParams);
+
+
+    @GET("api/info/update?" + RequestUtil.CONSTANT_PARAMS + "op=1&type=" + UPDATE_TYPE_MENTIONS)
+    Call<Update> clearMentionsUpdate(@QueryMap Map<String, String> oAuthParams);
+
+
+    @GET("api/info/update?" + RequestUtil.CONSTANT_PARAMS + "op=1&type=" + UPDATE_TYPE_FOLLOWERS)
+    Call<Update> clearFollowersUpdate(@QueryMap Map<String, String> oAuthParams);
+    // endregion
+
+
     // region Timeline
     @GET("api/statuses/home_timeline?" + RequestUtil.CONSTANT_PARAMS +
             "&pageflag=0&pagetime=0&reqnum=20&type=0&contenttype=0")
-    Call<Timeline> getHomeLatestTimeline(@QueryMap Map<String, String> oAuthParams);
+    Call<Timeline> getLatestHomeTimeline(@QueryMap Map<String, String> oAuthParams);
 
 
     @GET("api/statuses/home_timeline?" + RequestUtil.CONSTANT_PARAMS +
             "&pageflag=1&reqnum=20&type=0&contenttype=0")
     Call<Timeline> getMoreHomeTimeline(@QueryMap Map<String, String> oAuthParams,
+                                       @Query("lastid") String lastTweetId,
                                        @Query("pagetime") String lastTweetTimestamp);
+
+
+    @GET("api/statuses/mentions_timeline?" + RequestUtil.CONSTANT_PARAMS +
+            "&pageflag=0&pagetime=0&reqnum=20&type=0&contenttype=0")
+    Call<Timeline> getLatestNotificationTimeline(@QueryMap Map<String, String> oAuthParams);
+
+
+    @GET("api/statuses/mentions_timeline?" + RequestUtil.CONSTANT_PARAMS +
+            "&pageflag=1&reqnum=20&type=0&contenttype=0")
+    Call<Timeline> getMoreNotificationsTimeline(@QueryMap Map<String, String> oAuthParams,
+                                                @Query("lastid") String lastTweetId,
+                                                @Query("pagetime") String lastTweetTimestamp);
     // endregion
 
     // region Tweet

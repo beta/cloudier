@@ -33,6 +33,10 @@
             android:name=".ui.activity.ComposerActivity"
             android:label="@string/title.activity.composer">
         </activity>
+        <activity
+            android:name=".ui.activity.NotificationsActivity"
+            android:label="@string/title.activity.notifications">
+        </activity>
     </application>
 
 </manifest>

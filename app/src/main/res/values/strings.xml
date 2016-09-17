@@ -4,6 +4,7 @@
     <string name="app_name">Cloudier</string>
 
     <string name="title.activity.auth">Account authorization</string>
+    <string name="title.activity.notifications">Notifications</string>
     <string name="title.activity.tweet_detail">Tweet detail</string>
     <string name="title.activity.composer">New tweet</string>
     <string name="title.activity.composer.comment">Comment</string>
@@ -12,6 +13,7 @@
     <string name="title.action.refresh">Refresh</string>
     <string name="title.action.retry">Retry</string>
     <string name="title.action.send">Send</string>
+    <string name="title.action.notifications">Notifications</string>
 
     <string name="title.button.load_more">Load More</string>
 
@@ -19,6 +21,8 @@
     <string name="title.tab.retweets">Retweets</string>
 
     <string name="text.info.auth_success">Authorization succeeded</string>
+    <string name="text.info.no_more_tweets">No more tweets</string>
+    <string name="text.info.no_more_notifications">No more notifications</string>
     <string name="text.info.no_more_comments">No more comments</string>
     <string name="text.info.no_more_retweets">No more retweets</string>
     <string name="text.info.source_tweet_deleted">This tweet has been deleted.</string>
@@ -26,6 +30,7 @@
 
     <string name="text.error.failed_to_fetch_account">Failed to fetch account info</string>
     <string name="text.error.failed_to_fetch_timeline">Failed to fetch timeline</string>
+    <string name="text.error.failed_to_fetch_notifications">Failed to fetch notifications</string>
     <string name="text.error.failed_to_fetch_tweet">Failed to fetch tweet detail</string>
     <string name="text.error.failed_to_fetch_comments">Failed to fetch comments</string>
     <string name="text.error.failed_to_fetch_retweets">Failed to fetch retweets</string>

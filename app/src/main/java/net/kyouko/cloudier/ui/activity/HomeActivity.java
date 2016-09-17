@@ -1,124 +1,91 @@
 package net.kyouko.cloudier.ui.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.squareup.otto.Subscribe;
-import com.stfalcon.frescoimageviewer.ImageViewer;
 
-import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.api.TencentWeiboApi;
 import net.kyouko.cloudier.event.CommentTweetEvent;
 import net.kyouko.cloudier.event.LoadMoreTweetsEvent;
-import net.kyouko.cloudier.event.RetweetTweetEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.model.Account;
 import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.Tweet;
 import net.kyouko.cloudier.model.User;
-import net.kyouko.cloudier.ui.adapter.TimelineAdapter;
 import net.kyouko.cloudier.ui.widget.listener.RecyclerViewDisabler;
 import net.kyouko.cloudier.util.AuthUtil;
 import net.kyouko.cloudier.util.ImageUtil;
 import net.kyouko.cloudier.util.RequestUtil;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends TimelineActivity {
 
-    private final static int REQUEST_COMPOSER_NEW_TWEET = 0;
-    private final static int REQUEST_COMPOSER_COMMENT = 1;
-    private final static int REQUEST_COMPOSER_RETWEET = 2;
+    protected final static int REQUEST_COMPOSER_NEW_TWEET = 2;
 
 
-    @BindView(R.id.coordinator) CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.avatar) SimpleDraweeView draweeAvatar;
     @BindView(R.id.title) TextView textTitle;
-    @BindView(R.id.srl) SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.recycler) RecyclerView recyclerView;
     @BindView(R.id.fab) FloatingActionButton fab;
 
     private Account account;
     private User currentUser;
 
-    private Timeline timeline = new Timeline();
-    private TimelineAdapter adapter;
-
     private RecyclerViewDisabler recyclerViewDisabler;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-
-        ButterKnife.bind(this);
-
-        initView();
-
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(true);
-            }
-        });
-        checkAuthorization();
+    protected int getContentViewLayoutId() {
+        return R.layout.activity_home;
     }
 
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        CloudierApplication.getBus().register(this);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_home, menu);
+        return true;
     }
 
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_notification) {
+            startActivity(new Intent(this, NotificationsActivity.class));
+            overridePendingTransition(R.anim.swipe_in_from_right, R.anim.swipe_out_to_left);
+        }
 
-        CloudierApplication.getBus().unregister(this);
+        return super.onOptionsItemSelected(item);
     }
 
 
-    private void initView() {
-        initToolbar();
-        initSwipeRefreshLayout();
-        initRecyclerView();
+    @Override
+    protected void initView() {
+        super.initView();
         initFab();
     }
 
 
-    private void initToolbar() {
-        setSupportActionBar(toolbar);
-        setTitle(null);
+    @Override
+    protected void initToolbar() {
+        super.initToolbar();
 
+        setTitle(null);
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,27 +95,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-    private void initSwipeRefreshLayout() {
-        swipeRefreshLayout.setColorSchemeResources(R.color.light_blue_500, R.color.light_blue_700);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                adapter.hideComposer();
-                loadHomeTimeline();
-            }
-        });
-    }
-
-
-    private void initRecyclerView() {
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    @Override
+    protected void initRecyclerView() {
+        super.initRecyclerView();
 
         recyclerViewDisabler = new RecyclerViewDisabler();
         recyclerView.addOnItemTouchListener(recyclerViewDisabler);
-
-        adapter = new TimelineAdapter(this, timeline);
-        recyclerView.setAdapter(adapter);
     }
 
 
@@ -159,6 +111,12 @@ public class HomeActivity extends AppCompatActivity {
                 createNewTweet();
             }
         });
+    }
+
+
+    @Override
+    protected void prepare() {
+        checkAuthorization();
     }
 
 
@@ -190,7 +148,7 @@ public class HomeActivity extends AppCompatActivity {
                 AuthUtil.saveAccount(HomeActivity.this, account);
 
                 updateAccountInfo();
-                loadHomeTimeline();
+                loadTimeline();
             }
 
             @Override
@@ -215,18 +173,26 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-    private void loadHomeTimeline() {
+    @Override
+    protected void loadTimeline() {
         TencentWeiboApi api = RequestUtil.getApiInstance();
-        Call<Timeline> timelineCall = api.getHomeLatestTimeline(RequestUtil.getOAuthParams(this));
+        Call<Timeline> timelineCall = api.getLatestHomeTimeline(RequestUtil.getOAuthParams(this));
         timelineCall.enqueue(new Callback<Timeline>() {
             @Override
             public void onResponse(Call<Timeline> call, Response<Timeline> response) {
-                timeline.tweets.clear();
-                timeline.tweets.addAll(response.body().tweets);
-                timeline.users.putAll(response.body().users);
-
-                adapter.notifyDataSetChanged();
                 swipeRefreshLayout.setRefreshing(false);
+
+                if (response != null) {
+                    timeline.tweets.clear();
+                    timeline.tweets.addAll(response.body().tweets);
+                    timeline.users.putAll(response.body().users);
+
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Snackbar.make(coordinatorLayout, R.string.text_info_no_more_tweets,
+                            Snackbar.LENGTH_INDEFINITE)
+                            .show();
+                }
             }
 
             @Override
@@ -236,7 +202,7 @@ public class HomeActivity extends AppCompatActivity {
                         .setAction(R.string.title_action_retry, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                loadHomeTimeline();
+                                loadTimeline();
                             }
                         })
                         .show();
@@ -246,18 +212,27 @@ public class HomeActivity extends AppCompatActivity {
 
 
     @Subscribe
-    public void loadMoreHomeTimeline(LoadMoreTweetsEvent event) {
+    @Override
+    public void loadMoreTimeline(LoadMoreTweetsEvent event) {
         TencentWeiboApi api = RequestUtil.getApiInstance();
         Call<Timeline> timelineCall = api.getMoreHomeTimeline(RequestUtil.getOAuthParams(this),
+                timeline.tweets.get(timeline.tweets.size() - 1).id,
                 timeline.tweets.get(timeline.tweets.size() - 1).timestamp);
         timelineCall.enqueue(new Callback<Timeline>() {
             @Override
             public void onResponse(Call<Timeline> call, Response<Timeline> response) {
-                timeline.tweets.addAll(response.body().tweets);
-                timeline.users.putAll(response.body().users);
-
-                adapter.notifyDataSetChanged();
                 adapter.completeLoadingMore();
+
+                if (response.body() != null) {
+                    timeline.tweets.addAll(response.body().tweets);
+                    timeline.users.putAll(response.body().users);
+
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Snackbar.make(coordinatorLayout, R.string.text_info_no_more_tweets,
+                            Snackbar.LENGTH_INDEFINITE)
+                            .show();
+                }
             }
 
             @Override
@@ -268,7 +243,7 @@ public class HomeActivity extends AppCompatActivity {
                         .setAction(R.string.title_action_retry, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                loadMoreHomeTimeline(new LoadMoreTweetsEvent());
+                                loadMoreTimeline(new LoadMoreTweetsEvent());
                             }
                         })
                         .show();
@@ -304,64 +279,27 @@ public class HomeActivity extends AppCompatActivity {
 
 
     @Subscribe
-    public void viewTweet(ViewTweetEvent event) {
-        Intent intent = new Intent(this, TweetDetailActivity.class);
-
-        if (event.type == ViewTweetEvent.TYPE_TWEET) {
-            intent.putExtra("TWEET", event.tweet);
-            intent.putExtra("USERS", event.users);
-            if (event.card != null) {
-                ActivityOptionsCompat options = ActivityOptionsCompat
-                        .makeSceneTransitionAnimation(this, event.card.cardView, "card");
-                startActivity(intent, options.toBundle());
-            } else {
-                startActivity(intent);
-            }
-        } else if (event.type == ViewTweetEvent.TYPE_ID) {
-            intent.putExtra("TWEET_ID", event.tweetId);
-            startActivity(intent);
-        }
+    public void onViewTweet(ViewTweetEvent event) {
+        viewTweet(event);
     }
 
 
     @Subscribe
-    public void viewImages(ViewImageEvent event) {
-        new ImageViewer.Builder(this, (ArrayList<String>) event.imageUrls)
-                .setStartPosition(event.startPosition)
-                .show();
+    public void onViewImages(ViewImageEvent event) {
+        viewImages(event);
     }
 
 
     @Subscribe
-    public void commentOrRetweetTweet(CommentTweetEvent event) {
-        Intent intent = new Intent(this, ComposerActivity.class);
-
-        int requestCode;
-        if (event instanceof RetweetTweetEvent) {
-            requestCode = REQUEST_COMPOSER_RETWEET;
-            intent.putExtra("TYPE", ComposerActivity.TYPE_RETWEET);
-            intent.putExtra("CONTENT", ((RetweetTweetEvent) event).retweetContent);
-        } else {
-            requestCode = REQUEST_COMPOSER_COMMENT;
-            intent.putExtra("TYPE", ComposerActivity.TYPE_COMMENT);
-        }
-        intent.putExtra("TWEET", event.tweet);
-        intent.putExtra("SOURCE_CONTENT", event.sourceTweetContent);
-
-        Pair<View, String> cardPair = Pair.create((View) event.card.cardView, "card");
-        Pair<View, String> nicknamePair = Pair.create((View) event.nickname, "nickname");
-        Pair<View, String> timePair = Pair.create((View) event.time, "time");
-        Pair<View, String> contentPair = Pair.create((View) event.content, "content");
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                this, cardPair, nicknamePair, timePair, contentPair
-        );
-
-        startActivityForResult(intent, requestCode, options.toBundle());
+    public void onCommentOrRetweetTweet(CommentTweetEvent event) {
+        commentOrRetweetTweet(event);
     }
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == REQUEST_COMPOSER_NEW_TWEET) {
             String content = data.getStringExtra("CONTENT");
             ((EditText) adapter.getComposerCard().findViewById(R.id.content)).setText(content);
@@ -400,19 +338,6 @@ public class HomeActivity extends AppCompatActivity {
                         swipeRefreshLayout.setEnabled(true);
                     }
                 }, 350);
-            }
-        } else if (requestCode == REQUEST_COMPOSER_COMMENT && resultCode == RESULT_OK) {
-            Snackbar.make(coordinatorLayout, R.string.text_info_comment_sent, Snackbar.LENGTH_SHORT)
-                    .show();
-        } else if (requestCode == REQUEST_COMPOSER_RETWEET && resultCode == RESULT_OK) {
-            final boolean hasTweet = data.hasExtra("TWEET");
-            if (hasTweet) {
-                recyclerView.scrollToPosition(0);
-
-                Tweet tweet = (Tweet) data.getSerializableExtra("TWEET");
-                timeline.tweets.add(0, tweet);
-                timeline.users.putAll(tweet.users);
-                adapter.notifyItemInserted(0);
             }
         }
     }
