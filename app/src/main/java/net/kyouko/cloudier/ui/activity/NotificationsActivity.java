@@ -99,6 +99,7 @@ public class NotificationsActivity extends TimelineActivity {
             @Override
             public void onResponse(Call<Update> call, Response<Update> response) {
                 swipeRefreshLayout.setRefreshing(false);
+                setResult(RESULT_OK);
             }
 
             @Override

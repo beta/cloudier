@@ -40,6 +40,8 @@ public class HomeActivity extends TimelineActivity {
 
     protected final static int REQUEST_COMPOSER_NEW_TWEET = 2;
 
+    protected final static int REQUEST_NOTIFICATIONS = 10;
+
 
     @BindView(R.id.avatar) SimpleDraweeView draweeAvatar;
     @BindView(R.id.title) TextView textTitle;
@@ -47,6 +49,8 @@ public class HomeActivity extends TimelineActivity {
 
     private Account account;
     private User currentUser;
+
+    private MenuItem notificationMenuItem;
 
     private RecyclerViewDisabler recyclerViewDisabler;
 
@@ -60,6 +64,7 @@ public class HomeActivity extends TimelineActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_home, menu);
+        notificationMenuItem = menu.findItem(R.id.action_notification);
         return true;
     }
 
@@ -174,18 +179,20 @@ public class HomeActivity extends TimelineActivity {
 
 
     private void enterNotifications() {
-        startActivity(new Intent(this, NotificationsActivity.class));
+        startActivityForResult(new Intent(this, NotificationsActivity.class), REQUEST_NOTIFICATIONS);
         overridePendingTransition(R.anim.swipe_in_from_right, R.anim.swipe_out_to_left);
     }
 
 
-    private void loadUpdates() {
+    private void loadNotificationsUpdate() {
         Call<Update> updateCall = RequestUtil.getApiInstance()
                 .getUpdates(RequestUtil.getOAuthParams(this));
         updateCall.enqueue(new Callback<Update>() {
             @Override
             public void onResponse(Call<Update> call, Response<Update> response) {
                 if (response.body() != null && response.body().newMentionsCount > 0) {
+                    notificationMenuItem.setIcon(R.drawable.ic_notifications_white_24dp);
+
                     Snackbar.make(coordinatorLayout,
                             getString(R.string.text_info_new_notifications,
                                     response.body().newMentionsCount), Snackbar.LENGTH_LONG)
@@ -196,6 +203,8 @@ public class HomeActivity extends TimelineActivity {
                                 }
                             })
                             .show();
+                } else {
+                    notificationMenuItem.setIcon(R.drawable.ic_notifications_none_white_24dp);
                 }
             }
 
@@ -226,7 +235,7 @@ public class HomeActivity extends TimelineActivity {
                     onNoNewTweets();
                 }
 
-                loadUpdates();
+                loadNotificationsUpdate();
             }
 
 
@@ -387,6 +396,8 @@ public class HomeActivity extends TimelineActivity {
                     }
                 }, 350);
             }
+        } else if (requestCode == REQUEST_NOTIFICATIONS && resultCode == RESULT_OK) {
+            notificationMenuItem.setIcon(R.drawable.ic_notifications_none_white_24dp);
         }
     }
 
