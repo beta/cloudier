@@ -24,6 +24,7 @@ import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.model.Account;
 import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.Tweet;
+import net.kyouko.cloudier.model.Update;
 import net.kyouko.cloudier.model.User;
 import net.kyouko.cloudier.ui.widget.listener.RecyclerViewDisabler;
 import net.kyouko.cloudier.util.AuthUtil;
@@ -66,8 +67,7 @@ public class HomeActivity extends TimelineActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_notification) {
-            startActivity(new Intent(this, NotificationsActivity.class));
-            overridePendingTransition(R.anim.swipe_in_from_right, R.anim.swipe_out_to_left);
+            enterNotifications();
         }
 
         return super.onOptionsItemSelected(item);
@@ -173,6 +173,40 @@ public class HomeActivity extends TimelineActivity {
     }
 
 
+    private void enterNotifications() {
+        startActivity(new Intent(this, NotificationsActivity.class));
+        overridePendingTransition(R.anim.swipe_in_from_right, R.anim.swipe_out_to_left);
+    }
+
+
+    private void loadUpdates() {
+        Call<Update> updateCall = RequestUtil.getApiInstance()
+                .getUpdates(RequestUtil.getOAuthParams(this));
+        updateCall.enqueue(new Callback<Update>() {
+            @Override
+            public void onResponse(Call<Update> call, Response<Update> response) {
+                if (response.body() != null && response.body().newMentionsCount > 0) {
+                    Snackbar.make(coordinatorLayout,
+                            getString(R.string.text_info_new_notifications,
+                                    response.body().newMentionsCount), Snackbar.LENGTH_LONG)
+                            .setAction(R.string.title_action_view, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    enterNotifications();
+                                }
+                            })
+                            .show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Update> call, Throwable t) {
+                // Ignore
+            }
+        });
+    }
+
+
     @Override
     protected void loadTimeline() {
         TencentWeiboApi api = RequestUtil.getApiInstance();
@@ -182,23 +216,31 @@ public class HomeActivity extends TimelineActivity {
             public void onResponse(Call<Timeline> call, Response<Timeline> response) {
                 swipeRefreshLayout.setRefreshing(false);
 
-                if (response != null) {
+                if (response.body() != null && !response.body().tweets.isEmpty()) {
                     timeline.tweets.clear();
                     timeline.tweets.addAll(response.body().tweets);
                     timeline.users.putAll(response.body().users);
 
                     adapter.notifyDataSetChanged();
                 } else {
-                    Snackbar.make(coordinatorLayout, R.string.text_info_no_more_tweets,
-                            Snackbar.LENGTH_INDEFINITE)
-                            .show();
+                    onNoNewTweets();
                 }
+
+                loadUpdates();
             }
+
+
+            private void onNoNewTweets() {
+                Snackbar.make(coordinatorLayout, R.string.text_info_no_new_tweets,
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+            }
+
 
             @Override
             public void onFailure(Call<Timeline> call, Throwable t) {
                 Snackbar.make(coordinatorLayout, R.string.text_error_failed_to_fetch_timeline,
-                        Snackbar.LENGTH_INDEFINITE)
+                        Snackbar.LENGTH_SHORT)
                         .setAction(R.string.title_action_retry, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -223,17 +265,23 @@ public class HomeActivity extends TimelineActivity {
             public void onResponse(Call<Timeline> call, Response<Timeline> response) {
                 adapter.completeLoadingMore();
 
-                if (response.body() != null) {
+                if (response.body() != null && !response.body().tweets.isEmpty()) {
                     timeline.tweets.addAll(response.body().tweets);
                     timeline.users.putAll(response.body().users);
 
                     adapter.notifyDataSetChanged();
                 } else {
-                    Snackbar.make(coordinatorLayout, R.string.text_info_no_more_tweets,
-                            Snackbar.LENGTH_INDEFINITE)
-                            .show();
+                    onNoMoreTweets();
                 }
             }
+
+
+            private void onNoMoreTweets() {
+                Snackbar.make(coordinatorLayout, R.string.text_info_no_more_tweets,
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+            }
+
 
             @Override
             public void onFailure(Call<Timeline> call, Throwable t) {

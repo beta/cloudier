@@ -14,6 +14,7 @@
     <string name="title.action.retry">Retry</string>
     <string name="title.action.send">Send</string>
     <string name="title.action.notifications">Notifications</string>
+    <string name="title.action.view">View</string>
 
     <string name="title.button.load_more">Load More</string>
 
@@ -21,8 +22,11 @@
     <string name="title.tab.retweets">Retweets</string>
 
     <string name="text.info.auth_success">Authorization succeeded</string>
+    <string name="text.info.no_new_tweets">No new tweets</string>
     <string name="text.info.no_more_tweets">No more tweets</string>
+    <string name="text.info.no_new_notifications">No new notifications</string>
     <string name="text.info.no_more_notifications">No more notifications</string>
+    <string name="text.info.new_notifications">%d new notifications</string>
     <string name="text.info.no_more_comments">No more comments</string>
     <string name="text.info.no_more_retweets">No more retweets</string>
     <string name="text.info.source_tweet_deleted">This tweet has been deleted.</string>

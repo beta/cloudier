@@ -36,15 +36,15 @@ public interface TencentWeiboApi {
     int UPDATE_TYPE_FOLLOWERS = 8;
 
 
-    @GET("api/info/update?" + RequestUtil.CONSTANT_PARAMS + "op=0")
+    @GET("api/info/update?" + RequestUtil.CONSTANT_PARAMS + "&op=0")
     Call<Update> getUpdates(@QueryMap Map<String, String> oAuthParams);
 
 
-    @GET("api/info/update?" + RequestUtil.CONSTANT_PARAMS + "op=1&type=" + UPDATE_TYPE_MENTIONS)
+    @GET("api/info/update?" + RequestUtil.CONSTANT_PARAMS + "&op=1&type=" + UPDATE_TYPE_MENTIONS)
     Call<Update> clearMentionsUpdate(@QueryMap Map<String, String> oAuthParams);
 
 
-    @GET("api/info/update?" + RequestUtil.CONSTANT_PARAMS + "op=1&type=" + UPDATE_TYPE_FOLLOWERS)
+    @GET("api/info/update?" + RequestUtil.CONSTANT_PARAMS + "&op=1&type=" + UPDATE_TYPE_FOLLOWERS)
     Call<Update> clearFollowersUpdate(@QueryMap Map<String, String> oAuthParams);
     // endregion
 

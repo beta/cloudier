@@ -53,23 +53,33 @@ public class NotificationsActivity extends TimelineActivity {
         timelineCall.enqueue(new Callback<Timeline>() {
             @Override
             public void onResponse(Call<Timeline> call, Response<Timeline> response) {
-                swipeRefreshLayout.setRefreshing(false);
-
-                if (response.body() != null) {
+                if (response.body() != null && !response.body().tweets.isEmpty()) {
                     timeline.tweets.clear();
                     timeline.tweets.addAll(response.body().tweets);
                     timeline.users.putAll(response.body().users);
 
                     adapter.notifyDataSetChanged();
-
-                    clearMentionsUpdate();
+                } else {
+                    onNoNewTweets();
                 }
+
+                clearMentionsUpdate();
             }
+
+
+            private void onNoNewTweets() {
+                Snackbar.make(coordinatorLayout, R.string.text_info_no_new_tweets,
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+            }
+
 
             @Override
             public void onFailure(Call<Timeline> call, Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
+
                 Snackbar.make(coordinatorLayout, R.string.text_error_failed_to_fetch_notifications,
-                        Snackbar.LENGTH_INDEFINITE)
+                        Snackbar.LENGTH_SHORT)
                         .setAction(R.string.title_action_retry, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -88,12 +98,12 @@ public class NotificationsActivity extends TimelineActivity {
         clearUpdateCall.enqueue(new Callback<Update>() {
             @Override
             public void onResponse(Call<Update> call, Response<Update> response) {
-                // Ignore
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<Update> call, Throwable t) {
-                // Ignore
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
@@ -111,17 +121,23 @@ public class NotificationsActivity extends TimelineActivity {
             public void onResponse(Call<Timeline> call, Response<Timeline> response) {
                 adapter.completeLoadingMore();
 
-                if (response.body() != null) {
+                if (response.body() != null && !response.body().tweets.isEmpty()) {
                     timeline.tweets.addAll(response.body().tweets);
                     timeline.users.putAll(response.body().users);
 
                     adapter.notifyDataSetChanged();
                 } else {
-                    Snackbar.make(coordinatorLayout, R.string.text_info_no_more_notifications,
-                            Snackbar.LENGTH_SHORT)
-                            .show();
+                    onNoMoreTweets();
                 }
             }
+
+
+            private void onNoMoreTweets() {
+                Snackbar.make(coordinatorLayout, R.string.text_info_no_more_notifications,
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+            }
+
 
             @Override
             public void onFailure(Call<Timeline> call, Throwable t) {
