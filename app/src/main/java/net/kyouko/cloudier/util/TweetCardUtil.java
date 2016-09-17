@@ -263,7 +263,7 @@ public class TweetCardUtil {
             if (sourceTweet.imageUrls != null && !sourceTweet.imageUrls.isEmpty()) {
                 displaySourceImages(sourceTweet.imageUrls);
             } else {
-                sourceImage.setVisibility(View.GONE);
+                sourceImageWrapper.setVisibility(View.GONE);
             }
         }
 
