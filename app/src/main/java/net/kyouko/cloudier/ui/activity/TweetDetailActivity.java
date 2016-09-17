@@ -416,12 +416,12 @@ public class TweetDetailActivity extends AppCompatActivity implements
         if (event instanceof RetweetTweetEvent) {
             requestCode = REQUEST_COMPOSER_RETWEET;
             intent.putExtra("TYPE", ComposerActivity.TYPE_RETWEET);
+            intent.putExtra("CONTENT", ((RetweetTweetEvent) event).retweetContent);
         } else {
             requestCode = REQUEST_COMPOSER_COMMENT;
             intent.putExtra("TYPE", ComposerActivity.TYPE_COMMENT);
         }
         intent.putExtra("TWEET", event.tweet);
-        intent.putExtra("CONTENT", event.commentContent);
         intent.putExtra("SOURCE_CONTENT", event.sourceTweetContent);
 
         Pair<View, String> cardPair = Pair.create((View) event.card.cardView, "card");

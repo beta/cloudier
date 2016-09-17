@@ -10,14 +10,26 @@ import net.kyouko.cloudier.util.TweetCardUtil;
  */
 public class RetweetTweetEvent extends CommentTweetEvent {
 
+    public boolean isSourceTweet;
+    public String retweetContent;
+
+
     public RetweetTweetEvent(SourceTweet tweet, String sourceTweetContent, TweetCardUtil.Card card) {
         super(tweet, sourceTweetContent, card);
     }
 
 
-    public RetweetTweetEvent(SourceTweet tweet, String sourceTweetContent, String retweetContent,
-                             TweetCardUtil.Card card, boolean isSourceTweet) {
-        super(tweet, sourceTweetContent, retweetContent, card, isSourceTweet);
+    public RetweetTweetEvent(SourceTweet tweet, String sourceTweetContent, TweetCardUtil.Card card,
+                             String retweetContent, boolean isSourceTweet) {
+        super(tweet, sourceTweetContent, card);
+
+        this.retweetContent = retweetContent;
+        this.isSourceTweet = isSourceTweet;
+        if (!isSourceTweet) {
+            this.nickname = card.sourceNickname;
+            this.time = card.sourceTime;
+            this.content = card.sourceContent;
+        }
     }
 
 }
