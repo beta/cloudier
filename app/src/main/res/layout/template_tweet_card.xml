@@ -188,11 +188,39 @@
 
                 </LinearLayout>
 
-                <net.kyouko.cloudier.ui.widget.AspectRatioImageView
-                    android:id="@+id/source_image"
-                    style="@style/TweetCard.Source.Image"
+                <RelativeLayout
+                    android:id="@+id/source_image_wrapper"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <net.kyouko.cloudier.ui.widget.AspectRatioImageView
+                        android:id="@+id/source_image"
+                        style="@style/TweetCard.Source.Image"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                    <View
+                        android:id="@+id/source_image_mask"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/source_image"
+                        android:layout_alignEnd="@+id/source_image"
+                        android:layout_alignStart="@+id/source_image"
+                        android:layout_alignTop="@+id/source_image"
+                        android:background="?android:attr/selectableItemBackground"
+                        android:clickable="true"/>
+
+                    <TextView
+                        android:id="@+id/source_image_count"
+                        style="@style/TweetCard.Image.Indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/source_image"
+                        android:layout_alignEnd="@+id/source_image"
+                        tools:text="4"/>
+
+                </RelativeLayout>
 
             </LinearLayout>
 

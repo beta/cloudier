@@ -144,7 +144,10 @@ public class TweetCardUtil {
         @BindView(R.id.source_nickname) public TextView sourceNickname;
         @BindView(R.id.source_time) public TextView sourceTime;
         @BindView(R.id.source_content) public TextView sourceContent;
+        @BindView(R.id.source_image_wrapper) View sourceImageWrapper;
         @BindView(R.id.source_image) ImageView sourceImage;
+        @BindView(R.id.source_image_mask) View sourceImageMask;
+        @BindView(R.id.source_image_count) TextView sourceImageCount;
         @BindView(R.id.button_comment) View commentButton;
         @BindView(R.id.comment_count) TextView commentCount;
         @BindView(R.id.button_retweet) View retweetButton;
@@ -258,17 +261,44 @@ public class TweetCardUtil {
             sourceContent.setVisibility((tweetContent.length() > 0) ? View.VISIBLE : View.GONE);
 
             if (sourceTweet.imageUrls != null && !sourceTweet.imageUrls.isEmpty()) {
-                sourceImage.setVisibility(View.VISIBLE);
-
-                Picasso.with(context)
-                        .load(ImageUtil.getInstance(context)
-                                .parseImageUrl(sourceTweet.imageUrls.get(0)))
-                        .placeholder(new ColorDrawable(imagePlaceholderColor))
-                        .fit()
-                        .centerCrop()
-                        .into(sourceImage);
+                displaySourceImages(sourceTweet.imageUrls);
             } else {
                 sourceImage.setVisibility(View.GONE);
+            }
+        }
+
+
+        private void displaySourceImages(final List<String> imageUrls) {
+            sourceImageWrapper.setVisibility(View.VISIBLE);
+
+            sourceImage.setVisibility(View.VISIBLE);
+
+            Picasso.with(context)
+                    .load(ImageUtil.getInstance(context)
+                            .parseImageUrl(imageUrls.get(0)))
+                    .placeholder(new ColorDrawable(imagePlaceholderColor))
+                    .fit()
+                    .centerCrop()
+                    .into(sourceImage);
+
+            sourceImageMask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    List<String> newImageUrls = new ArrayList<>();
+                    for (String imageUrl : imageUrls) {
+                        newImageUrls.add(ImageUtil.getInstance(context)
+                                .parseImageUrl(imageUrl));
+                    }
+
+                    CloudierApplication.getBus().post(new ViewImageEvent(newImageUrls));
+                }
+            });
+
+            if (imageUrls.size() > 1) {
+                sourceImageCount.setVisibility(View.VISIBLE);
+                sourceImageCount.setText(String.valueOf(imageUrls.size()));
+            } else {
+                sourceImageCount.setVisibility(View.GONE);
             }
         }
 
