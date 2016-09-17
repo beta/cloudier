@@ -31,6 +31,7 @@
     <string name="text.info.no_more_retweets">No more retweets</string>
     <string name="text.info.source_tweet_deleted">This tweet has been deleted.</string>
     <string name="text.info.comment_sent">Comment succeeded</string>
+    <string name="text.info.retweet_sent">Retweet succeeded</string>
 
     <string name="text.error.failed_to_fetch_account">Failed to fetch account info</string>
     <string name="text.error.failed_to_fetch_timeline">Failed to fetch timeline</string>

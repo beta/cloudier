@@ -218,9 +218,8 @@ public class TweetCardUtil {
                 @Override
                 public void onClick(View view) {
                     if (hasSourceTweet) {
-                        CloudierApplication.getBus().post(new RetweetTweetEvent(
-                                ((Tweet) tweet).sourceTweet, sourceContent.getText().toString(),
-                                Card.this,
+                        CloudierApplication.getBus().post(new RetweetTweetEvent(tweet,
+                                sourceContent.getText().toString(), Card.this,
                                 context.getString(R.string.text_pattern_comment, tweet.username,
                                         tweet.originalContent), false));
                     } else {

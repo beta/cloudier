@@ -81,6 +81,24 @@ public class ComposerActivity extends AppCompatActivity {
 
     private int shortAnimationDuration;
 
+    private View.OnClickListener onSendButtonClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (composerType) {
+                case TYPE_NEW:
+                default:
+                    sendTweet();
+                    break;
+                case TYPE_COMMENT:
+                    comment();
+                    break;
+                case TYPE_RETWEET:
+                    retweet();
+                    break;
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,23 +231,7 @@ public class ComposerActivity extends AppCompatActivity {
             typedArray.recycle();
 
             sendButton.setImageResource(R.drawable.ic_send_white_24dp);
-            sendButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    switch (composerType) {
-                        case TYPE_NEW:
-                        default:
-                            sendTweet();
-                            break;
-                        case TYPE_COMMENT:
-                            comment();
-                            break;
-                        case TYPE_RETWEET:
-                            retweet();
-                            break;
-                    }
-                }
-            });
+            sendButton.setOnClickListener(onSendButtonClickListener);
         }
         return true;
     }
@@ -278,12 +280,7 @@ public class ComposerActivity extends AppCompatActivity {
                                 .onStop(new AnimationListener.Stop() {
                                     @Override
                                     public void onStop() {
-                                        sendButton.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-                                                sendTweet();
-                                            }
-                                        });
+                                        sendButton.setOnClickListener(onSendButtonClickListener);
                                     }
                                 })
                                 .start();
@@ -375,7 +372,7 @@ public class ComposerActivity extends AppCompatActivity {
                                 new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        sendTweet();
+                                        comment();
                                     }
                                 })
                         .show();
@@ -425,7 +422,7 @@ public class ComposerActivity extends AppCompatActivity {
                                 new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        sendTweet();
+                                        retweet();
                                     }
                                 })
                         .show();

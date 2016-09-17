@@ -396,6 +396,16 @@ public class HomeActivity extends TimelineActivity {
                     }
                 }, 350);
             }
+        } else if (requestCode == REQUEST_COMPOSER_RETWEET && resultCode == RESULT_OK) {
+            final boolean hasTweet = data.hasExtra("TWEET");
+            if (hasTweet) {
+                recyclerView.scrollToPosition(0);
+
+                Tweet tweet = (Tweet) data.getSerializableExtra("TWEET");
+                timeline.tweets.add(0, tweet);
+                timeline.users.putAll(tweet.users);
+                adapter.notifyItemInserted(0);
+            }
         } else if (requestCode == REQUEST_NOTIFICATIONS && resultCode == RESULT_OK) {
             notificationMenuItem.setIcon(R.drawable.ic_notifications_none_white_24dp);
         }

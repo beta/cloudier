@@ -25,7 +25,6 @@ import net.kyouko.cloudier.event.RetweetTweetEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.model.Timeline;
-import net.kyouko.cloudier.model.Tweet;
 import net.kyouko.cloudier.ui.adapter.TimelineAdapter;
 
 import java.util.ArrayList;
@@ -196,15 +195,8 @@ public abstract class TimelineActivity extends AppCompatActivity {
             Snackbar.make(coordinatorLayout, R.string.text_info_comment_sent, Snackbar.LENGTH_SHORT)
                     .show();
         } else if (requestCode == REQUEST_COMPOSER_RETWEET && resultCode == RESULT_OK) {
-            final boolean hasTweet = data.hasExtra("TWEET");
-            if (hasTweet) {
-                recyclerView.scrollToPosition(0);
-
-                Tweet tweet = (Tweet) data.getSerializableExtra("TWEET");
-                timeline.tweets.add(0, tweet);
-                timeline.users.putAll(tweet.users);
-                adapter.notifyItemInserted(0);
-            }
+            Snackbar.make(coordinatorLayout, R.string.text_info_retweet_sent, Snackbar.LENGTH_SHORT)
+                    .show();
         }
     }
 
