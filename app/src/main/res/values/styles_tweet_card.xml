@@ -45,6 +45,10 @@
         <item name="android:textAppearance">@style/SecondaryText</item>
     </style>
 
+    <style name="TweetCard.Header.WordCount" parent="">
+        <item name="android:textAppearance">@style/SecondaryText</item>
+    </style>
+
     <style name="TweetCard.Content" parent="">
         <item name="android:layout_marginStart">@dimen/spacing_normal</item>
         <item name="android:layout_marginEnd">@dimen/spacing_normal</item>
@@ -152,13 +156,6 @@
 
     <style name="TweetCard.Actions.Action.WithText.Text" parent="">
         <item name="android:layout_marginStart">@dimen/spacing_small</item>
-        <item name="android:textAppearance">@style/SecondaryText</item>
-    </style>
-
-    <style name="TweetCard.Actions.WordCount" parent="">
-        <item name="android:layout_alignParentEnd">true</item>
-        <item name="android:layout_centerVertical">true</item>
-        <item name="android:layout_marginEnd">@dimen/spacing_normal</item>
         <item name="android:textAppearance">@style/SecondaryText</item>
     </style>
 
