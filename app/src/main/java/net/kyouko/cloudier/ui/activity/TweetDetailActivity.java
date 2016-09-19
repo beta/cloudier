@@ -196,19 +196,23 @@ public class TweetDetailActivity extends AppCompatActivity implements
         tweetCall.enqueue(new Callback<Tweet>() {
             @Override
             public void onResponse(Call<Tweet> call, Response<Tweet> response) {
-                tweet = response.body();
-                TweetCardUtil.displayTweet(tweet, users, cardView);
-
                 swipeRefreshLayout.setRefreshing(false);
 
-                loadComments();
-                loadRetweets();
+                tweet = response.body();
+                if (tweet != null) {
+                    TweetCardUtil.displayTweet(tweet, users, cardView);
+
+                    loadComments();
+                    loadRetweets();
+                } else {
+                    onFailure();
+                }
             }
 
-            @Override
-            public void onFailure(Call<Tweet> call, Throwable t) {
+
+            private void onFailure() {
                 Snackbar.make(coordinatorLayout, R.string.text_error_failed_to_fetch_tweet,
-                        Snackbar.LENGTH_SHORT)
+                        Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.title_action_retry, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -216,6 +220,13 @@ public class TweetDetailActivity extends AppCompatActivity implements
                             }
                         })
                         .show();
+            }
+
+
+            @Override
+            public void onFailure(Call<Tweet> call, Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
+                onFailure();
             }
         });
     }
