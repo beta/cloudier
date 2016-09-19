@@ -37,6 +37,7 @@ public class NotificationsActivity extends TimelineActivity {
     @Override
     protected void initToolbar() {
         super.initToolbar();
+        textTitle.setText(R.string.title_activity_notifications);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

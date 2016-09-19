@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.squareup.otto.Subscribe;
@@ -44,7 +43,6 @@ public class HomeActivity extends TimelineActivity {
 
 
     @BindView(R.id.avatar) SimpleDraweeView draweeAvatar;
-    @BindView(R.id.title) TextView textTitle;
     @BindView(R.id.fab) FloatingActionButton fab;
 
     private Account account;
@@ -83,20 +81,6 @@ public class HomeActivity extends TimelineActivity {
     protected void initView() {
         super.initView();
         initFab();
-    }
-
-
-    @Override
-    protected void initToolbar() {
-        super.initToolbar();
-
-        setTitle(null);
-        toolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                recyclerView.smoothScrollToPosition(0);
-            }
-        });
     }
 
 

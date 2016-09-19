@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
 import com.stfalcon.frescoimageviewer.ImageViewer;
@@ -45,6 +46,7 @@ public abstract class TimelineActivity extends AppCompatActivity {
 
     @BindView(R.id.coordinator) CoordinatorLayout coordinatorLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.title) TextView textTitle;
     @BindView(R.id.srl) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.recycler) RecyclerView recyclerView;
 
@@ -100,6 +102,13 @@ public abstract class TimelineActivity extends AppCompatActivity {
 
     protected void initToolbar() {
         setSupportActionBar(toolbar);
+        setTitle(null);
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                recyclerView.smoothScrollToPosition(0);
+            }
+        });
     }
 
 
