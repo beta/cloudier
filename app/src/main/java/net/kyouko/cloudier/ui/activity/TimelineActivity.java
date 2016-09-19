@@ -109,7 +109,7 @@ public abstract class TimelineActivity extends AppCompatActivity {
         toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                recyclerView.smoothScrollToPosition(0);
+                recyclerView.scrollToPosition(0);
             }
         });
     }
