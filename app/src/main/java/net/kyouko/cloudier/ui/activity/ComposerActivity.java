@@ -84,17 +84,21 @@ public class ComposerActivity extends AppCompatActivity {
     private View.OnClickListener onSendButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            switch (composerType) {
-                case TYPE_NEW:
-                default:
-                    sendTweet();
-                    break;
-                case TYPE_COMMENT:
-                    comment();
-                    break;
-                case TYPE_RETWEET:
-                    retweet();
-                    break;
+            if (hasWordCountExceeded()) {
+                playWordCountExceededAnimation();
+            } else {
+                switch (composerType) {
+                    case TYPE_NEW:
+                    default:
+                        sendTweet();
+                        break;
+                    case TYPE_COMMENT:
+                        comment();
+                        break;
+                    case TYPE_RETWEET:
+                        retweet();
+                        break;
+                }
             }
         }
     };
@@ -237,6 +241,15 @@ public class ComposerActivity extends AppCompatActivity {
     }
 
 
+    private void playWordCountExceededAnimation() {
+        ViewAnimator
+                .animate(wordCount)
+                .shake()
+                .duration(shortAnimationDuration)
+                .start();
+    }
+
+
     private void playSendingTweetAnimation() {
         sendButton.setOnClickListener(null);
 
@@ -287,6 +300,11 @@ public class ComposerActivity extends AppCompatActivity {
                     }
                 })
                 .start();
+    }
+
+
+    private boolean hasWordCountExceeded() {
+        return (TweetTextCountWatcher.getWordCountAvailable(content.getText().toString()) < 0);
     }
 
 

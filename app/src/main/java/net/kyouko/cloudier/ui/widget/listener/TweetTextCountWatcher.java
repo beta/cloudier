@@ -29,7 +29,7 @@ public class TweetTextCountWatcher implements TextWatcher {
     }
 
 
-    public void applyWordCountAvailable(CharSequence charSequence) {
+    public static int getWordCountAvailable(CharSequence charSequence) {
         int wordCount = 0;
         for (int i = 0; i < charSequence.length(); i += 1) {
             char c = charSequence.charAt(i);
@@ -41,7 +41,12 @@ public class TweetTextCountWatcher implements TextWatcher {
         }
         wordCount /= 2;
 
-        int wordCountAvailable = 140 - wordCount;
+        return 140 - wordCount;
+    }
+
+
+    public void applyWordCountAvailable(CharSequence charSequence) {
+        int wordCountAvailable = getWordCountAvailable(charSequence);
         wordCountText.setText(String.valueOf(wordCountAvailable));
 
         if (wordCountAvailable < 0) {
