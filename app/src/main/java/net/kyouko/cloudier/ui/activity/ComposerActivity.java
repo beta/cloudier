@@ -2,6 +2,7 @@ package net.kyouko.cloudier.ui.activity;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
@@ -57,6 +58,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import id.zelory.compressor.Compressor;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -444,7 +446,15 @@ public class ComposerActivity extends AppCompatActivity {
                         });
 
                         File imageFile = new File(image.getPath());
-                        RequestBody imageBody = RequestBody.create(MediaType.parse("image/*"), imageFile);
+                        File compressedImageFile = new Compressor.Builder(ComposerActivity.this)
+                                .setQuality(75)
+                                .setMaxWidth(1920)
+                                .setMaxHeight(1080)
+                                .setCompressFormat(Bitmap.CompressFormat.JPEG)
+                                .build()
+                                .compressToFile(imageFile);
+                        RequestBody imageBody = RequestBody.create(MediaType.parse("image/jpeg"),
+                                compressedImageFile);
                         Call<ImgurResponseModel> uploadImageCall = RequestUtil.getImgurApiInstance()
                                 .uploadImage(imageBody);
 

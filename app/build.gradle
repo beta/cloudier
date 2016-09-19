@@ -41,4 +41,5 @@ dependencies {
     compile 'com.github.stfalcon:frescoimageviewer:0.2.0'
     compile 'com.github.florent37:viewanimator:1.0.4'
     compile 'com.github.nguyenhoanglam:ImagePicker:1.1.1'
+    compile 'id.zelory:compressor:1.0.2'
 }
