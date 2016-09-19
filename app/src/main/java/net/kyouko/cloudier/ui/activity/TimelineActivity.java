@@ -27,9 +27,11 @@ import net.kyouko.cloudier.event.RetweetTweetEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.model.Timeline;
+import net.kyouko.cloudier.model.Tweet;
 import net.kyouko.cloudier.ui.adapter.TimelineAdapter;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -146,15 +148,55 @@ public abstract class TimelineActivity extends AppCompatActivity {
             timeline.tweets.clear();
             timeline.tweets.addAll(latestTimeline.tweets);
         } else {
-            if (latestTimeline.tweets.get(0).id.equals(timeline.tweets.get(0).id)) {
+            if (timeline.tweets.isEmpty()) {
+                timeline.tweets.addAll(latestTimeline.tweets);
+            } else if (timeline.containsTweet(latestTimeline.tweets.get(0))) {
+                int startPosition = -1, endPosition = -1;
+                for (int i = 0; i < timeline.tweets.size(); i += 1) {
+                    if (timeline.tweets.get(i).id.equals(latestTimeline.tweets.get(0).id)) {
+                        startPosition = i;
+                        break;
+                    }
+                }
+                if (startPosition >= 0) {
+                    for (int i = startPosition; i < timeline.tweets.size(); i += 1) {
+                        if (timeline.tweets.get(i).id.equals(
+                                latestTimeline.tweets.get(latestTimeline.tweets.size() - 1).id)) {
+                            endPosition = i;
+                        }
+                    }
+                }
+                if (startPosition >= 0 && endPosition >= startPosition) {
+                    Iterator<Tweet> iterator = timeline.tweets.iterator();
+                    iterator.next();
+
+                    int i = 0;
+                    while (i < startPosition) {
+                        iterator.next();
+                        i += 1;
+                    }
+                    while (i < endPosition) {
+                        iterator.remove();
+                        iterator.next();
+                        i += 1;
+                    }
+                }
+                timeline.tweets.addAll(startPosition, latestTimeline.tweets);
+
                 onNoNewTweets(R.string.text_info_no_new_tweets);
             } else if (timeline.containsTweet(
                     latestTimeline.tweets.get(latestTimeline.tweets.size() - 1))) {
-                for (int i = 1; i < latestTimeline.tweets.size(); i += 1) {
-                    if (timeline.containsTweet(latestTimeline.tweets.get(i))) {
-                        timeline.tweets.addAll(0, latestTimeline.tweets.subList(0, i));
-                    }
+                Iterator<Tweet> iterator = timeline.tweets.iterator();
+                iterator.next();
+                Tweet tweet;
+                do {
+                    iterator.remove();
+                    tweet = iterator.next();
                 }
+                while (!tweet.id.equals(latestTimeline.tweets.get(latestTimeline.tweets.size() - 1).id));
+                iterator.remove();
+
+                timeline.tweets.addAll(0, latestTimeline.tweets);
             } else {
                 timeline.tweets.clear();
                 timeline.tweets.addAll(latestTimeline.tweets);
