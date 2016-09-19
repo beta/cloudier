@@ -13,6 +13,9 @@
         <item name="cardMaxElevation">8dp</item>
     </style>
 
+    <style name="TweetCard.Composer" parent="TweetCard">
+    </style>
+
     <style name="TweetCard.Wrapper" parent="">
         <item name="android:clickable">true</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
@@ -157,6 +160,42 @@
     <style name="TweetCard.Actions.Action.WithText.Text" parent="">
         <item name="android:layout_marginStart">@dimen/spacing_small</item>
         <item name="android:textAppearance">@style/SecondaryText</item>
+    </style>
+
+    <style name="TweetCard.Composer.Images" parent="">
+        <item name="android:paddingStart">@dimen/spacing_small</item>
+        <item name="android:paddingEnd">@dimen/spacing_normal</item>
+    </style>
+
+    <style name="TweetCard.Composer.Images.Wrapper" parent="">
+        <item name="android:layout_marginBottom">@dimen/spacing_normal</item>
+        <item name="android:scrollbarSize">4dp</item>
+    </style>
+
+    <style name="TweetCard.Composer.Images.Image" parent="">
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">120dp</item>
+    </style>
+
+    <style name="TweetCard.Composer.Images.Image.Wrapper" parent="">
+        <item name="android:layout_width">120dp</item>
+        <item name="android:layout_height">120dp</item>
+        <item name="android:layout_marginStart">@dimen/spacing_small</item>
+    </style>
+
+    <style name="TweetCard.Composer.Images.Image.Delete" parent="">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_gravity">top|end</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:src">@drawable/ic_close_white_24dp</item>
+    </style>
+
+    <style name="TweetCard.Composer.Images.Image.Indicator" parent="">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_gravity">top|end</item>
     </style>
 
 </resources>

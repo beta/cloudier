@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    style="@style/TweetCard.Composer.Images.Image.Wrapper"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/image"
+        style="@style/TweetCard.Composer.Images.Image"
+        xmlns:android="http://schemas.android.com/apk/res/android"/>
+
+    <ImageButton
+        android:id="@+id/delete"
+        style="@style/TweetCard.Composer.Images.Image.Delete"/>
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@style/TweetCard.Composer.Images.Image.Indicator"
+        android:indeterminate="true"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/success"
+        style="@style/TweetCard.Composer.Images.Image.Indicator"
+        android:src="@drawable/ic_done_white_24dp"
+        android:visibility="gone"/>
+
+</FrameLayout>

@@ -9,6 +9,7 @@
     <string name="title.activity.composer">New tweet</string>
     <string name="title.activity.composer.comment">Comment</string>
     <string name="title.activity.composer.retweet">Retweet</string>
+    <string name="title.activity.image_picker.folders">Folders</string>
 
     <string name="title.action.refresh">Refresh</string>
     <string name="title.action.retry">Retry</string>
@@ -42,6 +43,7 @@
     <string name="text.error.failed_to_send_tweet">Failed to send tweet</string>
     <string name="text.error.failed_to_comment">Failed to comment</string>
     <string name="text.error.failed_to_retweet">Failed to retweet</string>
+    <string name="text.error.failed_to_upload_images">Failed to upload images</string>
 
     <string name="text.hint.composer_content">What\'s happening?</string>
     <string name="text.hint.composer_content.comment">What do you think?</string>

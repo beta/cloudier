@@ -8,6 +8,7 @@ import com.google.gson.GsonBuilder;
 import net.kyouko.cloudier.Config;
 import net.kyouko.cloudier.api.BooleanConverter;
 import net.kyouko.cloudier.api.CustomConverterFactory;
+import net.kyouko.cloudier.api.ImgurApi;
 import net.kyouko.cloudier.api.MapDeserializer;
 import net.kyouko.cloudier.api.TencentWeiboApi;
 import net.kyouko.cloudier.model.Account;
@@ -15,6 +16,7 @@ import net.kyouko.cloudier.model.Account;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.RequestBody;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -26,9 +28,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RequestUtil {
 
     private static TencentWeiboApi apiInstance;
+    private static ImgurApi imgurApiInstance;
 
     private static Map<String, String> constantParams;
     private static Map<String, String> oAuthParams;
+
+    private static Map<String, RequestBody> constantParts;
+    private static Map<String, RequestBody> oAuthParts;
 
 
     public final static String CONSTANT_PARAMS = "format=json&clientip=127.0.0.1";
@@ -46,6 +52,7 @@ public class RequestUtil {
                     constantParams = new HashMap<>();
                     constantParams.put("format", "json");
                     constantParams.put("clientip", "127.0.0.1");
+                    constantParams.put("pic_type", "1");
                 }
             }
         }
@@ -98,6 +105,24 @@ public class RequestUtil {
     }
 
 
+    /**
+     * Returns an instance of {@link ImgurApi} for performing API requests.
+     *
+     * @return an instance of {@link ImgurApi} for performing API requests.
+     */
+    public static ImgurApi getImgurApiInstance() {
+        if (imgurApiInstance == null) {
+            synchronized (RequestUtil.class) {
+                if (imgurApiInstance == null) {
+                    imgurApiInstance = createImgurApiInstance();
+                }
+            }
+        }
+
+        return imgurApiInstance;
+    }
+
+
     private static TencentWeiboApi createApiInstance() {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(boolean.class, new BooleanConverter())
@@ -112,6 +137,16 @@ public class RequestUtil {
                 .build();
 
         return retrofit.create(TencentWeiboApi.class);
+    }
+
+
+    private static ImgurApi createImgurApiInstance() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.imgur.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        return retrofit.create(ImgurApi.class);
     }
 
 }

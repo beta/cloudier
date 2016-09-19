@@ -144,9 +144,11 @@
                 android:id="@+id/button_add_image"
                 style="@style/TweetCard.Actions.Action"
                 android:layout_width="40dp"
-                android:layout_height="40dp">
+                android:layout_height="40dp"
+                android:layout_marginEnd="@dimen/spacing_small">
 
                 <ImageView
+                    android:id="@+id/button_add_image_icon"
                     style="@style/TweetCard.Actions.Action.Icon"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
@@ -159,7 +161,7 @@
                 style="@style/TweetCard.Actions.Action"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_marginEnd="@dimen/spacing_small"
                 android:layout_toEndOf="@+id/button_add_image">
 
                 <ImageView
@@ -175,7 +177,6 @@
                 style="@style/TweetCard.Actions.Action"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="@dimen/spacing_small"
                 android:layout_toEndOf="@+id/button_add_friend">
 
                 <ImageView
@@ -187,6 +188,22 @@
             </FrameLayout>
 
         </RelativeLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/images_wrapper"
+            style="@style/TweetCard.Composer.Images.Wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/images"
+                style="@style/TweetCard.Composer.Images"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"/>
+
+        </HorizontalScrollView>
 
     </LinearLayout>
 

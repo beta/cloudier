@@ -4,6 +4,7 @@ import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.Tweet;
 import net.kyouko.cloudier.model.TweetResult;
 import net.kyouko.cloudier.model.Update;
+import net.kyouko.cloudier.model.UploadImageResult;
 import net.kyouko.cloudier.model.User;
 import net.kyouko.cloudier.util.RequestUtil;
 
@@ -111,7 +112,15 @@ public interface TencentWeiboApi {
     @POST("api/t/add_pic_url")
     Call<TweetResult> postTweet(@FieldMap Map<String, String> constantParams,
                                 @FieldMap Map<String, String> oAuthParams,
-                                @Field("content") String content);
+                                @Field("content") String content,
+                                @Field("pic_url") String imageUrls);
+
+
+    @FormUrlEncoded
+    @POST("api/t/upload_pic")
+    Call<UploadImageResult> uploadImageFromUrl(@FieldMap Map<String, String> constantParams,
+                                               @FieldMap Map<String, String> oAuthParams,
+                                               @Field("pic_url") String imageUrl);
 
 
     @FormUrlEncoded
