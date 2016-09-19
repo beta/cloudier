@@ -28,8 +28,12 @@
     <string name="title.setting.image.source">Image source</string>
     <string name="title.setting.image.quality">Image quality</string>
     <string name="title.setting.avatar.quality">Avatar quality</string>
+    <string name="title.setting.about">About</string>
+    <string name="title.setting.about.licenses">Open source licenses</string>
+    <string name="title.setting.about.github">GitHub</string>
 
     <string name="text.setting.summary.current_value">%s</string>
+    <string name="text.setting.summary.github">https://github.com/beta/cloudier</string>
 
     <string name="text.info.auth_success">Authorization succeeded</string>
     <string name="text.info.no_new_tweets">No new tweets</string>

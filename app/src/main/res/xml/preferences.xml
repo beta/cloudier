@@ -34,4 +34,24 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="about"
+        android:title="@string/title.setting.about">
+
+        <Preference
+            android:key="about.licenses"
+            android:title="@string/title.setting.about.licenses"/>
+
+        <Preference
+            android:summary="@string/text.setting.summary.github"
+            android:title="@string/title.setting.about.github">
+
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/beta/cloudier"/>
+
+        </Preference>
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

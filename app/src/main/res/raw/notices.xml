@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<notices>
+    <notice>
+        <name>ButterKnife</name>
+        <url>https://jakewharton.github.io/butterknife/</url>
+        <copyright>Copyright 2013 Jake Wharton</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>Commons Lang</name>
+        <url>https://commons.apache.org/lang</url>
+        <copyright>Copyright © 2001-2016 The Apache Software Foundation.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>Compressor</name>
+        <url>https://github.com/zetbaitsu/Compressor</url>
+        <copyright>Copyright (c) 2016 Zetra.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>Fresco</name>
+        <url>http://frescolib.org/</url>
+        <copyright>Copyright (c) 2015-present, Facebook, Inc.</copyright>
+        <license>BSD 3-Clause License</license>
+    </notice>
+    <notice>
+        <name>FrescoImageViewer</name>
+        <url>https://github.com/stfalcon-studio/FrescoImageViewer</url>
+        <copyright>Copyright (C) 2016 stfalcon.com</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>ImagePicker</name>
+        <url>https://github.com/nguyenhoanglam/ImagePicker</url>
+        <copyright>Copyright 2016 Nguyen Hoang Lam</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>LicensesDialog</name>
+        <url>https://github.com/PSDev/LicensesDialog</url>
+        <copyright>Copyright 2013-2016 Philip Schiffer</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>Otto</name>
+        <url>https://square.github.io/otto/</url>
+        <copyright>Copyright 2013 Square, Inc.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>Picasso</name>
+        <url>https://square.github.io/picasso/</url>
+        <copyright>Copyright 2013 Square, Inc.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>Retrofit</name>
+        <url>https://square.github.io/retrofit/</url>
+        <copyright>Copyright 2013 Square, Inc.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+    <notice>
+        <name>ViewAnimator</name>
+        <url>https://github.com/florent37/ViewAnimator</url>
+        <copyright>Copyright 2015 florent37, Inc.</copyright>
+        <license>Apache Software License 2.0</license>
+    </notice>
+</notices>
