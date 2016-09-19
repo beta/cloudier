@@ -137,7 +137,7 @@ public class HomeActivity extends TimelineActivity {
                 AuthUtil.saveAccount(HomeActivity.this, account);
 
                 updateAccountInfo();
-                loadTimeline();
+                loadLatestTimeline();
             }
 
             @Override
@@ -201,7 +201,9 @@ public class HomeActivity extends TimelineActivity {
 
 
     @Override
-    protected void loadTimeline() {
+    protected void loadLatestTimeline() {
+        swipeRefreshLayout.setRefreshing(true);
+
         TencentWeiboApi api = RequestUtil.getApiInstance();
         Call<Timeline> timelineCall = api.getLatestHomeTimeline(RequestUtil.getOAuthParams(this));
         timelineCall.enqueue(new Callback<Timeline>() {
@@ -210,34 +212,24 @@ public class HomeActivity extends TimelineActivity {
                 swipeRefreshLayout.setRefreshing(false);
 
                 if (response.body() != null && !response.body().tweets.isEmpty()) {
-                    timeline.tweets.clear();
-                    timeline.tweets.addAll(response.body().tweets);
-                    timeline.users.putAll(response.body().users);
-
-                    adapter.notifyDataSetChanged();
+                    mergeLatestTimeline(response.body());
                 } else {
-                    onNoNewTweets();
+                    onNoNewTweets(R.string.text_info_no_new_tweets);
                 }
 
                 loadNotificationsUpdate();
             }
 
 
-            private void onNoNewTweets() {
-                Snackbar.make(coordinatorLayout, R.string.text_info_no_new_tweets,
-                        Snackbar.LENGTH_SHORT)
-                        .show();
-            }
-
-
             @Override
             public void onFailure(Call<Timeline> call, Throwable t) {
+                swipeRefreshLayout.setRefreshing(false);
                 Snackbar.make(coordinatorLayout, R.string.text_error_failed_to_fetch_timeline,
                         Snackbar.LENGTH_SHORT)
                         .setAction(R.string.title_action_retry, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                loadTimeline();
+                                loadLatestTimeline();
                             }
                         })
                         .show();
@@ -264,15 +256,8 @@ public class HomeActivity extends TimelineActivity {
 
                     adapter.notifyDataSetChanged();
                 } else {
-                    onNoMoreTweets();
+                    onNoMoreTweets(R.string.text_info_no_more_tweets);
                 }
-            }
-
-
-            private void onNoMoreTweets() {
-                Snackbar.make(coordinatorLayout, R.string.text_info_no_more_tweets,
-                        Snackbar.LENGTH_SHORT)
-                        .show();
             }
 
 

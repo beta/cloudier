@@ -48,30 +48,19 @@ public class NotificationsActivity extends TimelineActivity {
 
 
     @Override
-    protected void loadTimeline() {
+    protected void loadLatestTimeline() {
         TencentWeiboApi api = RequestUtil.getApiInstance();
         Call<Timeline> timelineCall = api.getLatestNotificationTimeline(RequestUtil.getOAuthParams(this));
         timelineCall.enqueue(new Callback<Timeline>() {
             @Override
             public void onResponse(Call<Timeline> call, Response<Timeline> response) {
                 if (response.body() != null && !response.body().tweets.isEmpty()) {
-                    timeline.tweets.clear();
-                    timeline.tweets.addAll(response.body().tweets);
-                    timeline.users.putAll(response.body().users);
-
-                    adapter.notifyDataSetChanged();
+                    mergeLatestTimeline(response.body());
                 } else {
-                    onNoNewTweets();
+                    onNoNewTweets(R.string.text_info_no_new_tweets);
                 }
 
                 clearMentionsUpdate();
-            }
-
-
-            private void onNoNewTweets() {
-                Snackbar.make(coordinatorLayout, R.string.text_info_no_new_tweets,
-                        Snackbar.LENGTH_SHORT)
-                        .show();
             }
 
 
@@ -84,7 +73,7 @@ public class NotificationsActivity extends TimelineActivity {
                         .setAction(R.string.title_action_retry, new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                loadTimeline();
+                                loadLatestTimeline();
                             }
                         })
                         .show();
@@ -129,15 +118,8 @@ public class NotificationsActivity extends TimelineActivity {
 
                     adapter.notifyDataSetChanged();
                 } else {
-                    onNoMoreTweets();
+                    onNoMoreTweets(R.string.text_info_no_more_notifications);
                 }
-            }
-
-
-            private void onNoMoreTweets() {
-                Snackbar.make(coordinatorLayout, R.string.text_info_no_more_notifications,
-                        Snackbar.LENGTH_SHORT)
-                        .show();
             }
 
 

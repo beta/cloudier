@@ -24,4 +24,14 @@ public class Timeline implements Serializable {
     @SerializedName("user")
     public HashMap<String, String> users = new HashMap<>();
 
+
+    public boolean containsTweet(Tweet newTweet) {
+        for (Tweet tweet : tweets) {
+            if (tweet.id.equals(newTweet.id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

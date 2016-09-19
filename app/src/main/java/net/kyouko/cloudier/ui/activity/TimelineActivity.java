@@ -3,6 +3,7 @@ package net.kyouko.cloudier.ui.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.StringRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -117,7 +118,7 @@ public abstract class TimelineActivity extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadTimeline();
+                loadLatestTimeline();
             }
         });
     }
@@ -133,15 +134,51 @@ public abstract class TimelineActivity extends AppCompatActivity {
 
 
     protected void prepare() {
-        loadTimeline();
+        loadLatestTimeline();
     }
 
 
-    protected abstract void loadTimeline();
+    protected abstract void loadLatestTimeline();
+
+
+    protected void mergeLatestTimeline(Timeline latestTimeline) {
+        if (timeline.tweets.isEmpty()) {
+            timeline.tweets.clear();
+            timeline.tweets.addAll(latestTimeline.tweets);
+        } else {
+            if (latestTimeline.tweets.get(0).id.equals(timeline.tweets.get(0).id)) {
+                onNoNewTweets(R.string.text_info_no_new_tweets);
+            } else if (timeline.containsTweet(
+                    latestTimeline.tweets.get(latestTimeline.tweets.size() - 1))) {
+                for (int i = 1; i < latestTimeline.tweets.size(); i += 1) {
+                    if (timeline.containsTweet(latestTimeline.tweets.get(i))) {
+                        timeline.tweets.addAll(0, latestTimeline.tweets.subList(0, i));
+                    }
+                }
+            } else {
+                timeline.tweets.clear();
+                timeline.tweets.addAll(latestTimeline.tweets);
+            }
+        }
+
+        timeline.users.putAll(latestTimeline.users);
+
+        adapter.notifyDataSetChanged();
+    }
+
+
+    protected void onNoNewTweets(@StringRes int messageId) {
+        Snackbar.make(coordinatorLayout, messageId, Snackbar.LENGTH_SHORT).show();
+    }
 
 
     @Subscribe
     public abstract void loadMoreTimeline(LoadMoreTweetsEvent event);
+
+
+    protected void onNoMoreTweets(@StringRes int messageId) {
+        Snackbar.make(coordinatorLayout, messageId, Snackbar.LENGTH_SHORT).show();
+    }
 
 
     protected void viewTweet(ViewTweetEvent event) {
