@@ -207,7 +207,13 @@ public class ComposerActivity extends AppCompatActivity {
             sourceTweet = (SourceTweet) getIntent().getSerializableExtra("TWEET");
             sourceCard.setVisibility(View.VISIBLE);
 
-            sourceNickname.setText(sourceTweet.nickname);
+            String sourceTweetNickname = getIntent().getStringExtra("SOURCE_NICKNAME");
+            if (sourceTweetNickname.length() > 0) {
+                sourceNickname.setText(sourceTweetNickname);
+            } else {
+                sourceNickname.setText(sourceTweet.nickname);
+            }
+
             sourceTime.setText(DateTimeUtil.getDateTimeDescription(this, sourceTweet.timestamp));
 
             String sourceTweetContent = getIntent().getStringExtra("SOURCE_CONTENT");

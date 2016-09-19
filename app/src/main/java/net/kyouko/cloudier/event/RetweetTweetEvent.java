@@ -14,14 +14,16 @@ public class RetweetTweetEvent extends CommentTweetEvent {
     public String retweetContent;
 
 
-    public RetweetTweetEvent(SourceTweet tweet, String sourceTweetContent, TweetCardUtil.Card card) {
-        super(tweet, sourceTweetContent, card);
+    public RetweetTweetEvent(SourceTweet tweet, String sourceTweetNickname,
+                             String sourceTweetContent, TweetCardUtil.Card card) {
+        super(tweet, sourceTweetNickname, sourceTweetContent, card);
     }
 
 
-    public RetweetTweetEvent(SourceTweet tweet, String sourceTweetContent, TweetCardUtil.Card card,
+    public RetweetTweetEvent(SourceTweet tweet, String sourceTweetNickname,
+                             String sourceTweetContent, TweetCardUtil.Card card,
                              String retweetContent, boolean isSourceTweet) {
-        super(tweet, sourceTweetContent, card);
+        super(tweet, sourceTweetNickname, sourceTweetContent, card);
 
         this.retweetContent = retweetContent;
         this.isSourceTweet = isSourceTweet;

@@ -263,6 +263,7 @@ public abstract class TimelineActivity extends AppCompatActivity {
             intent.putExtra("TYPE", ComposerActivity.TYPE_COMMENT);
         }
         intent.putExtra("TWEET", event.tweet);
+        intent.putExtra("SOURCE_NICKNAME", event.sourceTweetNickname);
         intent.putExtra("SOURCE_CONTENT", event.sourceTweetContent);
 
         Pair<View, String> cardPair = Pair.create((View) event.card.cardView, "card");

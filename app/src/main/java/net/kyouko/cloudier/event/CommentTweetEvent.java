@@ -13,6 +13,7 @@ import net.kyouko.cloudier.util.TweetCardUtil;
 public class CommentTweetEvent {
 
     public SourceTweet tweet;
+    public String sourceTweetNickname;
     public String sourceTweetContent;
 
     public TweetCardUtil.MiniCard card;
@@ -21,8 +22,10 @@ public class CommentTweetEvent {
     public TextView content;
 
 
-    public CommentTweetEvent(SourceTweet tweet, String sourceTweetComment, TweetCardUtil.Card card) {
+    public CommentTweetEvent(SourceTweet tweet, String sourceTweetNickname,
+                             String sourceTweetComment, TweetCardUtil.Card card) {
         this.tweet = tweet;
+        this.sourceTweetNickname = sourceTweetNickname;
         this.sourceTweetContent = sourceTweetComment;
         this.card = card;
         this.nickname = card.nickname;
