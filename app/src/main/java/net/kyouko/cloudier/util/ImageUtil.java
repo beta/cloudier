@@ -9,35 +9,32 @@ import android.content.Context;
  */
 public class ImageUtil {
 
-    public final static int QUALITY_ORIGINAL = 0;
-    public final static int QUALITY_HIGH = 1;
-    public final static int QUALITY_MEDIUM = 2;
-    public final static int QUALITY_LOW = 3;
+    public final static int QUALITY_LOW = 0;
+    public final static int QUALITY_MEDIUM = 1;
+    public final static int QUALITY_HIGH = 2;
+    public final static int QUALITY_ORIGINAL = 3;
 
-    public final static String PREFIX_APP = "app";
-    public final static String[] PREFIXES = {"t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"};
+    public final static String IMAGE_QUALITY_LOW = "120";
+    public final static String IMAGE_QUALITY_MEDIUM = "320";
+    public final static String IMAGE_QUALITY_HIGH = "500";
+    public final static String IMAGE_QUALITY_ORIGINAL = "2000";
 
-    private final static String SUFFIX_AVATAR_ORIGINAL = "0";
-    private final static String SUFFIX_AVATAR_HIGH = "180";
-    private final static String SUFFIX_AVATAR_MEDIUM = "100";
-    private final static String SUFFIX_AVATAR_LOW = "50";
-
-    private final static String SUFFIX_IMAGE_ORIGINAL = "2000";
-    private final static String SUFFIX_IMAGE_HIGH = "500";
-    private final static String SUFFIX_IMAGE_MEDIUM = "320";
-    private final static String SUFFIX_IMAGE_LOW = "120";
+    public final static String AVATAR_QUALITY_LOW = "50";
+    public final static String AVATAR_QUALITY_MEDIUM = "100";
+    public final static String AVATAR_QUALITY_HIGH = "180";
+    public final static String AVATAR_QUALITY_ORIGINAL = "0";
 
 
-    private int imageQualityOverCellular;
-    private int imageQualityOverWifi;
-    private String prefix;
+    private String imageSource;
+    private String imageQuality;
+    private String avatarQuality;
 
 
     private ImageUtil(Context context) {
         PreferenceUtil pref = PreferenceUtil.with(context);
-        imageQualityOverCellular = pref.getInt(PreferenceUtil.PREF_IMAGE_QUALITY_OVER_CELLULAR);
-        imageQualityOverWifi = pref.getInt(PreferenceUtil.PREF_IMAGE_QUALITY_OVER_WIFI);
-        prefix = pref.getString(PreferenceUtil.PREF_IMAGE_SOURCE);
+        imageSource = pref.getString(PreferenceUtil.PREF_IMAGE_SOURCE);
+        imageQuality = pref.getString(PreferenceUtil.PREF_IMAGE_QUALITY);
+        avatarQuality = pref.getString(PreferenceUtil.PREF_AVATAR_QUALITY);
     }
 
 
@@ -47,62 +44,44 @@ public class ImageUtil {
 
 
     public String parseImageUrl(String originalUrl) {
-        // TODO: WiFi or cellular?
-        return parseImageUrl(originalUrl, imageQualityOverWifi);
+        return parseImageUrl(originalUrl, imageQuality, avatarQuality);
     }
 
 
     public String parseImageUrl(String originalUrl, int quality) {
+        switch (quality) {
+            case QUALITY_LOW:
+                return parseImageUrl(originalUrl, IMAGE_QUALITY_LOW, AVATAR_QUALITY_LOW);
+            case QUALITY_MEDIUM:
+                return parseImageUrl(originalUrl, IMAGE_QUALITY_MEDIUM, AVATAR_QUALITY_MEDIUM);
+            case QUALITY_HIGH:
+                return parseImageUrl(originalUrl, IMAGE_QUALITY_HIGH, AVATAR_QUALITY_HIGH);
+            case QUALITY_ORIGINAL:
+            default:
+                return parseImageUrl(originalUrl, IMAGE_QUALITY_ORIGINAL, AVATAR_QUALITY_ORIGINAL);
+        }
+    }
+
+
+    public String parseImageUrl(String originalUrl, String imageQuality, String avatarQuality) {
         int indexOfQpic = originalUrl.indexOf("qpic.cn");
         if (indexOfQpic >= 0) {
-            String imageUrl = "http://" + prefix + "." + originalUrl.substring(indexOfQpic);
-
+            String imageUrl = "http://" + imageSource + "." + originalUrl.substring(indexOfQpic);
             if (!imageUrl.endsWith("/")) {
                 imageUrl += "/";
             }
-            switch (quality) {
-                case QUALITY_ORIGINAL:
-                default:
-                    imageUrl += SUFFIX_IMAGE_ORIGINAL;
-                    break;
-                case QUALITY_HIGH:
-                    imageUrl += SUFFIX_IMAGE_HIGH;
-                    break;
-                case QUALITY_MEDIUM:
-                    imageUrl += SUFFIX_IMAGE_MEDIUM;
-                    break;
-                case QUALITY_LOW:
-                    imageUrl += SUFFIX_IMAGE_LOW;
-                    break;
-            }
-
+            imageUrl += imageQuality;
             return imageUrl;
         }
 
         int indexOfQlogo = originalUrl.indexOf("qlogo.cn");
         if (indexOfQlogo >= 0) {
-            String imageUrl = "http://" + prefix + "." + originalUrl.substring(indexOfQlogo);
-
-            if (!imageUrl.endsWith("/")) {
-                imageUrl += "/";
+            String avatarUrl = "http://" + imageSource + "." + originalUrl.substring(indexOfQlogo);
+            if (!avatarUrl.endsWith("/")) {
+                avatarUrl += "/";
             }
-            switch (quality) {
-                case QUALITY_ORIGINAL:
-                default:
-                    imageUrl += SUFFIX_AVATAR_ORIGINAL;
-                    break;
-                case QUALITY_HIGH:
-                    imageUrl += SUFFIX_AVATAR_HIGH;
-                    break;
-                case QUALITY_MEDIUM:
-                    imageUrl += SUFFIX_AVATAR_MEDIUM;
-                    break;
-                case QUALITY_LOW:
-                    imageUrl += SUFFIX_AVATAR_LOW;
-                    break;
-            }
-
-            return imageUrl;
+            avatarUrl += avatarQuality;
+            return avatarUrl;
         }
 
         return originalUrl;

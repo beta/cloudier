@@ -2,6 +2,7 @@ package net.kyouko.cloudier.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 /**
  * Util class for reading and writing preferences.
@@ -9,10 +10,6 @@ import android.content.SharedPreferences;
  * @author beta
  */
 public class PreferenceUtil {
-
-    private final static String PREF_KEY = "net.kyouko.cloudier.pref";
-
-    public final static String PREF_APP_HAS_INITIAL_SETUP = "app.has_initial_setup";
 
     public final static String PREF_ACCOUNT_ACCESS_TOKEN = "account.access_token";
     public final static String PREF_ACCOUNT_EXPIRES_IN = "account.expires_in";
@@ -24,16 +21,16 @@ public class PreferenceUtil {
 
     public final static String PREF_HAS_AUTHORIZED = "has_authorized";
 
-    public final static String PREF_IMAGE_QUALITY_OVER_CELLULAR = "image.quality_over_cellular";
-    public final static String PREF_IMAGE_QUALITY_OVER_WIFI = "image.quality_over_wifi";
     public final static String PREF_IMAGE_SOURCE = "image.source";
+    public final static String PREF_IMAGE_QUALITY = "image.quality";
+    public final static String PREF_AVATAR_QUALITY = "avatar.quality";
 
 
     private SharedPreferences preferences;
 
 
     private PreferenceUtil(Context context) {
-        preferences = context.getSharedPreferences(PREF_KEY, Context.MODE_PRIVATE);
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
 

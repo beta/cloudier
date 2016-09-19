@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="settings_image_source_entries" translatable="false">
+        <item>APP</item>
+        <item>T0</item>
+        <item>T1</item>
+        <item>T2</item>
+        <item>T3</item>
+        <item>T4</item>
+        <item>T5</item>
+        <item>T6</item>
+        <item>T7</item>
+        <item>T8</item>
+        <item>T9</item>
+    </string-array>
+
+    <string-array name="settings_image_source_values" translatable="false">
+        <item>app</item>
+        <item>t0</item>
+        <item>t1</item>
+        <item>t2</item>
+        <item>t3</item>
+        <item>t4</item>
+        <item>t5</item>
+        <item>t6</item>
+        <item>t7</item>
+        <item>t8</item>
+        <item>t9</item>
+    </string-array>
+
+    <string name="settings_image_source_default" translatable="false">app</string>
+
+    <string-array name="settings_image_quality_entries">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+    </string-array>
+
+    <string-array name="settings_image_quality_values" translatable="false">
+        <item>120</item>
+        <item>320</item>
+        <item>500</item>
+    </string-array>
+
+    <string name="settings_image_quality_default" translatable="false">320</string>
+
+    <string-array name="settings_avatar_quality_entries">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+    </string-array>
+
+    <string-array name="settings_avatar_quality_values" translatable="false">
+        <item>50</item>
+        <item>100</item>
+        <item>180</item>
+    </string-array>
+
+    <string name="settings_avatar_quality_default" translatable="false">100</string>
+
+</resources>

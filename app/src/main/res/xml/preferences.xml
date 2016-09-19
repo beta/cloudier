@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:key="image"
+        android:title="@string/title.setting.image">
+
+        <ListPreference
+            android:defaultValue="@string/settings_image_source_default"
+            android:dialogTitle="@string/title.setting.image.source"
+            android:entries="@array/settings_image_source_entries"
+            android:entryValues="@array/settings_image_source_values"
+            android:key="image.source"
+            android:summary="@string/text.setting.summary.current_value"
+            android:title="@string/title.setting.image.source"/>
+
+        <ListPreference
+            android:defaultValue="@string/settings_image_quality_default"
+            android:dialogTitle="@string/title.setting.image.quality"
+            android:entries="@array/settings_image_quality_entries"
+            android:entryValues="@array/settings_image_quality_values"
+            android:key="image.quality"
+            android:summary="@string/text.setting.summary.current_value"
+            android:title="@string/title.setting.image.quality"/>
+
+        <ListPreference
+            android:defaultValue="@string/settings_avatar_quality_default"
+            android:dialogTitle="@string/title.setting.avatar.quality"
+            android:entries="@array/settings_avatar_quality_entries"
+            android:entryValues="@array/settings_avatar_quality_values"
+            android:key="avatar.quality"
+            android:summary="@string/text.setting.summary.current_value"
+            android:title="@string/title.setting.avatar.quality"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

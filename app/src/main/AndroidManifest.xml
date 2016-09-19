@@ -37,6 +37,9 @@
             android:name=".ui.activity.NotificationsActivity"
             android:label="@string/title.activity.notifications">
         </activity>
+        <activity
+            android:name=".ui.activity.SettingsActivity"
+            android:label="@string/title.activity.settings"/>
     </application>
 
 </manifest>

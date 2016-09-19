@@ -9,4 +9,9 @@
         android:title="@string/title.action.notifications"
         app:showAsAction="ifRoom"/>
 
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/title.action.settings"
+        app:showAsAction="never"/>
+
 </menu>
