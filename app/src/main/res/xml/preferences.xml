@@ -28,7 +28,7 @@
             android:dialogTitle="@string/title.setting.avatar.quality"
             android:entries="@array/settings_avatar_quality_entries"
             android:entryValues="@array/settings_avatar_quality_values"
-            android:key="avatar.quality"
+            android:key="image.avatar.quality"
             android:summary="@string/text.setting.summary.current_value"
             android:title="@string/title.setting.avatar.quality"/>
 

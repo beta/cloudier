@@ -23,7 +23,7 @@ public class PreferenceUtil {
 
     public final static String PREF_IMAGE_SOURCE = "image.source";
     public final static String PREF_IMAGE_QUALITY = "image.quality";
-    public final static String PREF_AVATAR_QUALITY = "avatar.quality";
+    public final static String PREF_AVATAR_QUALITY = "image.avatar.quality";
 
 
     private SharedPreferences preferences;

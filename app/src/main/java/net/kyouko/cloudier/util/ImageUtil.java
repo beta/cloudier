@@ -25,6 +25,8 @@ public class ImageUtil {
     public final static String AVATAR_QUALITY_ORIGINAL = "0";
 
 
+    private static ImageUtil instance;
+
     private String imageSource;
     private String imageQuality;
     private String avatarQuality;
@@ -39,7 +41,19 @@ public class ImageUtil {
 
 
     public static ImageUtil getInstance(Context context) {
-        return new ImageUtil(context);
+        if (instance == null) {
+            synchronized (ImageUtil.class) {
+                if (instance == null) {
+                    recreateInstance(context);
+                }
+            }
+        }
+        return instance;
+    }
+
+
+    public static void recreateInstance(Context context) {
+        instance = new ImageUtil(context);
     }
 
 
