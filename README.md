@@ -13,6 +13,10 @@ Cloudier is currently working in progress. You can find alpha versions from [Rel
  - [Retrofit](https://square.github.io/retrofit/), [Picasso](https://square.github.io/picasso/) and [Otto](https://square.github.io/otto/)
  - [Fresco](http://frescolib.org/)
  - [FrescoImageViewer](https://github.com/stfalcon-studio/FrescoImageViewer)
+ - [ViewAnimator](https://github.com/florent37/ViewAnimator)
+ - [ImagePicker](https://github.com/nguyenhoanglam/ImagePicker)
+ - [Compressor](https://github.com/zetbaitsu/Compressor)
+ - [LicensesDialog](https://github.com/PSDev/LicensesDialog)
 
 ## License
 
