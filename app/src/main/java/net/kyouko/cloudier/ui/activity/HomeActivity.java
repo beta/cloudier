@@ -166,7 +166,7 @@ public class HomeActivity extends TimelineActivity {
 
     private void enterNotifications() {
         startActivityForResult(new Intent(this, NotificationsActivity.class), REQUEST_NOTIFICATIONS);
-        overridePendingTransition(R.anim.swipe_in_from_right, R.anim.swipe_out_to_left);
+        overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_to_left);
     }
 
 
