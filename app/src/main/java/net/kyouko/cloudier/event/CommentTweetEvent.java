@@ -14,6 +14,7 @@ public class CommentTweetEvent {
 
     public SourceTweet tweet;
     public String sourceTweetNickname;
+    public String sourceTweetTime;
     public String sourceTweetContent;
 
     public TweetCardUtil.MiniCard card;
@@ -22,10 +23,11 @@ public class CommentTweetEvent {
     public TextView content;
 
 
-    public CommentTweetEvent(SourceTweet tweet, String sourceTweetNickname,
+    public CommentTweetEvent(SourceTweet tweet, String sourceTweetNickname, String sourceTweetTime,
                              String sourceTweetComment, TweetCardUtil.Card card) {
         this.tweet = tweet;
         this.sourceTweetNickname = sourceTweetNickname;
+        this.sourceTweetTime = sourceTweetTime;
         this.sourceTweetContent = sourceTweetComment;
         this.card = card;
         this.nickname = card.nickname;

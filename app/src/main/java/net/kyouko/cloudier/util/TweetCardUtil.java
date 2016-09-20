@@ -211,7 +211,7 @@ public class TweetCardUtil {
                 @Override
                 public void onClick(View view) {
                     CloudierApplication.getBus().post(new CommentTweetEvent(tweet, tweet.nickname,
-                            content.getText().toString(), Card.this));
+                            time.getText().toString(), content.getText().toString(), Card.this));
                 }
             });
             retweetButton.setOnClickListener(new View.OnClickListener() {
@@ -220,12 +220,14 @@ public class TweetCardUtil {
                     if (hasSourceTweet) {
                         CloudierApplication.getBus().post(new RetweetTweetEvent(tweet,
                                 sourceNickname.getText().toString(),
+                                sourceTime.getText().toString(),
                                 sourceContent.getText().toString(), Card.this,
                                 context.getString(R.string.text_pattern_comment, tweet.username,
                                         tweet.originalContent), false));
                     } else {
                         CloudierApplication.getBus().post(new RetweetTweetEvent(tweet,
-                                tweet.nickname, content.getText().toString(), Card.this));
+                                tweet.nickname, time.getText().toString(),
+                                content.getText().toString(), Card.this));
                     }
                 }
             });

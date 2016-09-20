@@ -211,10 +211,24 @@ public class ComposerActivity extends AppCompatActivity {
             if (sourceTweetNickname.length() > 0) {
                 sourceNickname.setText(sourceTweetNickname);
             } else {
-                sourceNickname.setText(sourceTweet.nickname);
+                if (sourceTweet instanceof Tweet && ((Tweet) sourceTweet).sourceTweet != null) {
+                    sourceNickname.setText(((Tweet) sourceTweet).sourceTweet.nickname);
+                } else {
+                    sourceNickname.setText(sourceTweet.nickname);
+                }
             }
 
-            sourceTime.setText(DateTimeUtil.getDateTimeDescription(this, sourceTweet.timestamp));
+            String sourceTweetTime = getIntent().getStringExtra("SOURCE_TIME");
+            if (sourceTweetTime.length() > 0) {
+                sourceTime.setText(sourceTweetTime);
+            } else {
+                if (sourceTweet instanceof Tweet && ((Tweet) sourceTweet).sourceTweet != null) {
+                    sourceTime.setText(DateTimeUtil.getDateTimeDescription(this,
+                            ((Tweet) sourceTweet).sourceTweet.timestamp));
+                } else {
+                    sourceTime.setText(DateTimeUtil.getDateTimeDescription(this, sourceTweet.timestamp));
+                }
+            }
 
             String sourceTweetContent = getIntent().getStringExtra("SOURCE_CONTENT");
             if (sourceTweetContent.length() > 0) {
