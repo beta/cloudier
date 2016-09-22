@@ -9,6 +9,7 @@ import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.api.TencentWeiboApi;
 import net.kyouko.cloudier.event.CommentTweetEvent;
 import net.kyouko.cloudier.event.LoadMoreTweetsEvent;
+import net.kyouko.cloudier.event.ShareTweetEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.model.Timeline;
@@ -155,6 +156,12 @@ public class NotificationsActivity extends TimelineActivity {
     @Subscribe
     public void onCommentOrRetweetTweet(CommentTweetEvent event) {
         commentOrRetweetTweet(event);
+    }
+
+
+    @Subscribe
+    public void onShareTweet(ShareTweetEvent event) {
+        shareTweet(event);
     }
 
 }

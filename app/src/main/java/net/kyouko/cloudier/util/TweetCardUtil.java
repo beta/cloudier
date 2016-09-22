@@ -15,6 +15,7 @@ import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.event.CommentTweetEvent;
 import net.kyouko.cloudier.event.RetweetTweetEvent;
+import net.kyouko.cloudier.event.ShareTweetEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.model.SourceTweet;
@@ -229,6 +230,13 @@ public class TweetCardUtil {
                                 tweet.nickname, time.getText().toString(),
                                 content.getText().toString(), Card.this));
                     }
+                }
+            });
+
+            shareButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CloudierApplication.getBus().post(new ShareTweetEvent(tweet.id));
                 }
             });
         }

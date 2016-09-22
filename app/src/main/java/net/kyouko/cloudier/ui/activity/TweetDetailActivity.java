@@ -26,6 +26,7 @@ import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.event.CommentTweetEvent;
 import net.kyouko.cloudier.event.LoadMoreTweetsWithTypeEvent;
 import net.kyouko.cloudier.event.RetweetTweetEvent;
+import net.kyouko.cloudier.event.ShareTweetEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.model.SourceTweet;
@@ -444,6 +445,15 @@ public class TweetDetailActivity extends AppCompatActivity implements
         );
 
         startActivityForResult(intent, requestCode, options.toBundle());
+    }
+
+
+    @Subscribe
+    public void onShareTweet(ShareTweetEvent event) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.text_pattern_tweet_link, event.tweetId));
+        startActivity(Intent.createChooser(intent, getString(R.string.text_info_share_tweet)));
     }
 
 
