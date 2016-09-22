@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Cloudier</string>
+
+    <string name="title.activity.auth">账户授权</string>
+    <string name="title.activity.notifications">消息</string>
+    <string name="title.activity.tweet_detail">微博详情</string>
+    <string name="title.activity.composer">发表新微博</string>
+    <string name="title.activity.composer.comment">评论</string>
+    <string name="title.activity.composer.retweet">转发</string>
+    <string name="title.activity.image_picker.folders">文件夹</string>
+    <string name="title.activity.settings">选项</string>
+
+    <string name="title.action.refresh">刷新</string>
+    <string name="title.action.retry">重试</string>
+    <string name="title.action.send">发送</string>
+    <string name="title.action.notifications">消息</string>
+    <string name="title.action.view">查看</string>
+    <string name="title.action.settings">选项</string>
+    <string name="title.action.share_via">分享自…</string>
+
+    <string name="title.button.load_more">加载更多</string>
+
+    <string name="title.tab.comments">评论</string>
+    <string name="title.tab.retweets">转发</string>
+
+    <string name="title.setting.image">图片</string>
+    <string name="title.setting.image.source">图片来源</string>
+    <string name="title.setting.image.quality">图片质量</string>
+    <string name="title.setting.avatar.quality">头像质量</string>
+    <string name="title.setting.about">关于</string>
+    <string name="title.setting.about.licenses">开放源代码协议</string>
+
+    <string name="text.info.auth_success">授权成功</string>
+    <string name="text.info.no_new_tweets">没有新微博</string>
+    <string name="text.info.no_more_tweets">没有更多微博了</string>
+    <string name="text.info.no_new_notifications">没有新提醒</string>
+    <string name="text.info.no_more_notifications">没有更多提醒了</string>
+    <string name="text.info.new_notifications">%d 条新提醒</string>
+    <string name="text.info.no_more_comments">没有更多评论了</string>
+    <string name="text.info.no_more_retweets">没有更多转发了</string>
+    <string name="text.info.source_tweet_deleted">微博已被删除。</string>
+    <string name="text.info.comment_sent">评论成功</string>
+    <string name="text.info.retweet_sent">转发成功</string>
+    <string name="text.info.share_tweet">分享微博</string>
+
+    <string name="text.error.failed_to_fetch_account">无法获取账户信息</string>
+    <string name="text.error.failed_to_fetch_timeline">无法加载时间线</string>
+    <string name="text.error.failed_to_fetch_notifications">无法加载消息列表</string>
+    <string name="text.error.failed_to_fetch_tweet">无法加载微博详情</string>
+    <string name="text.error.failed_to_fetch_comments">无法加载评论列表</string>
+    <string name="text.error.failed_to_fetch_retweets">无法加载转发列表</string>
+    <string name="text.error.failed_to_send_tweet">无法发送微博</string>
+    <string name="text.error.failed_to_comment">评论失败</string>
+    <string name="text.error.failed_to_retweet">转发失败</string>
+    <string name="text.error.failed_to_upload_images">无法上传图片</string>
+
+    <string name="text.hint.composer_content">有什么新鲜事？</string>
+    <string name="text.hint.composer_content.comment">说点什么吧。</string>
+
+    <string name="text.time.just_now">刚才</string>
+    <string name="text.time.1_second_ago">1 秒前</string>
+    <string name="text.time.seconds_ago">%d 秒前</string>
+    <string name="text.time.1_minute_ago">1 分钟前</string>
+    <string name="text.time.minutes_ago">%d 分钟前</string>
+    <string name="text.time.yesterday">昨天 %s</string>
+
+</resources>

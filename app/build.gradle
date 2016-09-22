@@ -41,7 +41,7 @@ dependencies {
     compile 'com.facebook.fresco:fresco:0.13.0'
     compile 'com.github.stfalcon:frescoimageviewer:0.2.0'
     compile 'com.github.florent37:viewanimator:1.0.4'
-    compile 'com.github.nguyenhoanglam:ImagePicker:1.1.1'
     compile 'id.zelory:compressor:1.0.2'
     compile 'de.psdev.licensesdialog:licensesdialog:1.8.1'
+    compile project(':imagepicker')
 }
