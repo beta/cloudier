@@ -208,7 +208,7 @@ public class ComposerActivity extends AppCompatActivity {
             sourceCard.setVisibility(View.VISIBLE);
 
             String sourceTweetNickname = getIntent().getStringExtra("SOURCE_NICKNAME");
-            if (sourceTweetNickname.length() > 0) {
+            if (sourceTweetNickname != null && sourceTweetNickname.length() > 0) {
                 sourceNickname.setText(sourceTweetNickname);
             } else {
                 if (sourceTweet instanceof Tweet && ((Tweet) sourceTweet).sourceTweet != null) {
@@ -219,7 +219,7 @@ public class ComposerActivity extends AppCompatActivity {
             }
 
             String sourceTweetTime = getIntent().getStringExtra("SOURCE_TIME");
-            if (sourceTweetTime.length() > 0) {
+            if (sourceTweetTime != null && sourceTweetTime.length() > 0) {
                 sourceTime.setText(sourceTweetTime);
             } else {
                 if (sourceTweet instanceof Tweet && ((Tweet) sourceTweet).sourceTweet != null) {
@@ -231,7 +231,7 @@ public class ComposerActivity extends AppCompatActivity {
             }
 
             String sourceTweetContent = getIntent().getStringExtra("SOURCE_CONTENT");
-            if (sourceTweetContent.length() > 0) {
+            if (sourceTweetContent != null && sourceTweetContent.length() > 0) {
                 sourceContent.setText(sourceTweetContent);
                 sourceContent.setVisibility(View.VISIBLE);
             } else {
