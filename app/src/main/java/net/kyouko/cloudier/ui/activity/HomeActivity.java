@@ -14,6 +14,7 @@ import android.widget.EditText;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.squareup.otto.Subscribe;
 
+import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.api.TencentWeiboApi;
 import net.kyouko.cloudier.event.CommentTweetEvent;
@@ -117,6 +118,12 @@ public class HomeActivity extends TimelineActivity {
         if (AuthUtil.hasAuthorized(this)) {
             account = AuthUtil.readAccount(this);
             draweeAvatar.setImageURI(ImageUtil.getInstance(this).parseImageUrl(account.avatarUrl));
+            draweeAvatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CloudierApplication.getBus().post(new ViewUserEvent(account.username));
+                }
+            });
             textTitle.setText(account.nickname);
 
             getAccountInfo();
@@ -162,6 +169,12 @@ public class HomeActivity extends TimelineActivity {
 
     private void updateAccountInfo() {
         draweeAvatar.setImageURI(ImageUtil.getInstance(this).parseImageUrl(currentUser.avatarUrl));
+        draweeAvatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CloudierApplication.getBus().post(new ViewUserEvent(currentUser.username));
+            }
+        });
         textTitle.setText(currentUser.nickname);
     }
 
