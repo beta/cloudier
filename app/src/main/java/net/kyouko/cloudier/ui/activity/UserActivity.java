@@ -122,7 +122,7 @@ public class UserActivity extends AppCompatActivity {
         followersArgs.putSerializable("USERS", followers);
         followersArgs.putInt("TYPE", User.TYPE_FOLLOWER);
         followersFragment.setArguments(followersArgs);
-        adapter.add(getString(R.string.title_tab_following), followersFragment);
+        adapter.add(getString(R.string.title_tab_followers), followersFragment);
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
