@@ -34,12 +34,16 @@
             android:label="@string/title.activity.composer">
         </activity>
         <activity
+            android:name=".ui.activity.UserActivity">
+        </activity>
+        <activity
             android:name=".ui.activity.NotificationsActivity"
             android:label="@string/title.activity.notifications">
         </activity>
         <activity
             android:name=".ui.activity.SettingsActivity"
-            android:label="@string/title.activity.settings"/>
+            android:label="@string/title.activity.settings">
+        </activity>
     </application>
 
 </manifest>

@@ -21,6 +21,7 @@ import net.kyouko.cloudier.event.LoadMoreTweetsEvent;
 import net.kyouko.cloudier.event.ShareTweetEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
+import net.kyouko.cloudier.event.ViewUserEvent;
 import net.kyouko.cloudier.model.Account;
 import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.Tweet;
@@ -304,6 +305,12 @@ public class HomeActivity extends TimelineActivity {
                 }
             }
         }, 400);
+    }
+
+
+    @Subscribe
+    public void onViewUser(ViewUserEvent event) {
+        viewUser(event);
     }
 
 

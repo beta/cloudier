@@ -19,11 +19,16 @@
     <string name="title.action.view">查看</string>
     <string name="title.action.settings">选项</string>
     <string name="title.action.share_via">分享自…</string>
+    <string name="title.action.follow">关注</string>
+    <string name="title.action.unfollow">取消关注</string>
 
     <string name="title.button.load_more">加载更多</string>
 
     <string name="title.tab.comments">评论</string>
     <string name="title.tab.retweets">转发</string>
+    <string name="title.tab.tweets">推文</string>
+    <string name="title.tab.following">收听</string>
+    <string name="title.tab.followers">听众</string>
 
     <string name="title.setting.image">图片</string>
     <string name="title.setting.image.source">图片来源</string>
@@ -55,6 +60,7 @@
     <string name="text.error.failed_to_comment">评论失败</string>
     <string name="text.error.failed_to_retweet">转发失败</string>
     <string name="text.error.failed_to_upload_images">无法上传图片</string>
+    <string name="text.error.failed_to_fetch_user">无法加载用户信息</string>
 
     <string name="text.hint.composer_content">有什么新鲜事？</string>
     <string name="text.hint.composer_content.comment">说点什么吧。</string>

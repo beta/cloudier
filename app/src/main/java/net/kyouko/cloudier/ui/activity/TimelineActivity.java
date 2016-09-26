@@ -27,6 +27,7 @@ import net.kyouko.cloudier.event.RetweetTweetEvent;
 import net.kyouko.cloudier.event.ShareTweetEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
+import net.kyouko.cloudier.event.ViewUserEvent;
 import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.Tweet;
 import net.kyouko.cloudier.ui.adapter.TimelineAdapter;
@@ -221,6 +222,13 @@ public abstract class TimelineActivity extends AppCompatActivity {
 
     protected void onNoMoreTweets(@StringRes int messageId) {
         Snackbar.make(coordinatorLayout, messageId, Snackbar.LENGTH_SHORT).show();
+    }
+
+
+    protected void viewUser(ViewUserEvent event) {
+        Intent intent = new Intent(this, UserActivity.class);
+        intent.putExtra("USERNAME", event.username);
+        startActivity(intent);
     }
 
 

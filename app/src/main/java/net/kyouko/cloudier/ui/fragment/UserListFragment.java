@@ -9,34 +9,35 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import net.kyouko.cloudier.R;
-import net.kyouko.cloudier.model.Timeline;
-import net.kyouko.cloudier.model.Tweet;
-import net.kyouko.cloudier.ui.adapter.TimelineAdapter;
+import net.kyouko.cloudier.model.User;
+import net.kyouko.cloudier.ui.adapter.UserListAdapter;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Fragment for displaying a list of tweets.
+ * Fragment for displaying a list of users.
  *
  * @author beta
  */
-public class TweetListFragment extends Fragment {
+public class UserListFragment extends Fragment {
 
     @BindView(R.id.recycler) RecyclerView recyclerView;
 
-    private Timeline timeline;
-    private int tweetType = Tweet.TYPE_ORIGINAL;
+    private ArrayList<User> users;
+    private int userType = User.TYPE_FOLLOWING;
 
-    private TimelineAdapter adapter;
+    private UserListAdapter adapter;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        timeline = (Timeline) getArguments().getSerializable("TIMELINE");
-        tweetType = getArguments().getInt("TYPE", Tweet.TYPE_ORIGINAL);
+        users = (ArrayList<User>) getArguments().getSerializable("USERS");
+        userType = getArguments().getInt("TYPE", User.TYPE_FOLLOWING);
     }
 
 
@@ -61,24 +62,13 @@ public class TweetListFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new TimelineAdapter(getContext(), timeline, true, true);
-        adapter.setTweetType(tweetType);
+        adapter = new UserListAdapter(getContext(), users, userType);
         recyclerView.setAdapter(adapter);
-    }
-
-
-    public void refreshTweetList() {
-        adapter.notifyDataSetChanged();
     }
 
 
     public void completeLoadingMore() {
         adapter.completeLoadingMore();
-    }
-
-
-    public void notifyItemInserted(int position) {
-        adapter.notifyItemInserted(position);
     }
 
 }

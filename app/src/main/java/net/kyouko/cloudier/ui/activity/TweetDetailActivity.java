@@ -29,6 +29,7 @@ import net.kyouko.cloudier.event.RetweetTweetEvent;
 import net.kyouko.cloudier.event.ShareTweetEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
+import net.kyouko.cloudier.event.ViewUserEvent;
 import net.kyouko.cloudier.model.SourceTweet;
 import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.Tweet;
@@ -388,6 +389,14 @@ public class TweetDetailActivity extends AppCompatActivity implements
         } else if (event.type == Tweet.TYPE_RETWEET) {
             loadMoreRetweets();
         }
+    }
+
+
+    @Subscribe
+    public void viewUser(ViewUserEvent event) {
+        Intent intent = new Intent(this, UserActivity.class);
+        intent.putExtra("USERNAME", event.username);
+        startActivity(intent);
     }
 
 

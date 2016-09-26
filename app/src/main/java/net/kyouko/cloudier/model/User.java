@@ -2,12 +2,18 @@ package net.kyouko.cloudier.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Class for a user.
  *
  * @author beta
  */
-public class User {
+public class User implements Serializable {
+
+    public final static int TYPE_FOLLOWING = 0;
+    public final static int TYPE_FOLLOWER = 1;
+
 
     @SerializedName("name")
     public String username;

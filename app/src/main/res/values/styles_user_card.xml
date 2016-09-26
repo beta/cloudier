@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="UserCard" parent="CardView.Light">
+        <item name="android:layout_marginTop">@dimen/spacing_small</item>
+        <item name="android:layout_marginStart">@dimen/spacing_small</item>
+        <item name="android:layout_marginEnd">@dimen/spacing_small</item>
+
+        <item name="android:background">@color/white</item>
+
+        <item name="cardCornerRadius">2dp</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardMaxElevation">8dp</item>
+    </style>
+
+    <style name="UserCard.Wrapper" parent="">
+        <item name="android:padding">@dimen/spacing_normal</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="UserCard.Avatar" parent="">
+        <item name="placeholderImage">@color/grey_300</item>
+        <item name="roundAsCircle">true</item>
+        <item name="viewAspectRatio">1</item>
+    </style>
+
+    <style name="UserCard.Nickname" parent="">
+        <item name="android:textAppearance">@style/PrimaryTitle</item>
+    </style>
+
+    <style name="UserCard.Username" parent="">
+        <item name="android:layout_marginStart">@dimen/spacing_tiny</item>
+        <item name="android:textAppearance">@style/SecondaryText</item>
+    </style>
+
+    <style name="UserCard.Introduction" parent="">
+        <item name="android:textAppearance">@style/PrimaryText</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+</resources>

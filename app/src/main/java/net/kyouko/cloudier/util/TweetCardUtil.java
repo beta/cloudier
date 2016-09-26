@@ -18,6 +18,7 @@ import net.kyouko.cloudier.event.RetweetTweetEvent;
 import net.kyouko.cloudier.event.ShareTweetEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
+import net.kyouko.cloudier.event.ViewUserEvent;
 import net.kyouko.cloudier.model.SourceTweet;
 import net.kyouko.cloudier.model.Tweet;
 
@@ -78,6 +79,13 @@ public class TweetCardUtil {
             }
 
             avatar.setImageURI(ImageUtil.getInstance(context).parseImageUrl(tweet.avatarUrl));
+            avatar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CloudierApplication.getBus().post(new ViewUserEvent(tweet.username));
+                }
+            });
+
             nickname.setText(tweet.nickname);
             time.setText(DateTimeUtil.getDateTimeDescription(context, tweet.timestamp));
 

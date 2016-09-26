@@ -19,11 +19,16 @@
     <string name="title.action.view">View</string>
     <string name="title.action.settings">Settings</string>
     <string name="title.action.share_via">Share via…</string>
+    <string name="title.action.follow">Follow</string>
+    <string name="title.action.unfollow">Unfollow</string>
 
     <string name="title.button.load_more">Load More</string>
 
     <string name="title.tab.comments">Comments</string>
     <string name="title.tab.retweets">Retweets</string>
+    <string name="title.tab.tweets">Tweets</string>
+    <string name="title.tab.following">Following</string>
+    <string name="title.tab.followers">Followers</string>
 
     <string name="title.setting.image">Image</string>
     <string name="title.setting.image.source">Image source</string>
@@ -59,6 +64,7 @@
     <string name="text.error.failed_to_comment">Failed to comment</string>
     <string name="text.error.failed_to_retweet">Failed to retweet</string>
     <string name="text.error.failed_to_upload_images">Failed to upload images</string>
+    <string name="text.error.failed_to_fetch_user">Failed to fetch user info</string>
 
     <string name="text.hint.composer_content">What\'s happening?</string>
     <string name="text.hint.composer_content.comment">What do you think?</string>

@@ -12,6 +12,7 @@ import net.kyouko.cloudier.event.LoadMoreTweetsEvent;
 import net.kyouko.cloudier.event.ShareTweetEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
+import net.kyouko.cloudier.event.ViewUserEvent;
 import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.Update;
 import net.kyouko.cloudier.util.RequestUtil;
@@ -138,6 +139,12 @@ public class NotificationsActivity extends TimelineActivity {
                         .show();
             }
         });
+    }
+
+
+    @Subscribe
+    public void onViewUser(ViewUserEvent event) {
+        viewUser(event);
     }
 
 
