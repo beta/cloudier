@@ -1,19 +1,24 @@
 package net.kyouko.cloudier.ui.activity;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.squareup.picasso.Picasso;
 
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.model.Timeline;
@@ -35,8 +40,9 @@ import retrofit2.Response;
 public class UserActivity extends AppCompatActivity {
 
     @BindView(R.id.coordinator) CoordinatorLayout coordinator;
+    @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
-    @BindView(R.id.avatar) SimpleDraweeView avatar;
+    @BindView(R.id.avatar) ImageView avatar;
     @BindView(R.id.introduction) TextView introduction;
     @BindView(R.id.tabs) TabLayout tabLayout;
     @BindView(R.id.pager) ViewPager viewPager;
@@ -165,8 +171,21 @@ public class UserActivity extends AppCompatActivity {
 
     private void applyUserInfo(User user) {
         setTitle(user.nickname);
-        avatar.setImageURI(Uri.parse(ImageUtil.getInstance(UserActivity.this)
-                .parseImageUrl(user.avatarUrl)));
+        Picasso.with(this)
+                .load(Uri.parse(ImageUtil.getInstance(UserActivity.this).parseImageUrl(user.avatarUrl)))
+                .placeholder(R.color.grey_300)
+                .into(avatar, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        BitmapDrawable drawable = (BitmapDrawable) avatar.getDrawable();
+                        applyThemeColors(drawable.getBitmap());
+                    }
+
+                    @Override
+                    public void onError() {
+                        // Ignore
+                    }
+                });
         introduction.setText(user.introduction);
 
         if (user.followed) {
@@ -176,6 +195,19 @@ public class UserActivity extends AppCompatActivity {
             followMenuItem.setIcon(R.drawable.ic_person_add_white_24dp);
             followMenuItem.setTitle(R.string.title_action_follow);
         }
+    }
+
+
+    private void applyThemeColors(Bitmap bitmap) {
+        Palette palette = Palette.from(bitmap).generate();
+
+        int primaryColor = palette.getMutedColor(getResources().getColor(R.color.light_blue_500));
+        collapsingToolbarLayout.setBackgroundColor(primaryColor);
+        collapsingToolbarLayout.setContentScrimColor(primaryColor);
+        tabLayout.setBackgroundColor(primaryColor);
+
+        int primaryDarkColor = palette.getDarkMutedColor(getResources().getColor(R.color.light_blue_700));
+        getWindow().setStatusBarColor(primaryDarkColor);
     }
 
 }
