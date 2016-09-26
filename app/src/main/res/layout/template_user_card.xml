@@ -28,34 +28,20 @@
             android:layout_marginStart="@dimen/spacing_normal"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/nickname"
+                style="@style/UserCard.Nickname"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/nickname"
-                    style="@style/UserCard.Nickname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="beta"/>
-
-                <TextView
-                    android:id="@+id/username"
-                    style="@style/UserCard.Username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:text="\@Bitex"/>
-
-            </LinearLayout>
+                tools:text="beta"/>
 
             <TextView
-                android:id="@+id/introduction"
-                style="@style/UserCard.Introduction"
-                android:layout_width="match_parent"
+                android:id="@+id/username"
+                style="@style/UserCard.Username"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_minimum"
-                tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."/>
+                android:layout_marginTop="2dp"
+                tools:text="\@Bitex"/>
 
         </LinearLayout>
 

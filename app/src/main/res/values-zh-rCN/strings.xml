@@ -49,6 +49,8 @@
     <string name="text.info.comment_sent">评论成功</string>
     <string name="text.info.retweet_sent">转发成功</string>
     <string name="text.info.share_tweet">分享微博</string>
+    <string name="text.info.no_more_following">没有更多收听了</string>
+    <string name="text.info.no_more_followers">没有更多听众了</string>
 
     <string name="text.error.failed_to_fetch_account">无法获取账户信息</string>
     <string name="text.error.failed_to_fetch_timeline">无法加载时间线</string>
@@ -61,6 +63,8 @@
     <string name="text.error.failed_to_retweet">转发失败</string>
     <string name="text.error.failed_to_upload_images">无法上传图片</string>
     <string name="text.error.failed_to_fetch_user">无法加载用户信息</string>
+    <string name="text.error.failed_to_fetch_following">无法加载收听列表</string>
+    <string name="text.error.failed_to_fetch_followers">无法加载听众列表</string>
 
     <string name="text.hint.composer_content">有什么新鲜事？</string>
     <string name="text.hint.composer_content.comment">说点什么吧。</string>

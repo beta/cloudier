@@ -53,6 +53,8 @@
     <string name="text.info.comment_sent">Comment succeeded</string>
     <string name="text.info.retweet_sent">Retweet succeeded</string>
     <string name="text.info.share_tweet">Share tweet</string>
+    <string name="text.info.no_more_following">No more following</string>
+    <string name="text.info.no_more_followers">No more followers</string>
 
     <string name="text.error.failed_to_fetch_account">Failed to fetch account info</string>
     <string name="text.error.failed_to_fetch_timeline">Failed to fetch timeline</string>
@@ -65,6 +67,8 @@
     <string name="text.error.failed_to_retweet">Failed to retweet</string>
     <string name="text.error.failed_to_upload_images">Failed to upload images</string>
     <string name="text.error.failed_to_fetch_user">Failed to fetch user info</string>
+    <string name="text.error.failed_to_fetch_following">Failed to fetch following</string>
+    <string name="text.error.failed_to_fetch_followers">Failed to fetch followers</string>
 
     <string name="text.hint.composer_content">What\'s happening?</string>
     <string name="text.hint.composer_content.comment">What do you think?</string>

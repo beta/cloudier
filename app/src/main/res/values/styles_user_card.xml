@@ -30,14 +30,7 @@
     </style>
 
     <style name="UserCard.Username" parent="">
-        <item name="android:layout_marginStart">@dimen/spacing_tiny</item>
         <item name="android:textAppearance">@style/SecondaryText</item>
-    </style>
-
-    <style name="UserCard.Introduction" parent="">
-        <item name="android:textAppearance">@style/PrimaryText</item>
-        <item name="android:maxLines">1</item>
-        <item name="android:ellipsize">end</item>
     </style>
 
 </resources>

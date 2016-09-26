@@ -6,6 +6,7 @@ import net.kyouko.cloudier.model.TweetResult;
 import net.kyouko.cloudier.model.Update;
 import net.kyouko.cloudier.model.UploadImageResult;
 import net.kyouko.cloudier.model.User;
+import net.kyouko.cloudier.model.UserList;
 import net.kyouko.cloudier.util.RequestUtil;
 
 import java.util.Map;
@@ -73,7 +74,22 @@ public interface TencentWeiboApi {
     Call<Timeline> getMoreNotificationsTimeline(@QueryMap Map<String, String> oAuthParams,
                                                 @Query("lastid") String lastTweetId,
                                                 @Query("pagetime") String lastTweetTimestamp);
+
+
+    @GET("api/statuses/user_timeline?" + RequestUtil.CONSTANT_PARAMS +
+            "&pageflag=0&pagetime=0&lastid=0&reqnum=20&type=35&contenttype=0")
+    Call<Timeline> getLatestUserTimeline(@QueryMap Map<String, String> oAuthParams,
+                                         @Query("name") String username);
+
+
+    @GET("api/statuses/user_timeline?" + RequestUtil.CONSTANT_PARAMS +
+            "&pageflag=1&reqnum=20&type=35&contenttype=0")
+    Call<Timeline> getMoreUserTimeline(@QueryMap Map<String, String> oAuthParams,
+                                       @Query("name") String username,
+                                       @Query("lastid") String lastTweetId,
+                                       @Query("pagetime") String lastTweetTimestamp);
     // endregion
+
 
     // region Tweet
     @GET("api/t/show?" + RequestUtil.CONSTANT_PARAMS)
@@ -137,6 +153,30 @@ public interface TencentWeiboApi {
                               @FieldMap Map<String, String> oAuthParams,
                               @Field("reid") String tweetId,
                               @Field("content") String content);
+    // endregion
+
+
+    // region relations
+    @GET("api/friends/user_idollist?" + RequestUtil.CONSTANT_PARAMS + "&reqnum=20&startindex=0")
+    Call<UserList> getFollowingList(@QueryMap Map<String, String> oAuthParams,
+                                    @Query("name") String username);
+
+
+    @GET("api/friends/user_idollist?" + RequestUtil.CONSTANT_PARAMS + "&reqnum=20")
+    Call<UserList> getMoreFollowingList(@QueryMap Map<String, String> oAuthParams,
+                                        @Query("name") String username,
+                                        @Query("startindex") int startIndex);
+
+
+    @GET("api/friends/user_fanslist?" + RequestUtil.CONSTANT_PARAMS + "&reqnum=20&startindex=0")
+    Call<UserList> getFollowerList(@QueryMap Map<String, String> oAuthParams,
+                                   @Query("name") String username);
+
+
+    @GET("api/friends/user_fanslist?" + RequestUtil.CONSTANT_PARAMS + "&reqnum=20")
+    Call<UserList> getMoreFollowerList(@QueryMap Map<String, String> oAuthParams,
+                                       @Query("name") String username,
+                                       @Query("startindex") int startIndex);
     // endregion
 
 }

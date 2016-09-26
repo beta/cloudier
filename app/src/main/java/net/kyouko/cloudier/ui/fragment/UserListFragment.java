@@ -53,6 +53,13 @@ public class UserListFragment extends Fragment {
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+    }
+
+
     private void initView() {
         initRecyclerView();
     }
@@ -69,6 +76,13 @@ public class UserListFragment extends Fragment {
 
     public void completeLoadingMore() {
         adapter.completeLoadingMore();
+    }
+
+
+    public void refreshList() {
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
 }

@@ -26,6 +26,10 @@ public class TweetListFragment extends Fragment {
     @BindView(R.id.recycler) RecyclerView recyclerView;
 
     private Timeline timeline;
+
+    private boolean minimized = true;
+
+    private boolean hasTweetType = false;
     private int tweetType = Tweet.TYPE_ORIGINAL;
 
     private TimelineAdapter adapter;
@@ -36,7 +40,9 @@ public class TweetListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         timeline = (Timeline) getArguments().getSerializable("TIMELINE");
+        hasTweetType = getArguments().containsKey("TYPE");
         tweetType = getArguments().getInt("TYPE", Tweet.TYPE_ORIGINAL);
+        minimized = getArguments().getBoolean("MINIMIZED", true);
     }
 
 
@@ -61,8 +67,10 @@ public class TweetListFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        adapter = new TimelineAdapter(getContext(), timeline, true, true);
-        adapter.setTweetType(tweetType);
+        adapter = new TimelineAdapter(getContext(), timeline, true, minimized);
+        if (hasTweetType) {
+            adapter.setTweetType(tweetType);
+        }
         recyclerView.setAdapter(adapter);
     }
 

@@ -17,6 +17,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.event.LoadMoreUsersEvent;
+import net.kyouko.cloudier.event.ViewUserEvent;
 import net.kyouko.cloudier.model.User;
 import net.kyouko.cloudier.util.ImageUtil;
 
@@ -83,12 +84,17 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.BaseVi
     }
 
 
-    private void bindUserViewHolder(UserViewHolder holder, User user) {
+    private void bindUserViewHolder(UserViewHolder holder, final User user) {
+        holder.wrapper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CloudierApplication.getBus().post(new ViewUserEvent(user.username));
+            }
+        });
         holder.avatar.setImageURI(
                 Uri.parse(ImageUtil.getInstance(context).parseImageUrl(user.avatarUrl)));
         holder.nickname.setText(user.nickname);
-        holder.username.setText(user.username);
-        holder.introduction.setText((user.introduction == null) ? "" : user.introduction);
+        holder.username.setText(context.getString(R.string.text_pattern_username, user.username));
     }
 
 
@@ -174,7 +180,6 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.BaseVi
         @BindView(R.id.avatar) SimpleDraweeView avatar;
         @BindView(R.id.nickname) TextView nickname;
         @BindView(R.id.username) TextView username;
-        @BindView(R.id.introduction) TextView introduction;
 
 
         UserViewHolder(View itemView) {
