@@ -2,6 +2,7 @@ package net.kyouko.cloudier.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,9 +16,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,6 +41,7 @@ import net.kyouko.cloudier.model.UserList;
 import net.kyouko.cloudier.ui.adapter.TabsFragmentPagerAdapter;
 import net.kyouko.cloudier.ui.fragment.TweetListFragment;
 import net.kyouko.cloudier.ui.fragment.UserListFragment;
+import net.kyouko.cloudier.util.AuthUtil;
 import net.kyouko.cloudier.util.ImageUtil;
 import net.kyouko.cloudier.util.RequestUtil;
 
@@ -61,7 +62,13 @@ public class UserActivity extends AppCompatActivity {
     @BindView(R.id.coordinator) CoordinatorLayout coordinator;
     @BindView(R.id.collapsing_toolbar) CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.background) View background;
     @BindView(R.id.avatar) ImageView avatar;
+    @BindView(R.id.nickname) TextView nicknameText;
+    @BindView(R.id.username) TextView usernameText;
+    @BindView(R.id.follow) Button followButton;
+    @BindView(R.id.followers) TextView followersText;
+    @BindView(R.id.following) TextView followingText;
     @BindView(R.id.introduction) TextView introduction;
     @BindView(R.id.tabs) TabLayout tabLayout;
     @BindView(R.id.pager) ViewPager viewPager;
@@ -76,8 +83,6 @@ public class UserActivity extends AppCompatActivity {
 
     private UserListFragment followersFragment;
     private ArrayList<User> followers = new ArrayList<>();
-
-    private MenuItem followMenuItem;
 
 
     @Override
@@ -105,14 +110,6 @@ public class UserActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         CloudierApplication.getBus().unregister(this);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_user, menu);
-        followMenuItem = menu.findItem(R.id.action_follow);
-        return true;
     }
 
 
@@ -209,9 +206,12 @@ public class UserActivity extends AppCompatActivity {
 
     private void applyUserInfo(User user) {
         setTitle(user.nickname);
+        nicknameText.setText(user.nickname);
+        usernameText.setText(getString(R.string.text_pattern_username, user.username));
+
         Picasso.with(this)
                 .load(Uri.parse(ImageUtil.getInstance(UserActivity.this).parseImageUrl(user.avatarUrl)))
-                .placeholder(R.color.grey_300)
+                .placeholder(android.R.color.transparent)
                 .into(avatar, new com.squareup.picasso.Callback() {
                     @Override
                     public void onSuccess() {
@@ -224,14 +224,26 @@ public class UserActivity extends AppCompatActivity {
                         // Ignore
                     }
                 });
-        introduction.setText(user.introduction);
+
+        followersText.setText(getString(R.string.text_pattern_followers, user.followerCount));
+        followingText.setText(getString(R.string.text_pattern_following, user.followingCount));
+
+        if (user.introduction.isEmpty()) {
+            introduction.setVisibility(View.GONE);
+        } else {
+            introduction.setVisibility(View.VISIBLE);
+            introduction.setText(user.introduction);
+        }
 
         if (user.followed) {
-            followMenuItem.setIcon(R.drawable.ic_person_delete_white_24dp);
-            followMenuItem.setTitle(R.string.title_action_unfollow);
+            followButton.setText(R.string.title_button_unfollow);
         } else {
-            followMenuItem.setIcon(R.drawable.ic_person_add_white_24dp);
-            followMenuItem.setTitle(R.string.title_action_follow);
+            followButton.setText(R.string.title_button_follow);
+        }
+        if (!user.username.toLowerCase().equals(AuthUtil.readAccount(this).username.toLowerCase())) {
+            followButton.setVisibility(View.VISIBLE);
+        } else {
+            followButton.setVisibility(View.GONE);
         }
     }
 
@@ -243,9 +255,16 @@ public class UserActivity extends AppCompatActivity {
         collapsingToolbarLayout.setBackgroundColor(primaryColor);
         collapsingToolbarLayout.setContentScrimColor(primaryColor);
         tabLayout.setBackgroundColor(primaryColor);
+        followButton.setTextColor(primaryColor);
 
-        int primaryDarkColor = palette.getDarkMutedColor(getResources().getColor(R.color.light_blue_700));
+        float alpha = 0.87f;
+        int primaryDarkColor = Color.rgb(
+                (int) (Color.red(primaryColor) * alpha),
+                (int) (Color.green(primaryColor) * alpha),
+                (int) (Color.blue(primaryColor) * alpha)
+        );
         getWindow().setStatusBarColor(primaryDarkColor);
+        background.setBackgroundColor(primaryDarkColor);
     }
 
 

@@ -23,35 +23,110 @@
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="wrap_content"
             app:contentScrim="?attr/colorPrimary"
-            app:expandedTitleMarginBottom="@dimen/spacing_extra"
-            app:expandedTitleMarginStart="@dimen/spacing_large"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
-
-            <ImageView
-                android:id="@+id/avatar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@color/grey_300"
-                app:layout_collapseMode="parallax"/>
+            app:expandedTitleTextAppearance="@style/InvisibleText"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|enterAlwaysCollapsed|snap">
 
             <View
+                android:id="@+id/background"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/black_38alpha"/>
+                android:layout_height="104dp"
+                android:background="?attr/colorPrimaryDark"/>
 
-            <TextView
-                android:id="@+id/introduction"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="@dimen/spacing_normal"
-                android:layout_marginStart="@dimen/spacing_large"
-                android:ellipsize="end"
-                android:maxLines="1"
-                tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."/>
+                android:layout_marginTop="64dp"
+                android:paddingEnd="@dimen/spacing_normal"
+                android:paddingStart="@dimen/spacing_normal">
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/avatar_wrapper"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="2dp"
+                    app:cardElevation="4dp">
+
+                    <ImageView
+                        android:id="@+id/avatar"
+                        android:layout_width="96dp"
+                        android:layout_height="96dp"
+                        android:scaleType="centerCrop"
+                        android:src="@android:color/transparent"/>
+
+                </android.support.v7.widget.CardView>
+
+                <Button
+                    android:id="@+id/follow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/spacing_extra"
+                    android:backgroundTint="@color/white"
+                    android:text="@string/title.button.follow"
+                    android:textColor="@color/black_87alpha"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/nickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_normal"
+                    android:layout_marginTop="@dimen/spacing_extra"
+                    android:layout_toEndOf="@+id/avatar_wrapper"
+                    android:layout_toStartOf="@+id/follow"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    tools:text="beta"/>
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/nickname"
+                    android:layout_below="@+id/nickname"
+                    android:layout_marginTop="@dimen/spacing_minimum"
+                    android:layout_toStartOf="@+id/follow"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    tools:text="\@Bitex_"/>
+
+                <TextView
+                    android:id="@+id/followers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/avatar_wrapper"
+                    android:layout_marginBottom="@dimen/spacing_small"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/white"
+                    tools:text="26 Followers"/>
+
+                <TextView
+                    android:id="@+id/following"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/followers"
+                    android:layout_marginStart="@dimen/spacing_small"
+                    android:layout_toEndOf="@+id/followers"
+                    android:fontFamily="sans-serif-medium"
+                    android:textColor="@color/white"
+                    tools:text="28 Following"/>
+
+                <TextView
+                    android:id="@+id/introduction"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/followers"
+                    android:layout_marginBottom="@dimen/spacing_small"
+                    android:textColor="@color/white"
+                    tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."/>
+
+            </RelativeLayout>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"

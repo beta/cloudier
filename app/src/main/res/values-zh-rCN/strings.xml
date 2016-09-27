@@ -19,14 +19,14 @@
     <string name="title.action.view">查看</string>
     <string name="title.action.settings">选项</string>
     <string name="title.action.share_via">分享自…</string>
-    <string name="title.action.follow">关注</string>
-    <string name="title.action.unfollow">取消关注</string>
 
     <string name="title.button.load_more">加载更多</string>
+    <string name="title.button.follow">关注</string>
+    <string name="title.button.unfollow">取消关注</string>
 
     <string name="title.tab.comments">评论</string>
     <string name="title.tab.retweets">转发</string>
-    <string name="title.tab.tweets">推文</string>
+    <string name="title.tab.tweets">微博</string>
     <string name="title.tab.following">收听</string>
     <string name="title.tab.followers">听众</string>
 
@@ -77,5 +77,8 @@
     <string name="text.time.1_minute_ago">1 分钟前</string>
     <string name="text.time.minutes_ago">%d 分钟前</string>
     <string name="text.time.yesterday">昨天 %s</string>
+
+    <string name="text.pattern.followers">%d 听众</string>
+    <string name="text.pattern.following">%d 收听</string>
 
 </resources>
