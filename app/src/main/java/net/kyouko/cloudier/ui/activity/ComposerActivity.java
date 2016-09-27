@@ -2,11 +2,13 @@ package net.kyouko.cloudier.ui.activity;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -72,6 +74,11 @@ public class ComposerActivity extends AppCompatActivity {
     public final static int TYPE_RETWEET = 2;
 
     public final static int REQUEST_IMAGE_PICKER = 0;
+
+    private final static String[] FILE_PROJECTION = new String[]{
+            MediaStore.Images.Media._ID,
+            MediaStore.Images.Media.DISPLAY_NAME,
+            MediaStore.Images.Media.DATA};
 
 
     @BindView(R.id.coordinator) CoordinatorLayout coordinatorLayout;
@@ -143,6 +150,13 @@ public class ComposerActivity extends AppCompatActivity {
         fetchComposerType();
 
         initView();
+        if (getIntent().getAction() != null) {
+            if ((getIntent().getAction().equals(Intent.ACTION_SEND) ||
+                    getIntent().getAction().equals(Intent.ACTION_SEND_MULTIPLE)) &&
+                    getIntent().getType() != null) {
+                fetchSharedContent();
+            }
+        }
     }
 
 
@@ -257,6 +271,59 @@ public class ComposerActivity extends AppCompatActivity {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
             content.setSelection(0, 0);
         }
+    }
+
+
+    private void fetchSharedContent() {
+        String action = getIntent().getAction();
+        String type = getIntent().getType();
+
+        if (action.equals(Intent.ACTION_SEND)) {
+            if (type.equals("text/plain")) {
+                String sharedText = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+                if (sharedText != null) {
+                    content.setText(sharedText);
+                }
+            } else if (type.startsWith("image/")) {
+                Uri sharedImageUri = getIntent().getParcelableExtra(Intent.EXTRA_STREAM);
+                if (sharedImageUri != null) {
+                    Image image = getImageFromUri(sharedImageUri);
+                    if (image != null) {
+                        images.add(image);
+                        displayImages();
+                    }
+                }
+            }
+        } else if (action.equals(Intent.ACTION_SEND_MULTIPLE) && type.startsWith("image/")) {
+            ArrayList<Uri> sharedImageUris = getIntent().getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+            if (sharedImageUris != null) {
+                for (Uri imageUri : sharedImageUris) {
+                    Image image = getImageFromUri(imageUri);
+                    if (image != null) {
+                        images.add(image);
+                    }
+                }
+                displayImages();
+            }
+        }
+    }
+
+
+    private Image getImageFromUri(Uri imageUri) {
+        Cursor cursor = getContentResolver().query(imageUri, FILE_PROJECTION, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+
+            long id = cursor.getLong(cursor.getColumnIndex(FILE_PROJECTION[0]));
+            String name = cursor.getString(cursor.getColumnIndex(FILE_PROJECTION[1]));
+            String path = cursor.getString(cursor.getColumnIndex(FILE_PROJECTION[2]));
+            Image image = new Image(id, name, path, true);
+
+            cursor.close();
+            return image;
+        }
+
+        return null;
     }
 
 
