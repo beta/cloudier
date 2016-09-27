@@ -1,5 +1,6 @@
 package net.kyouko.cloudier.api;
 
+import net.kyouko.cloudier.model.Empty;
 import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.Tweet;
 import net.kyouko.cloudier.model.TweetResult;
@@ -177,6 +178,20 @@ public interface TencentWeiboApi {
     Call<UserList> getMoreFollowerList(@QueryMap Map<String, String> oAuthParams,
                                        @Query("name") String username,
                                        @Query("startindex") int startIndex);
+
+
+    @FormUrlEncoded
+    @POST("api/friends/add")
+    Call<Empty> followUser(@FieldMap Map<String, String> constantParams,
+                           @FieldMap Map<String, String> oAuthParams,
+                           @Field("name") String username);
+
+
+    @FormUrlEncoded
+    @POST("api/friends/del")
+    Call<Empty> unfollowUser(@FieldMap Map<String, String> constantParams,
+                             @FieldMap Map<String, String> oAuthParams,
+                             @Field("name") String username);
     // endregion
 
 }

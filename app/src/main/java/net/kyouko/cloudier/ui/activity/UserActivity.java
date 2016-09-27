@@ -35,6 +35,7 @@ import net.kyouko.cloudier.event.ShareTweetEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.event.ViewUserEvent;
+import net.kyouko.cloudier.model.Empty;
 import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.User;
 import net.kyouko.cloudier.model.UserList;
@@ -74,6 +75,7 @@ public class UserActivity extends AppCompatActivity {
     @BindView(R.id.pager) ViewPager viewPager;
 
     private String username;
+    private User user;
 
     private TweetListFragment userTimelineFragment;
     private Timeline userTimeline = new Timeline();
@@ -172,7 +174,8 @@ public class UserActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.body() != null) {
-                    applyUserInfo(response.body());
+                    user = response.body();
+                    applyUserInfo();
 
                     loadTimeline();
                     loadFollowingList();
@@ -204,7 +207,7 @@ public class UserActivity extends AppCompatActivity {
     }
 
 
-    private void applyUserInfo(User user) {
+    private void applyUserInfo() {
         setTitle(user.nickname);
         nicknameText.setText(user.nickname);
         usernameText.setText(getString(R.string.text_pattern_username, user.username));
@@ -235,10 +238,27 @@ public class UserActivity extends AppCompatActivity {
             introduction.setText(user.introduction);
         }
 
+        updateFollowButton();
+    }
+
+
+    private void updateFollowButton() {
         if (user.followed) {
             followButton.setText(R.string.title_button_unfollow);
+            followButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    unfollowUser();
+                }
+            });
         } else {
             followButton.setText(R.string.title_button_follow);
+            followButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    followUser();
+                }
+            });
         }
         if (!user.username.toLowerCase().equals(AuthUtil.readAccount(this).username.toLowerCase())) {
             followButton.setVisibility(View.VISIBLE);
@@ -265,6 +285,54 @@ public class UserActivity extends AppCompatActivity {
         );
         getWindow().setStatusBarColor(primaryDarkColor);
         background.setBackgroundColor(primaryDarkColor);
+    }
+
+
+    private void followUser() {
+        Call<Empty> followUserCall = RequestUtil.getApiInstance().followUser(
+                RequestUtil.getConstantParams(), RequestUtil.getOAuthParams(this), username);
+        followUserCall.enqueue(new Callback<Empty>() {
+            @Override
+            public void onResponse(Call<Empty> call, Response<Empty> response) {
+                user.followed = true;
+                updateFollowButton();
+
+                Snackbar.make(coordinator, getString(R.string.text_info_followed, user.nickname),
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+            }
+
+            @Override
+            public void onFailure(Call<Empty> call, Throwable t) {
+                Snackbar.make(coordinator, R.string.text_error_failed_to_follow_user,
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+            }
+        });
+    }
+
+
+    private void unfollowUser() {
+        Call<Empty> unfollowUserCall = RequestUtil.getApiInstance().unfollowUser(
+                RequestUtil.getConstantParams(), RequestUtil.getOAuthParams(this), username);
+        unfollowUserCall.enqueue(new Callback<Empty>() {
+            @Override
+            public void onResponse(Call<Empty> call, Response<Empty> response) {
+                user.followed = false;
+                updateFollowButton();
+
+                Snackbar.make(coordinator, getString(R.string.text_info_unfollowed, user.nickname),
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+            }
+
+            @Override
+            public void onFailure(Call<Empty> call, Throwable t) {
+                Snackbar.make(coordinator, R.string.text_error_failed_to_unfollow_user,
+                        Snackbar.LENGTH_SHORT)
+                        .show();
+            }
+        });
     }
 
 

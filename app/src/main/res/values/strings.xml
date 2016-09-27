@@ -56,6 +56,8 @@
     <string name="text.info.share_tweet">Share tweet</string>
     <string name="text.info.no_more_following">No more following</string>
     <string name="text.info.no_more_followers">No more followers</string>
+    <string name="text.info.followed">You are now following %s</string>
+    <string name="text.info.unfollowed">You have unfollowed %s</string>
 
     <string name="text.error.failed_to_fetch_account">Failed to fetch account info</string>
     <string name="text.error.failed_to_fetch_timeline">Failed to fetch timeline</string>
@@ -70,6 +72,8 @@
     <string name="text.error.failed_to_fetch_user">Failed to fetch user info</string>
     <string name="text.error.failed_to_fetch_following">Failed to fetch following</string>
     <string name="text.error.failed_to_fetch_followers">Failed to fetch followers</string>
+    <string name="text.error.failed_to_follow_user">Failed to follow user</string>
+    <string name="text.error.failed_to_unfollow_user">Failed to unfollow user</string>
 
     <string name="text.hint.composer_content">What\'s happening?</string>
     <string name="text.hint.composer_content.comment">What do you think?</string>
