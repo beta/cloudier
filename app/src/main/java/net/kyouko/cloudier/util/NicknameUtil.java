@@ -25,7 +25,8 @@ public class NicknameUtil {
             SpannableStringBuilder originalContent, HashMap<String, String> users) {
         for (LinkedHashMap.Entry<String, String> entry : users.entrySet()) {
             int lastPosition = 0;
-            int start = originalContent.toString().indexOf("@" + entry.getKey(), lastPosition);
+            int start = originalContent.toString().toLowerCase()
+                    .indexOf("@" + entry.getKey().toLowerCase(), lastPosition);
             while (start >= 0) {
                 int end = start + entry.getKey().length() + 1;
                 originalContent.replace(start, end, entry.getValue());
@@ -35,7 +36,8 @@ public class NicknameUtil {
                 originalContent.setSpan(new StyleSpan(Typeface.BOLD), spanStart, spanEnd, 0);
 
                 lastPosition = spanEnd;
-                start = originalContent.toString().indexOf("@" + entry.getKey(), lastPosition);
+                start = originalContent.toString().toLowerCase()
+                        .indexOf("@" + entry.getKey().toLowerCase(), lastPosition);
             }
         }
 
