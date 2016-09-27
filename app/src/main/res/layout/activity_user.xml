@@ -50,8 +50,9 @@
 
                     <ImageView
                         android:id="@+id/avatar"
-                        android:layout_width="96dp"
-                        android:layout_height="96dp"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
+                        android:layout_margin="3dp"
                         android:scaleType="centerCrop"
                         android:src="@android:color/transparent"/>
 
