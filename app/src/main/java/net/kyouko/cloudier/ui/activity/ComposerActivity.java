@@ -105,7 +105,7 @@ public class ComposerActivity extends AppCompatActivity {
     private int composerType = TYPE_NEW;
     private SourceTweet sourceTweet;
 
-    private ArrayList<Image> images = new ArrayList<>();
+    private ArrayList<String> imagePaths = new ArrayList<>();
     private List<UploadImageView> uploadImageViews = new ArrayList<>();
     private List<String> imageUrls = new ArrayList<>();
 
@@ -260,7 +260,7 @@ public class ComposerActivity extends AppCompatActivity {
             addImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (images.size() < 9) {
+                    if (imagePaths.size() < 9) {
                         pickImage();
                     }
                 }
@@ -287,21 +287,15 @@ public class ComposerActivity extends AppCompatActivity {
             } else if (type.startsWith("image/")) {
                 Uri sharedImageUri = getIntent().getParcelableExtra(Intent.EXTRA_STREAM);
                 if (sharedImageUri != null) {
-                    Image image = getImageFromUri(sharedImageUri);
-                    if (image != null) {
-                        images.add(image);
-                        displayImages();
-                    }
+                    imagePaths.add(sharedImageUri.getPath());
+                    displayImages();
                 }
             }
         } else if (action.equals(Intent.ACTION_SEND_MULTIPLE) && type.startsWith("image/")) {
             ArrayList<Uri> sharedImageUris = getIntent().getParcelableArrayListExtra(Intent.EXTRA_STREAM);
             if (sharedImageUris != null) {
                 for (Uri imageUri : sharedImageUris) {
-                    Image image = getImageFromUri(imageUri);
-                    if (image != null) {
-                        images.add(image);
-                    }
+                    imagePaths.add(imageUri.getPath());
                 }
                 displayImages();
             }
@@ -438,35 +432,33 @@ public class ComposerActivity extends AppCompatActivity {
         ImagePicker.create(this)
                 .folderMode(true)
                 .folderTitle(getString(R.string.title_activity_image_picker_folders))
-                .multi()
-                .limit(9)
+                .single()
                 .showCamera(true)
-                .origin(images)
                 .start(REQUEST_IMAGE_PICKER);
     }
 
 
     private void displayImages() {
-        if (images.size() < 9) {
+        if (imagePaths.size() < 9) {
             addImageButtonIcon.setImageDrawable(getDrawable(R.drawable.ic_image_black_54alpha_24dp));
         }
 
-        if (images.isEmpty()) {
+        if (imagePaths.isEmpty()) {
             imagesWrapper.setVisibility(View.GONE);
         } else {
             imagesWrapper.setVisibility(View.VISIBLE);
             imagesLayout.removeAllViewsInLayout();
             uploadImageViews.clear();
 
-            for (int i = 0; i < images.size(); i += 1) {
+            for (int i = 0; i < imagePaths.size(); i += 1) {
                 final int imageIndex = i;
-                Image image = images.get(imageIndex);
+                String imagePath = imagePaths.get(imageIndex);
 
                 View view = getLayoutInflater().inflate(R.layout.template_composer_image, imagesLayout, false);
                 UploadImageView uploadImageView = new UploadImageView(view);
 
                 Picasso.with(this)
-                        .load("file://" + image.getPath())
+                        .load("file://" + imagePath)
                         .placeholder(R.color.grey_300)
                         .fit()
                         .centerCrop()
@@ -474,7 +466,7 @@ public class ComposerActivity extends AppCompatActivity {
                 uploadImageView.delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        images.remove(imageIndex);
+                        imagePaths.remove(imageIndex);
                         displayImages();
                     }
                 });
@@ -489,8 +481,12 @@ public class ComposerActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_PICKER && resultCode == RESULT_OK && data != null) {
-            images = data.getParcelableArrayListExtra(ImagePickerActivity.INTENT_EXTRA_SELECTED_IMAGES);
-            if (images.size() == 9) {
+            ArrayList<Image> selectedImages =
+                    data.getParcelableArrayListExtra(ImagePickerActivity.INTENT_EXTRA_SELECTED_IMAGES);
+            if (selectedImages.size() == 1) {
+                imagePaths.add(selectedImages.get(0).getPath());
+            }
+            if (imagePaths.size() == 9) {
                 addImageButtonIcon.setImageDrawable(getDrawable(R.drawable.ic_image_black_38alpha_24dp));
             }
             displayImages();
@@ -517,9 +513,9 @@ public class ComposerActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (!images.isEmpty()) {
-                    for (int i = 0; i < images.size(); i += 1) {
-                        Image image = images.get(i);
+                if (!imagePaths.isEmpty()) {
+                    for (int i = 0; i < imagePaths.size(); i += 1) {
+                        String imagePath = imagePaths.get(i);
 
                         final UploadImageView uploadImageView = uploadImageViews.get(i);
                         runOnUiThread(new Runnable() {
@@ -532,7 +528,7 @@ public class ComposerActivity extends AppCompatActivity {
                             }
                         });
 
-                        File imageFile = new File(image.getPath());
+                        File imageFile = new File(imagePath);
                         File compressedImageFile = new Compressor.Builder(ComposerActivity.this)
                                 .setQuality(75)
                                 .setMaxWidth(1920)
