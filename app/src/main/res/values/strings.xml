@@ -42,6 +42,8 @@
     <string name="text.setting.summary.image_source">Change a source if there is difficulty loading images</string>
     <string name="text.setting.summary.github" translatable="false">https://github.com/beta/cloudier</string>
 
+    <string name="text.label.follows_you">Follows you</string>
+
     <string name="text.info.auth_success">Authorization succeeded</string>
     <string name="text.info.no_new_tweets">No new tweets</string>
     <string name="text.info.no_more_tweets">No more tweets</string>

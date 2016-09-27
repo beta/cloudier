@@ -68,6 +68,7 @@ public class UserActivity extends AppCompatActivity {
     @BindView(R.id.nickname) TextView nicknameText;
     @BindView(R.id.username) TextView usernameText;
     @BindView(R.id.follow) Button followButton;
+    @BindView(R.id.following_status) TextView followingStatus;
     @BindView(R.id.followers) TextView followersText;
     @BindView(R.id.following) TextView followingText;
     @BindView(R.id.introduction) TextView introduction;
@@ -236,6 +237,12 @@ public class UserActivity extends AppCompatActivity {
         } else {
             introduction.setVisibility(View.VISIBLE);
             introduction.setText(user.introduction);
+        }
+
+        if (user.following) {
+            followingStatus.setVisibility(View.VISIBLE);
+        } else {
+            followingStatus.setVisibility(View.GONE);
         }
 
         updateFollowButton();

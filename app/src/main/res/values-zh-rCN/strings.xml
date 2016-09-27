@@ -39,6 +39,8 @@
 
     <string name="text.setting.summary.image_source">如果加载图片遇到问题，请尝试切换图源</string>
 
+    <string name="text.label.follows_you">已收听你</string>
+
     <string name="text.info.auth_success">授权成功</string>
     <string name="text.info.no_new_tweets">没有新微博</string>
     <string name="text.info.no_more_tweets">没有更多微博了</string>
