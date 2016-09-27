@@ -31,11 +31,13 @@
     <string name="title.tab.followers">听众</string>
 
     <string name="title.setting.image">图片</string>
-    <string name="title.setting.image.source">图片来源</string>
+    <string name="title.setting.image.source">图源</string>
     <string name="title.setting.image.quality">图片质量</string>
     <string name="title.setting.avatar.quality">头像质量</string>
     <string name="title.setting.about">关于</string>
     <string name="title.setting.about.licenses">开放源代码协议</string>
+
+    <string name="text.setting.summary.image_source">如果加载图片遇到问题，请尝试切换图源</string>
 
     <string name="text.info.auth_success">授权成功</string>
     <string name="text.info.no_new_tweets">没有新微博</string>

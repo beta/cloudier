@@ -39,6 +39,7 @@
     <string name="title.setting.about.github" translatable="false">GitHub</string>
 
     <string name="text.setting.summary.current_value" translatable="false">%s</string>
+    <string name="text.setting.summary.image_source">Change a source if there is difficulty loading images</string>
     <string name="text.setting.summary.github" translatable="false">https://github.com/beta/cloudier</string>
 
     <string name="text.info.auth_success">Authorization succeeded</string>

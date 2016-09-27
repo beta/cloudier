@@ -11,7 +11,7 @@
             android:entries="@array/settings_image_source_entries"
             android:entryValues="@array/settings_image_source_values"
             android:key="image.source"
-            android:summary="@string/text.setting.summary.current_value"
+            android:summary="@string/text.setting.summary.image_source"
             android:title="@string/title.setting.image.source"/>
 
         <ListPreference
