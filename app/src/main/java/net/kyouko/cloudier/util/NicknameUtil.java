@@ -24,6 +24,10 @@ public class NicknameUtil {
     public static SpannableStringBuilder replaceUsernameWithNicknameInContent(
             SpannableStringBuilder originalContent, HashMap<String, String> users) {
         for (LinkedHashMap.Entry<String, String> entry : users.entrySet()) {
+            if (entry.getValue().length() == 0) {
+                continue;
+            }
+
             int lastPosition = 0;
             int start = originalContent.toString().toLowerCase()
                     .indexOf("@" + entry.getKey().toLowerCase(), lastPosition);
