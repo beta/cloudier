@@ -2,7 +2,6 @@ package net.kyouko.cloudier.ui.activity;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.net.Uri;
@@ -50,11 +49,14 @@ import net.kyouko.cloudier.model.UploadImageResult;
 import net.kyouko.cloudier.ui.widget.listener.TweetTextCountWatcher;
 import net.kyouko.cloudier.util.AuthUtil;
 import net.kyouko.cloudier.util.DateTimeUtil;
+import net.kyouko.cloudier.util.FileUtil;
 import net.kyouko.cloudier.util.ImageUtil;
 import net.kyouko.cloudier.util.RequestUtil;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,7 +107,7 @@ public class ComposerActivity extends AppCompatActivity {
     private int composerType = TYPE_NEW;
     private SourceTweet sourceTweet;
 
-    private ArrayList<String> imagePaths = new ArrayList<>();
+    private ArrayList<Uri> imageUris = new ArrayList<>();
     private List<UploadImageView> uploadImageViews = new ArrayList<>();
     private List<String> imageUrls = new ArrayList<>();
 
@@ -260,7 +262,7 @@ public class ComposerActivity extends AppCompatActivity {
             addImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (imagePaths.size() < 9) {
+                    if (imageUris.size() < 9) {
                         pickImage();
                     }
                 }
@@ -287,37 +289,17 @@ public class ComposerActivity extends AppCompatActivity {
             } else if (type.startsWith("image/")) {
                 Uri sharedImageUri = getIntent().getParcelableExtra(Intent.EXTRA_STREAM);
                 if (sharedImageUri != null) {
-                    imagePaths.add(sharedImageUri.getPath());
+                    imageUris.add(sharedImageUri);
                     displayImages();
                 }
             }
         } else if (action.equals(Intent.ACTION_SEND_MULTIPLE) && type.startsWith("image/")) {
             ArrayList<Uri> sharedImageUris = getIntent().getParcelableArrayListExtra(Intent.EXTRA_STREAM);
             if (sharedImageUris != null) {
-                for (Uri imageUri : sharedImageUris) {
-                    imagePaths.add(imageUri.getPath());
-                }
+                imageUris.addAll(sharedImageUris);
                 displayImages();
             }
         }
-    }
-
-
-    private Image getImageFromUri(Uri imageUri) {
-        Cursor cursor = getContentResolver().query(imageUri, FILE_PROJECTION, null, null, null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-
-            long id = cursor.getLong(cursor.getColumnIndex(FILE_PROJECTION[0]));
-            String name = cursor.getString(cursor.getColumnIndex(FILE_PROJECTION[1]));
-            String path = cursor.getString(cursor.getColumnIndex(FILE_PROJECTION[2]));
-            Image image = new Image(id, name, path, true);
-
-            cursor.close();
-            return image;
-        }
-
-        return null;
     }
 
 
@@ -439,26 +421,26 @@ public class ComposerActivity extends AppCompatActivity {
 
 
     private void displayImages() {
-        if (imagePaths.size() < 9) {
+        if (imageUris.size() < 9) {
             addImageButtonIcon.setImageDrawable(getDrawable(R.drawable.ic_image_black_54alpha_24dp));
         }
 
-        if (imagePaths.isEmpty()) {
+        if (imageUris.isEmpty()) {
             imagesWrapper.setVisibility(View.GONE);
         } else {
             imagesWrapper.setVisibility(View.VISIBLE);
             imagesLayout.removeAllViewsInLayout();
             uploadImageViews.clear();
 
-            for (int i = 0; i < imagePaths.size(); i += 1) {
+            for (int i = 0; i < imageUris.size(); i += 1) {
                 final int imageIndex = i;
-                String imagePath = imagePaths.get(imageIndex);
+                Uri imageUri = imageUris.get(imageIndex);
 
                 View view = getLayoutInflater().inflate(R.layout.template_composer_image, imagesLayout, false);
                 UploadImageView uploadImageView = new UploadImageView(view);
 
                 Picasso.with(this)
-                        .load("file://" + imagePath)
+                        .load(imageUri)
                         .placeholder(R.color.grey_300)
                         .fit()
                         .centerCrop()
@@ -466,7 +448,7 @@ public class ComposerActivity extends AppCompatActivity {
                 uploadImageView.delete.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        imagePaths.remove(imageIndex);
+                        imageUris.remove(imageIndex);
                         displayImages();
                     }
                 });
@@ -484,9 +466,9 @@ public class ComposerActivity extends AppCompatActivity {
             ArrayList<Image> selectedImages =
                     data.getParcelableArrayListExtra(ImagePickerActivity.INTENT_EXTRA_SELECTED_IMAGES);
             if (selectedImages.size() == 1) {
-                imagePaths.add(selectedImages.get(0).getPath());
+                imageUris.add(Uri.parse("file://" + selectedImages.get(0).getPath()));
             }
-            if (imagePaths.size() == 9) {
+            if (imageUris.size() == 9) {
                 addImageButtonIcon.setImageDrawable(getDrawable(R.drawable.ic_image_black_38alpha_24dp));
             }
             displayImages();
@@ -513,9 +495,9 @@ public class ComposerActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (!imagePaths.isEmpty()) {
-                    for (int i = 0; i < imagePaths.size(); i += 1) {
-                        String imagePath = imagePaths.get(i);
+                if (!imageUris.isEmpty()) {
+                    for (int i = 0; i < imageUris.size(); i += 1) {
+                        Uri imageUri = imageUris.get(i);
 
                         final UploadImageView uploadImageView = uploadImageViews.get(i);
                         runOnUiThread(new Runnable() {
@@ -528,7 +510,32 @@ public class ComposerActivity extends AppCompatActivity {
                             }
                         });
 
-                        File imageFile = new File(imagePath);
+                        File imageFile = null;
+                        if (imageUri.getScheme().toLowerCase().equals("content")) {
+                            InputStream inputStream = null;
+                            try {
+                                inputStream = getContentResolver().openInputStream(imageUri);
+                                imageFile = FileUtil.writeToTemporaryImageFile(
+                                        ComposerActivity.this, inputStream);
+                            } catch (FileNotFoundException e) {
+                                // Ignore
+                            } finally {
+                                if (inputStream != null) {
+                                    try {
+                                        inputStream.close();
+                                    } catch (IOException e) {
+                                        // Ignore
+                                    }
+                                }
+                            }
+                        } else {
+                            imageFile = new File(imageUri.getPath());
+                        }
+
+                        if (imageFile == null) {
+                            continue;
+                        }
+
                         File compressedImageFile = new Compressor.Builder(ComposerActivity.this)
                                 .setQuality(75)
                                 .setMaxWidth(1920)
