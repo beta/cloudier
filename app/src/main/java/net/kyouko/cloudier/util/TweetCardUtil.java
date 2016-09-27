@@ -3,6 +3,7 @@ package net.kyouko.cloudier.util;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.CardView;
+import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 import android.widget.ImageView;
@@ -89,11 +90,11 @@ public class TweetCardUtil {
             nickname.setText(tweet.nickname);
             time.setText(DateTimeUtil.getDateTimeDescription(context, tweet.timestamp));
 
-            boolean hasContent = (tweet.content.length() > 0);
+            boolean hasContent = (tweet.originalContent.length() > 0);
             content.setVisibility(hasContent ? View.VISIBLE : View.GONE);
 
             SpannableStringBuilder tweetContent = TextUtil.addLinkToUrlsInText(context,
-                    tweet.originalContent, false);
+                    Html.fromHtml(tweet.originalContent).toString(), false);
             tweetContent = TextUtil.addLinkToTopicsInText(context, tweetContent, false);
             tweetContent = NicknameUtil.replaceUsernameWithNicknameInContent(tweetContent, users);
             content.setText(tweetContent);
@@ -272,7 +273,7 @@ public class TweetCardUtil {
             sourceTime.setText(DateTimeUtil.getDateTimeDescription(context, sourceTweet.timestamp));
 
             SpannableStringBuilder tweetContent = TextUtil.addLinkToUrlsInText(context,
-                    sourceTweet.originalContent, false);
+                    Html.fromHtml(sourceTweet.originalContent).toString(), false);
             tweetContent = TextUtil.addLinkToTopicsInText(context, tweetContent, false);
             tweetContent = NicknameUtil.replaceUsernameWithNicknameInContent(tweetContent, users);
             sourceContent.setText(tweetContent);
