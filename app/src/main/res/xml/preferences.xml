@@ -2,6 +2,17 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
+        android:key="composer"
+        android:title="@string/title.setting.composer">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="composer.retweet_jump_to_top"
+            android:title="@string/title.setting.composer.retweet_jump_to_top"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:key="image"
         android:title="@string/title.setting.image">
 

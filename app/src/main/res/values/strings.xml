@@ -30,6 +30,8 @@
     <string name="title.tab.following">Following</string>
     <string name="title.tab.followers">Followers</string>
 
+    <string name="title.setting.composer">Composer</string>
+    <string name="title.setting.composer.retweet_jump_to_top">Jump to timeline top after retweeting</string>
     <string name="title.setting.image">Image</string>
     <string name="title.setting.image.source">Image source</string>
     <string name="title.setting.image.quality">Image quality</string>

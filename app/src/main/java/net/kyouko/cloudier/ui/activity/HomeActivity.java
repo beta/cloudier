@@ -31,6 +31,7 @@ import net.kyouko.cloudier.model.User;
 import net.kyouko.cloudier.ui.widget.listener.RecyclerViewDisabler;
 import net.kyouko.cloudier.util.AuthUtil;
 import net.kyouko.cloudier.util.ImageUtil;
+import net.kyouko.cloudier.util.PreferenceUtil;
 import net.kyouko.cloudier.util.RequestUtil;
 
 import butterknife.BindView;
@@ -397,7 +398,10 @@ public class HomeActivity extends TimelineActivity {
         } else if (requestCode == REQUEST_COMPOSER_RETWEET && resultCode == RESULT_OK) {
             final boolean hasTweet = data.hasExtra("TWEET");
             if (hasTweet) {
-                recyclerView.scrollToPosition(0);
+                PreferenceUtil pref = PreferenceUtil.with(this);
+                if (pref.getBoolean(PreferenceUtil.PREF_COMPOSER_JUMP_TO_TOP_AFTER_RETWEET)) {
+                    recyclerView.scrollToPosition(0);
+                }
 
                 Tweet tweet = (Tweet) data.getSerializableExtra("TWEET");
                 timeline.tweets.add(0, tweet);

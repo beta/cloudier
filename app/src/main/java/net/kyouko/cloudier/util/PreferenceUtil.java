@@ -21,6 +21,8 @@ public class PreferenceUtil {
 
     public final static String PREF_HAS_AUTHORIZED = "has_authorized";
 
+    public final static String PREF_COMPOSER_JUMP_TO_TOP_AFTER_RETWEET = "composer.retweet_jump_to_top";
+
     public final static String PREF_IMAGE_SOURCE = "image.source";
     public final static String PREF_IMAGE_QUALITY = "image.quality";
     public final static String PREF_AVATAR_QUALITY = "image.avatar.quality";
