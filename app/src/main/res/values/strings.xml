@@ -21,6 +21,9 @@
     <string name="title.action.share_via">Share via…</string>
     <string name="title.action.copy_tweet">Copy</string>
     <string name="title.action.copy_tweet_link">Copy link to tweet</string>
+    <string name="title.action.delete_tweet">Delete</string>
+    <string name="title.action.ok">OK</string>
+    <string name="title.action.cancel">Cancel</string>
 
     <string name="title.button.load_more">Load More</string>
     <string name="title.button.follow">Follow</string>
@@ -66,6 +69,8 @@
     <string name="text.info.unfollowed">You have unfollowed %s</string>
     <string name="text.info.tweet_copied">Tweet has been copied to clipboard</string>
     <string name="text.info.tweet_link_copied">Link to this tweet has been copied to clipboard</string>
+    <string name="text.info.delete_tweet">Are you sure to delete this tweet?</string>
+    <string name="text.info.tweet_deleted">Tweet deleted</string>
 
     <string name="text.error.failed_to_fetch_account">Failed to fetch account info</string>
     <string name="text.error.failed_to_fetch_timeline">Failed to fetch timeline</string>
@@ -82,6 +87,7 @@
     <string name="text.error.failed_to_fetch_followers">Failed to fetch followers</string>
     <string name="text.error.failed_to_follow_user">Failed to follow user</string>
     <string name="text.error.failed_to_unfollow_user">Failed to unfollow user</string>
+    <string name="text.error.failed_to_delete_tweet">Failed to delete tweet</string>
 
     <string name="text.hint.composer_content">What\'s happening?</string>
     <string name="text.hint.composer_content.comment">What do you think?</string>

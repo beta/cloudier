@@ -28,6 +28,7 @@ import com.stfalcon.frescoimageviewer.ImageViewer;
 import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.event.CommentTweetEvent;
+import net.kyouko.cloudier.event.DeleteTweetEvent;
 import net.kyouko.cloudier.event.LoadMoreTweetsEvent;
 import net.kyouko.cloudier.event.LoadMoreUsersEvent;
 import net.kyouko.cloudier.event.RetweetTweetEvent;
@@ -38,6 +39,7 @@ import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.event.ViewUserEvent;
 import net.kyouko.cloudier.model.Empty;
 import net.kyouko.cloudier.model.Timeline;
+import net.kyouko.cloudier.model.TweetResult;
 import net.kyouko.cloudier.model.User;
 import net.kyouko.cloudier.model.UserList;
 import net.kyouko.cloudier.ui.adapter.TabsFragmentPagerAdapter;
@@ -60,6 +62,7 @@ public class UserActivity extends AppCompatActivity {
 
     private final static int REQUEST_COMPOSER_COMMENT = 0;
     private final static int REQUEST_COMPOSER_RETWEET = 1;
+    private final static int REQUEST_VIEW_TWEET = 2;
 
 
     @BindView(R.id.coordinator) CoordinatorLayout coordinator;
@@ -570,9 +573,9 @@ public class UserActivity extends AppCompatActivity {
             if (event.card != null) {
                 ActivityOptionsCompat options = ActivityOptionsCompat
                         .makeSceneTransitionAnimation(this, event.card.cardView, "card");
-                startActivity(intent, options.toBundle());
+                startActivityForResult(intent, REQUEST_VIEW_TWEET, options.toBundle());
             } else {
-                startActivity(intent);
+                startActivityForResult(intent, REQUEST_VIEW_TWEET);
             }
         } else if (event.type == ViewTweetEvent.TYPE_ID) {
             intent.putExtra("TWEET_ID", event.tweetId);
@@ -639,6 +642,69 @@ public class UserActivity extends AppCompatActivity {
     @Subscribe
     public void onShowTweetMenu(ShowTweetMenuEvent event) {
         TweetCardUtil.showTweetMenu(this, event.tweet);
+    }
+
+
+    @Subscribe
+    public void onDeleteTweet(DeleteTweetEvent event) {
+        deleteTweet(event.tweetId);
+    }
+
+
+    private void deleteTweet(final String tweetId) {
+        Call<TweetResult> deleteTweetCall = RequestUtil.getApiInstance().deleteTweet(
+                RequestUtil.getConstantParams(), RequestUtil.getOAuthParams(this), tweetId);
+        deleteTweetCall.enqueue(new Callback<TweetResult>() {
+            @Override
+            public void onResponse(Call<TweetResult> call, Response<TweetResult> response) {
+                if (response.body() != null) {
+                    Snackbar.make(coordinator, R.string.text_info_tweet_deleted,
+                            Snackbar.LENGTH_SHORT)
+                            .show();
+
+                    for (int i = 0; i < userTimeline.tweets.size(); i += 1) {
+                        if (userTimeline.tweets.get(i).id.equals(tweetId)) {
+                            userTimeline.tweets.remove(i);
+                            userTimelineFragment.notifyItemRemoved(i);
+                            break;
+                        }
+                    }
+                } else {
+                    onFailure();
+                }
+            }
+
+
+            private void onFailure() {
+                Snackbar.make(coordinator, R.string.text_error_failed_to_delete_tweet,
+                        Snackbar.LENGTH_SHORT);
+            }
+
+
+            @Override
+            public void onFailure(Call<TweetResult> call, Throwable t) {
+                onFailure();
+            }
+        });
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_VIEW_TWEET && resultCode == TweetDetailActivity.RESULT_DELETED) {
+            String tweetId = data.getStringExtra("TWEET_ID");
+            for (int i = 0; i < userTimeline.tweets.size(); i += 1) {
+                if (userTimeline.tweets.get(i).id.equals(tweetId)) {
+                    userTimeline.tweets.remove(i);
+                    userTimelineFragment.notifyItemRemoved(i);
+                    break;
+                }
+            }
+
+            Snackbar.make(coordinator, R.string.text_info_tweet_deleted,
+                    Snackbar.LENGTH_SHORT)
+                    .show();
+        }
     }
 
 }

@@ -155,6 +155,13 @@ public interface TencentWeiboApi {
                               @Field("reid") String tweetId,
                               @Field("content") String content,
                               @Field("pic_url") String imageUrls);
+
+
+    @FormUrlEncoded
+    @POST("api/t/del")
+    Call<TweetResult> deleteTweet(@FieldMap Map<String, String> constantParams,
+                                  @FieldMap Map<String, String> oAuthParams,
+                                  @Field("id") String tweetId);
     // endregion
 
 

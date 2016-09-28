@@ -89,4 +89,9 @@ public class TweetListFragment extends Fragment {
         adapter.notifyItemInserted(position);
     }
 
+
+    public void notifyItemRemoved(int position) {
+        adapter.notifyItemRemoved(position);
+    }
+
 }

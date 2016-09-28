@@ -20,6 +20,7 @@ import com.squareup.picasso.Picasso;
 import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.event.CommentTweetEvent;
+import net.kyouko.cloudier.event.DeleteTweetEvent;
 import net.kyouko.cloudier.event.RetweetTweetEvent;
 import net.kyouko.cloudier.event.ShareTweetEvent;
 import net.kyouko.cloudier.event.ShowTweetMenuEvent;
@@ -385,6 +386,33 @@ public class TweetCardUtil {
                 MessageUtil.showToast(context, context.getString(R.string.text_info_tweet_link_copied));
             }
         });
+
+        if (tweet.sentBySelf) {
+            selections.add(context.getString(R.string.title_action_delete_tweet));
+            actions.add(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertDialog.Builder(context)
+                            .setMessage(R.string.text_info_delete_tweet)
+                            .setPositiveButton(R.string.title_action_ok,
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            CloudierApplication.getBus().post(
+                                                    new DeleteTweetEvent(tweet.id));
+                                        }
+                                    })
+                            .setNegativeButton(R.string.title_action_cancel,
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // Ignore
+                                        }
+                                    })
+                            .show();
+                }
+            });
+        }
 
         new AlertDialog.Builder(context)
                 .setItems(selections.toArray(new CharSequence[0]), new DialogInterface.OnClickListener() {

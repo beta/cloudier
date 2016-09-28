@@ -24,6 +24,7 @@ import com.stfalcon.frescoimageviewer.ImageViewer;
 import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.event.CommentTweetEvent;
+import net.kyouko.cloudier.event.DeleteTweetEvent;
 import net.kyouko.cloudier.event.LoadMoreTweetsWithTypeEvent;
 import net.kyouko.cloudier.event.RetweetTweetEvent;
 import net.kyouko.cloudier.event.ShareTweetEvent;
@@ -34,6 +35,7 @@ import net.kyouko.cloudier.event.ViewUserEvent;
 import net.kyouko.cloudier.model.SourceTweet;
 import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.Tweet;
+import net.kyouko.cloudier.model.TweetResult;
 import net.kyouko.cloudier.ui.adapter.TabsFragmentPagerAdapter;
 import net.kyouko.cloudier.ui.fragment.TweetListFragment;
 import net.kyouko.cloudier.util.RequestUtil;
@@ -53,6 +55,8 @@ public class TweetDetailActivity extends AppCompatActivity implements
 
     private final static int REQUEST_COMPOSER_COMMENT = 0;
     private final static int REQUEST_COMPOSER_RETWEET = 1;
+
+    public final static int RESULT_DELETED = 1;
 
 
     @BindView(R.id.coordinator) CoordinatorLayout coordinatorLayout;
@@ -470,6 +474,39 @@ public class TweetDetailActivity extends AppCompatActivity implements
     @Subscribe
     public void onShowTweetMenu(ShowTweetMenuEvent event) {
         TweetCardUtil.showTweetMenu(this, event.tweet);
+    }
+
+
+    @Subscribe
+    public void onDeleteTweet(final DeleteTweetEvent event) {
+        Call<TweetResult> deleteTweetCall = RequestUtil.getApiInstance().deleteTweet(
+                RequestUtil.getConstantParams(), RequestUtil.getOAuthParams(this), event.tweetId);
+        deleteTweetCall.enqueue(new Callback<TweetResult>() {
+            @Override
+            public void onResponse(Call<TweetResult> call, Response<TweetResult> response) {
+                if (response.body() != null) {
+                    Intent data = new Intent();
+                    data.putExtra("TWEET_ID", event.tweetId);
+                    setResult(RESULT_DELETED, data);
+
+                    finish();
+                } else {
+                    onFailure();
+                }
+            }
+
+
+            private void onFailure() {
+                Snackbar.make(coordinatorLayout, R.string.text_error_failed_to_delete_tweet,
+                        Snackbar.LENGTH_SHORT);
+            }
+
+
+            @Override
+            public void onFailure(Call<TweetResult> call, Throwable t) {
+                onFailure();
+            }
+        });
     }
 
 

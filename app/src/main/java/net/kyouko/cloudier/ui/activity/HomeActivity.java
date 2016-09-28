@@ -18,6 +18,7 @@ import net.kyouko.cloudier.CloudierApplication;
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.api.TencentWeiboApi;
 import net.kyouko.cloudier.event.CommentTweetEvent;
+import net.kyouko.cloudier.event.DeleteTweetEvent;
 import net.kyouko.cloudier.event.LoadMoreTweetsEvent;
 import net.kyouko.cloudier.event.ShareTweetEvent;
 import net.kyouko.cloudier.event.ShowTweetMenuEvent;
@@ -356,6 +357,12 @@ public class HomeActivity extends TimelineActivity {
     @Subscribe
     public void onShowTweetMenu(ShowTweetMenuEvent event) {
         showTweetMenu(event);
+    }
+
+
+    @Subscribe
+    public void onDeleteTweet(DeleteTweetEvent event) {
+        deleteTweet(event);
     }
 
 

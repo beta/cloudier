@@ -21,6 +21,9 @@
     <string name="title.action.share_via">分享自…</string>
     <string name="title.action.copy_tweet">复制内容</string>
     <string name="title.action.copy_tweet_link">复制微博链接</string>
+    <string name="title.action.delete_tweet">删除</string>
+    <string name="title.action.ok">确定</string>
+    <string name="title.action.cancel">取消</string>
 
     <string name="title.button.load_more">加载更多</string>
     <string name="title.button.follow">关注</string>
@@ -63,6 +66,8 @@
     <string name="text.info.unfollowed">已取消收听%s</string>
     <string name="text.info.tweet_copied">微博内容已被复制到剪贴板</string>
     <string name="text.info.tweet_link_copied">微博链接已被复制到剪贴板</string>
+    <string name="text.info.delete_tweet">确定要删除这条微博？</string>
+    <string name="text.info.tweet_deleted">微博已删除</string>
 
     <string name="text.error.failed_to_fetch_account">无法获取账户信息</string>
     <string name="text.error.failed_to_fetch_timeline">无法加载时间线</string>
@@ -79,6 +84,7 @@
     <string name="text.error.failed_to_fetch_followers">无法加载听众列表</string>
     <string name="text.error.failed_to_follow_user">收听失败</string>
     <string name="text.error.failed_to_unfollow_user">取消收听失败</string>
+    <string name="text.error.failed_to_delete_tweet">删除失败</string>
 
     <string name="text.hint.composer_content">有什么新鲜事？</string>
     <string name="text.hint.composer_content.comment">说点什么吧。</string>
