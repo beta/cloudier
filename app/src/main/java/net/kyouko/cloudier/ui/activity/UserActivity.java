@@ -228,6 +228,13 @@ public class UserActivity extends AppCompatActivity {
                         // Ignore
                     }
                 });
+        avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewImages(new ViewImageEvent(ImageUtil.getInstance(UserActivity.this)
+                        .parseImageUrl(user.avatarUrl)));
+            }
+        });
 
         followersText.setText(getString(R.string.text_pattern_followers, user.followerCount));
         followingText.setText(getString(R.string.text_pattern_following, user.followingCount));
