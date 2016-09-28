@@ -101,6 +101,7 @@ public class ComposerActivity extends AppCompatActivity {
     @BindView(R.id.images) LinearLayout imagesLayout;
     @BindView(R.id.button_add_image) View addImageButton;
     @BindView(R.id.button_add_image_icon) ImageView addImageButtonIcon;
+    @BindView(R.id.button_add_topic) View addTopicButton;
 
     private Account account;
 
@@ -290,6 +291,17 @@ public class ComposerActivity extends AppCompatActivity {
                 }
             });
         }
+
+        addTopicButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int selectionStart = content.getSelectionStart();
+                int selectionEnd = content.getSelectionEnd();
+                String topic = getString(R.string.text_pattern_topic);
+                content.setText(content.getText().replace(selectionStart, selectionEnd, topic));
+                content.setSelection(selectionStart + 1, selectionStart + topic.length() - 1);
+            }
+        });
 
         if (content.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);

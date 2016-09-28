@@ -110,5 +110,6 @@
     <string name="text.pattern.tweet_link" translatable="false">http://t.qq.com/p/t/%s</string>
     <string name="text.pattern.followers">%d Followers</string>
     <string name="text.pattern.following">%d Following</string>
+    <string name="text.pattern.topic">#Topic#</string>
 
 </resources>

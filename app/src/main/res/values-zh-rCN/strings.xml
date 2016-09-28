@@ -104,5 +104,6 @@
 
     <string name="text.pattern.followers">%d 听众</string>
     <string name="text.pattern.following">%d 收听</string>
+    <string name="text.pattern.topic">#话题#</string>
 
 </resources>
