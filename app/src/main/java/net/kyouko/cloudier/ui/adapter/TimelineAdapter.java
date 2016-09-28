@@ -49,6 +49,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
     private boolean hasTweetType = false;
     private int tweetType = Tweet.TYPE_ORIGINAL;
 
+    private boolean showLoadMore = true;
     private LoadMoreViewHolder loadMoreViewHolder;
     private boolean isLoadingMore = false;
 
@@ -157,41 +158,49 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
 
 
     public void loadMore() {
-        if (isLoadingMore || loadMoreViewHolder == null) {
+        if (isLoadingMore || !showLoadMore) {
             return;
         }
 
         isLoadingMore = true;
-        loadMoreViewHolder.button.setClickable(false);
+        if (loadMoreViewHolder != null) {
+            loadMoreViewHolder.button.setClickable(false);
 
-        loadMoreViewHolder.progress.setAlpha(0f);
-        loadMoreViewHolder.progress.setVisibility(View.VISIBLE);
+            loadMoreViewHolder.progress.setAlpha(0f);
+            loadMoreViewHolder.progress.setVisibility(View.VISIBLE);
 
-        loadMoreViewHolder.progress.animate()
-                .alpha(1f)
-                .setDuration(shortAnimationDuration)
-                .setListener(null);
+            loadMoreViewHolder.progress.animate()
+                    .alpha(1f)
+                    .setDuration(shortAnimationDuration)
+                    .setListener(null);
 
-        loadMoreViewHolder.button.animate()
-                .alpha(0f)
-                .setDuration(shortAnimationDuration)
-                .setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        loadMoreViewHolder.button.setVisibility(View.GONE);
-                        loadMoreViewHolder.button.setClickable(true);
+            loadMoreViewHolder.button.animate()
+                    .alpha(0f)
+                    .setDuration(shortAnimationDuration)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            loadMoreViewHolder.button.setVisibility(View.GONE);
+                            loadMoreViewHolder.button.setClickable(true);
 
-                        if (!hasTweetType) {
-                            CloudierApplication.getBus().post(new LoadMoreTweetsEvent());
-                        } else {
-                            CloudierApplication.getBus().post(new LoadMoreTweetsWithTypeEvent(tweetType));
+                            if (!hasTweetType) {
+                                CloudierApplication.getBus().post(new LoadMoreTweetsEvent());
+                            } else {
+                                CloudierApplication.getBus().post(new LoadMoreTweetsWithTypeEvent(tweetType));
+                            }
                         }
-                    }
-                });
+                    });
+        } else {
+            if (!hasTweetType) {
+                CloudierApplication.getBus().post(new LoadMoreTweetsEvent());
+            } else {
+                CloudierApplication.getBus().post(new LoadMoreTweetsWithTypeEvent(tweetType));
+            }
+        }
     }
 
 
-    public void completeLoadingMore() {
+    public void completeLoadingMore(boolean hasMore) {
         isLoadingMore = false;
         if (loadMoreViewHolder != null) {
             loadMoreViewHolder.progress.setVisibility(View.GONE);
@@ -199,6 +208,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
             loadMoreViewHolder.button.setAlpha(1f);
             loadMoreViewHolder.button.setVisibility(View.VISIBLE);
         }
+
+        setShowLoadMore(hasMore);
     }
 
 
@@ -221,8 +232,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
 
     @Override
     public int getItemViewType(int position) {
-        boolean showLoadMore = !timeline.tweets.isEmpty();
-
         if (showComposer && position == 0) {
             return ITEM_TYPE_COMPOSER;
         } else if (showLoadMore && position == (getItemCount() - 1)) {
@@ -236,13 +245,21 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
     @Override
     public int getItemCount() {
         return (timeline.tweets.size() + (showComposer ? 1 : 0) +
-                (!timeline.tweets.isEmpty() ? 1 : 0));
+                (showLoadMore && !timeline.tweets.isEmpty() ? 1 : 0));
     }
 
 
     public void setTweetType(int tweetType) {
         this.tweetType = tweetType;
         this.hasTweetType = true;
+    }
+
+
+    public void setShowLoadMore(boolean showLoadMore) {
+        this.showLoadMore = showLoadMore;
+        if (!showLoadMore) {
+            loadMoreViewHolder = null;
+        }
     }
 
 

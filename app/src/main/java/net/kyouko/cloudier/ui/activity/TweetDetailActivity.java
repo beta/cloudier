@@ -284,21 +284,25 @@ public class TweetDetailActivity extends AppCompatActivity implements
                     if (response.body().tweets.isEmpty()) {
                         Snackbar.make(coordinatorLayout, R.string.text_info_no_more_comments,
                                 Snackbar.LENGTH_SHORT).show();
+                        commentsFragment.completeLoadingMore(false);
                     } else {
                         commentsTimeline.tweets.addAll(response.body().tweets);
                         commentsTimeline.users.putAll(response.body().users);
+
+                        commentsFragment.completeLoadingMore(true);
                     }
                 } else {
                     Snackbar.make(coordinatorLayout, R.string.text_info_no_more_comments,
                             Snackbar.LENGTH_SHORT).show();
+                    commentsFragment.completeLoadingMore(false);
                 }
 
-                commentsFragment.completeLoadingMore();
                 commentsFragment.refreshTweetList();
             }
 
             @Override
             public void onFailure(Call<Timeline> call, Throwable t) {
+                commentsFragment.completeLoadingMore(true);
                 Snackbar.make(coordinatorLayout, R.string.text_error_failed_to_fetch_comments,
                         Snackbar.LENGTH_SHORT)
                         .setAction(R.string.title_action_retry, new View.OnClickListener() {
@@ -358,16 +362,19 @@ public class TweetDetailActivity extends AppCompatActivity implements
                     if (response.body().tweets.isEmpty()) {
                         Snackbar.make(coordinatorLayout, R.string.text_info_no_more_retweets,
                                 Snackbar.LENGTH_SHORT).show();
+                        retweetsFragment.completeLoadingMore(false);
                     } else {
                         retweetsTimeline.tweets.addAll(response.body().tweets);
                         retweetsTimeline.users.putAll(response.body().users);
+
+                        retweetsFragment.completeLoadingMore(true);
                     }
                 } else {
                     Snackbar.make(coordinatorLayout, R.string.text_info_no_more_retweets,
                             Snackbar.LENGTH_SHORT).show();
+                    retweetsFragment.completeLoadingMore(false);
                 }
 
-                retweetsFragment.completeLoadingMore();
                 retweetsFragment.refreshTweetList();
             }
 

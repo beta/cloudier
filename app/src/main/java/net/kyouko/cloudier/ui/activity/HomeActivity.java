@@ -268,14 +268,14 @@ public class HomeActivity extends TimelineActivity {
         timelineCall.enqueue(new Callback<Timeline>() {
             @Override
             public void onResponse(Call<Timeline> call, Response<Timeline> response) {
-                adapter.completeLoadingMore();
-
                 if (response.body() != null && !response.body().tweets.isEmpty()) {
                     timeline.tweets.addAll(response.body().tweets);
                     timeline.users.putAll(response.body().users);
 
+                    adapter.completeLoadingMore(true);
                     adapter.notifyDataSetChanged();
                 } else {
+                    adapter.completeLoadingMore(false);
                     onNoMoreTweets(R.string.text_info_no_more_tweets);
                 }
             }
@@ -283,7 +283,7 @@ public class HomeActivity extends TimelineActivity {
 
             @Override
             public void onFailure(Call<Timeline> call, Throwable t) {
-                adapter.completeLoadingMore();
+                adapter.completeLoadingMore(true);
                 Snackbar.make(coordinatorLayout, R.string.text_error_failed_to_fetch_timeline,
                         Snackbar.LENGTH_SHORT)
                         .setAction(R.string.title_action_retry, new View.OnClickListener() {
