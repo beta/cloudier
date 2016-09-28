@@ -1,15 +1,18 @@
 package net.kyouko.cloudier.util;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
+import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -57,21 +60,34 @@ public class TweetCardUtil {
         @BindView(R.id.image_mask) View imageMask;
         @BindView(R.id.image_count) TextView imageCount;
 
-        protected Context context;
+        protected Activity activity;
 
         protected int imagePlaceholderColor;
 
 
         public MiniCard(CardView cardView) {
             this.cardView = cardView;
-            context = cardView.getContext();
+            activity = getActivity(cardView);
 
             ButterKnife.bind(this, cardView);
         }
 
 
+        private Activity getActivity(View view) {
+            Context context = view.getContext();
+            while (context instanceof ContextWrapper) {
+                if (context instanceof Activity) {
+                    return (Activity) context;
+                }
+
+                context = ((ContextWrapper) context).getBaseContext();
+            }
+            return null;
+        }
+
+
         protected void loadResources() {
-            imagePlaceholderColor = context.getResources().getColor(R.color.grey_300);
+            imagePlaceholderColor = activity.getResources().getColor(R.color.grey_300);
         }
 
 
@@ -86,7 +102,7 @@ public class TweetCardUtil {
                 });
             }
 
-            avatar.setImageURI(ImageUtil.getInstance(context).parseImageUrl(tweet.avatarUrl));
+            avatar.setImageURI(ImageUtil.getInstance(activity).parseImageUrl(tweet.avatarUrl));
             avatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -95,16 +111,17 @@ public class TweetCardUtil {
             });
 
             nickname.setText(tweet.nickname);
-            time.setText(DateTimeUtil.getDateTimeDescription(context, tweet.timestamp));
+            time.setText(DateTimeUtil.getDateTimeDescription(activity, tweet.timestamp));
 
             boolean hasContent = (tweet.originalContent.length() > 0);
             content.setVisibility(hasContent ? View.VISIBLE : View.GONE);
 
-            SpannableStringBuilder tweetContent = TextUtil.addLinkToUrlsInText(context,
-                    Html.fromHtml(tweet.originalContent).toString(), false);
-            tweetContent = TextUtil.addLinkToTopicsInText(context, tweetContent, false);
+            SpannableStringBuilder tweetContent = TextUtil.addLinkToUrlsInText(activity,
+                    Html.fromHtml(tweet.originalContent).toString(), true);
+            tweetContent = TextUtil.addLinkToTopicsInText(activity, tweetContent, true);
             tweetContent = NicknameUtil.replaceUsernameWithNicknameInContent(tweetContent, users);
             content.setText(tweetContent);
+            content.setMovementMethod(LinkMovementMethod.getInstance());
 
             boolean hasImages = (tweet.imageUrls != null && !tweet.imageUrls.isEmpty());
             if (hasImages) {
@@ -118,8 +135,8 @@ public class TweetCardUtil {
         protected void displayImages(final List<String> imageUrls) {
             imageWrapper.setVisibility(View.VISIBLE);
 
-            Picasso.with(context)
-                    .load(ImageUtil.getInstance(context).parseImageUrl(imageUrls.get(0)))
+            Picasso.with(activity)
+                    .load(ImageUtil.getInstance(activity).parseImageUrl(imageUrls.get(0)))
                     .placeholder(new ColorDrawable(imagePlaceholderColor))
                     .fit()
                     .centerCrop()
@@ -131,7 +148,7 @@ public class TweetCardUtil {
                 public void onClick(View view) {
                     List<String> newImageUrls = new ArrayList<>();
                     for (String imageUrl : imageUrls) {
-                        newImageUrls.add(ImageUtil.getInstance(context)
+                        newImageUrls.add(ImageUtil.getInstance(activity)
                                 .parseImageUrl(imageUrl));
                     }
 
@@ -208,7 +225,7 @@ public class TweetCardUtil {
                 comment.setVisibility(View.GONE);
             }
 
-            username.setText(context.getString(R.string.text_pattern_username, tweet.username));
+            username.setText(activity.getString(R.string.text_pattern_username, tweet.username));
 
             boolean hasContent = (tweet.content.length() > 0);
             boolean hasImages = (tweet.imageUrls != null && !tweet.imageUrls.isEmpty());
@@ -244,7 +261,7 @@ public class TweetCardUtil {
                                 sourceNickname.getText().toString(),
                                 sourceTime.getText().toString(),
                                 sourceContent.getText().toString(), Card.this,
-                                context.getString(R.string.text_pattern_comment, tweet.username,
+                                activity.getString(R.string.text_pattern_comment, tweet.username,
                                         tweet.originalContent), false));
                     } else {
                         CloudierApplication.getBus().post(new RetweetTweetEvent(tweet,
@@ -289,11 +306,10 @@ public class TweetCardUtil {
 
             sourceNickname.setText(sourceTweet.nickname);
 
-            sourceTime.setText(DateTimeUtil.getDateTimeDescription(context, sourceTweet.timestamp));
+            sourceTime.setText(DateTimeUtil.getDateTimeDescription(activity, sourceTweet.timestamp));
 
-            SpannableStringBuilder tweetContent = TextUtil.addLinkToUrlsInText(context,
-                    Html.fromHtml(sourceTweet.originalContent).toString(), false);
-            tweetContent = TextUtil.addLinkToTopicsInText(context, tweetContent, false);
+            SpannableStringBuilder tweetContent = new SpannableStringBuilder(
+                    Html.fromHtml(sourceTweet.originalContent));
             tweetContent = NicknameUtil.replaceUsernameWithNicknameInContent(tweetContent, users);
             sourceContent.setText(tweetContent);
             sourceContent.setVisibility((tweetContent.length() > 0) ? View.VISIBLE : View.GONE);
@@ -311,8 +327,8 @@ public class TweetCardUtil {
 
             sourceImage.setVisibility(View.VISIBLE);
 
-            Picasso.with(context)
-                    .load(ImageUtil.getInstance(context)
+            Picasso.with(activity)
+                    .load(ImageUtil.getInstance(activity)
                             .parseImageUrl(imageUrls.get(0)))
                     .placeholder(new ColorDrawable(imagePlaceholderColor))
                     .fit()
@@ -324,7 +340,7 @@ public class TweetCardUtil {
                 public void onClick(View view) {
                     List<String> newImageUrls = new ArrayList<>();
                     for (String imageUrl : imageUrls) {
-                        newImageUrls.add(ImageUtil.getInstance(context)
+                        newImageUrls.add(ImageUtil.getInstance(activity)
                                 .parseImageUrl(imageUrl));
                     }
 

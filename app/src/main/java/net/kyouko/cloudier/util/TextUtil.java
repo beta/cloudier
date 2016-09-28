@@ -1,5 +1,6 @@
 package net.kyouko.cloudier.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -17,14 +18,14 @@ import java.util.regex.Pattern;
  */
 public class TextUtil {
 
-    public static SpannableStringBuilder addLinkToUrlsInText(final Context context, String text,
+    public static SpannableStringBuilder addLinkToUrlsInText(final Activity activity, String text,
                                                              final boolean clickable) {
         SpannableStringBuilder builder = new SpannableStringBuilder(text);
-        return addLinkToUrlsInText(context, builder, clickable);
+        return addLinkToUrlsInText(activity, builder, clickable);
     }
 
 
-    public static SpannableStringBuilder addLinkToUrlsInText(final Context context,
+    public static SpannableStringBuilder addLinkToUrlsInText(final Activity activity,
                                                              SpannableStringBuilder builder,
                                                              final boolean clickable) {
         String regexUrl = "http://url\\.cn/[0-9a-zA-Z]{7}";
@@ -37,7 +38,7 @@ public class TextUtil {
                 @Override
                 public void onClick(View widget) {
                     if (clickable) {
-                        UrlUtil.openUrl(context, url);
+                        UrlUtil.openUrl(activity, url);
                     }
                 }
             };
