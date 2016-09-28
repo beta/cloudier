@@ -63,6 +63,11 @@
             android:summary="@string/text.setting.summary.github"
             android:title="@string/title.setting.about.github"/>
 
+        <Preference
+            android:key="about.version"
+            android:summary="@string/version_name"
+            android:title="@string/title.setting.about.version"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

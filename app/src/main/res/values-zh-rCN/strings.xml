@@ -44,6 +44,7 @@
     <string name="title.setting.avatar.quality">头像质量</string>
     <string name="title.setting.about">关于</string>
     <string name="title.setting.about.licenses">开放源代码协议</string>
+    <string name="title.setting.about.version">版本</string>
 
     <string name="text.setting.summary.image_source">如果加载图片遇到问题，请尝试切换图源</string>
 

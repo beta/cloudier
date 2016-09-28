@@ -45,6 +45,7 @@
     <string name="title.setting.about">About</string>
     <string name="title.setting.about.licenses">Open source licenses</string>
     <string name="title.setting.about.github" translatable="false">GitHub</string>
+    <string name="title.setting.about.version">Version</string>
 
     <string name="text.setting.summary.current_value" translatable="false">%s</string>
     <string name="text.setting.summary.image_source">Change a source if there is difficulty loading images</string>
