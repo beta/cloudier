@@ -219,6 +219,16 @@ public class ComposerActivity extends AppCompatActivity {
         watcher.applyWordCountAvailable(content.getText().toString());
         content.setText(getIntent().getStringExtra("CONTENT"));
 
+        wordCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                while (hasWordCountExceeded()) {
+                    content.setText(content.getText().subSequence(0, content.getText().length() - 1));
+                }
+                content.setSelection(content.length());
+            }
+        });
+
         if (composerType == TYPE_COMMENT || composerType == TYPE_RETWEET) {
             sourceTweet = (SourceTweet) getIntent().getSerializableExtra("TWEET");
             sourceCard.setVisibility(View.VISIBLE);
