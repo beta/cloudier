@@ -108,4 +108,9 @@ public class TweetListFragment extends Fragment {
         adapter.notifyItemRemoved(position);
     }
 
+
+    public void scrollToTop() {
+        recyclerView.scrollToPosition(0);
+    }
+
 }

@@ -136,6 +136,23 @@ public class UserActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (viewPager.getCurrentItem()) {
+                    case 0:
+                        userTimelineFragment.scrollToTop();
+                        break;
+                    case 1:
+                        followingFragment.scrollToTop();
+                        break;
+                    case 2:
+                        followersFragment.scrollToTop();
+                        break;
+                }
+            }
+        });
     }
 
 

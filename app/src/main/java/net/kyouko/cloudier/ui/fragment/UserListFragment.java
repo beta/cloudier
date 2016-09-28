@@ -85,4 +85,9 @@ public class UserListFragment extends Fragment {
         }
     }
 
+
+    public void scrollToTop() {
+        recyclerView.scrollToPosition(0);
+    }
+
 }
