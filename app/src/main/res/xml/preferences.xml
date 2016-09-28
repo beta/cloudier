@@ -51,6 +51,18 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:key="misc"
+        android:title="@string/title.setting.misc">
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="misc.use_chrome_custom_tabs"
+            android:title="@string/title.setting.misc.use_chrome_custom_tabs"/>
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
         android:key="about"
         android:title="@string/title.setting.about">
 
