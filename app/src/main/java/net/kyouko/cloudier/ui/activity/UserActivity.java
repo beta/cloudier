@@ -182,6 +182,33 @@ public class UserActivity extends AppCompatActivity {
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+            }
+
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        userTimelineFragment.scrollToTop();
+                        break;
+                    case 1:
+                        followingFragment.scrollToTop();
+                        break;
+                    case 2:
+                        followersFragment.scrollToTop();
+                        break;
+                }
+            }
+        });
     }
 
 
