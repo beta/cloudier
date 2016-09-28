@@ -147,7 +147,6 @@ public class TweetCardUtil {
 
         @BindView(R.id.username) TextView username;
         @BindView(R.id.space_below_content) View spaceBelowContent;
-        @BindView(R.id.space_below_image) View spaceBelowImage;
         @BindView(R.id.deleted_source) View deletedSourceCard;
         @BindView(R.id.source_card) CardView sourceCard;
         @BindView(R.id.source_wrapper) View sourceWrapper;
@@ -210,7 +209,6 @@ public class TweetCardUtil {
 
             spaceBelowContent.setVisibility((hasContent && (hasImages || hasSourceTweet)) ?
                     View.VISIBLE : View.GONE);
-            spaceBelowImage.setVisibility((hasImages && hasSourceTweet) ? View.VISIBLE : View.GONE);
 
             commentCount.setText(String.valueOf(tweet.commentCount));
             commentCount.setVisibility((tweet.commentCount > 0) ? View.VISIBLE : View.GONE);

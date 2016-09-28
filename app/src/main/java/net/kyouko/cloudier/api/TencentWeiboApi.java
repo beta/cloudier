@@ -153,7 +153,8 @@ public interface TencentWeiboApi {
     Call<TweetResult> retweet(@FieldMap Map<String, String> constantParams,
                               @FieldMap Map<String, String> oAuthParams,
                               @Field("reid") String tweetId,
-                              @Field("content") String content);
+                              @Field("content") String content,
+                              @Field("pic_url") String imageUrls);
     // endregion
 
 

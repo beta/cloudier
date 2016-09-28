@@ -126,13 +126,13 @@ public class ComposerActivity extends AppCompatActivity {
                 switch (composerType) {
                     case TYPE_NEW:
                     default:
-                        sendTweet();
+                        uploadImagesAndSendTweet(false);
                         break;
                     case TYPE_COMMENT:
                         comment();
                         break;
                     case TYPE_RETWEET:
-                        retweet();
+                        uploadImagesAndSendTweet(true);
                         break;
                 }
             }
@@ -254,7 +254,19 @@ public class ComposerActivity extends AppCompatActivity {
                 sourceContent.setVisibility(View.GONE);
             }
 
-            addImageButton.setVisibility(View.GONE);
+            if (composerType == TYPE_RETWEET) {
+                addImageButton.setVisibility(View.VISIBLE);
+                addImageButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (imageUris.size() < 9) {
+                            pickImage();
+                        }
+                    }
+                });
+            } else {
+                addImageButton.setVisibility(View.GONE);
+            }
         } else {
             sourceCard.setVisibility(View.GONE);
 
@@ -476,16 +488,16 @@ public class ComposerActivity extends AppCompatActivity {
     }
 
 
-    private void sendTweet() {
+    private void uploadImagesAndSendTweet(boolean isRetweet) {
         content.setEnabled(false);
 
         playSendingTweetAnimation();
 
-        uploadImages();
+        uploadImages(isRetweet);
     }
 
 
-    private void uploadImages() {
+    private void uploadImages(final boolean isRetweet) {
         imageUrls.clear();
 
         for (UploadImageView uploadImageView : uploadImageViews) {
@@ -575,7 +587,7 @@ public class ComposerActivity extends AppCompatActivity {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            onFailedToUploadImages();
+                                            onFailedToUploadImages(isRetweet);
                                         }
                                     });
                                     return;
@@ -584,7 +596,7 @@ public class ComposerActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        onFailedToUploadImages();
+                                        onFailedToUploadImages(isRetweet);
                                     }
                                 });
                                 return;
@@ -593,20 +605,24 @@ public class ComposerActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    onFailedToUploadImages();
+                                    onFailedToUploadImages(isRetweet);
                                 }
                             });
                             return;
                         }
                     }
                 }
-                sendTweetWithImages();
+                if (isRetweet) {
+                    retweet();
+                } else {
+                    sendTweet();
+                }
             }
         }).start();
     }
 
 
-    private void onFailedToUploadImages() {
+    private void onFailedToUploadImages(final boolean isRetweet) {
         content.setEnabled(true);
 
         Snackbar.make(coordinatorLayout, R.string.text_error_failed_to_upload_images,
@@ -615,7 +631,7 @@ public class ComposerActivity extends AppCompatActivity {
                         new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                sendTweet();
+                                uploadImagesAndSendTweet(isRetweet);
                             }
                         })
                 .show();
@@ -631,7 +647,7 @@ public class ComposerActivity extends AppCompatActivity {
     }
 
 
-    private void sendTweetWithImages() {
+    private void sendTweet() {
         String imageUrlsString = "";
         if (!imageUrls.isEmpty()) {
             imageUrlsString = ImageUtil.getInstance(this)
@@ -669,7 +685,7 @@ public class ComposerActivity extends AppCompatActivity {
                                 new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        sendTweet();
+                                        uploadImagesAndSendTweet(false);
                                     }
                                 })
                         .show();
@@ -735,13 +751,19 @@ public class ComposerActivity extends AppCompatActivity {
 
 
     private void retweet() {
-        content.setEnabled(false);
-
-        playSendingTweetAnimation();
+        String imageUrlsString = "";
+        if (!imageUrls.isEmpty()) {
+            imageUrlsString = ImageUtil.getInstance(this)
+                    .parseImageUrl(imageUrls.get(0), ImageUtil.QUALITY_ORIGINAL);
+            for (int i = 1; i < imageUrls.size(); i += 1) {
+                imageUrlsString += "," + ImageUtil.getInstance(this)
+                        .parseImageUrl(imageUrls.get(i), ImageUtil.QUALITY_ORIGINAL);
+            }
+        }
 
         Call<TweetResult> retweetCall = RequestUtil.getApiInstance().retweet(
                 RequestUtil.getConstantParams(), RequestUtil.getOAuthParams(this),
-                sourceTweet.id, content.getText().toString());
+                sourceTweet.id, content.getText().toString(), imageUrlsString);
         retweetCall.enqueue(new Callback<TweetResult>() {
             @Override
             public void onResponse(Call<TweetResult> call, Response<TweetResult> response) {

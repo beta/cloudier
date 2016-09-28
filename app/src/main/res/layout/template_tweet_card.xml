@@ -117,11 +117,6 @@
 
         </RelativeLayout>
 
-        <include
-            android:id="@+id/space_below_image"
-            layout="@layout/template_tweet_card_space"
-            android:visibility="gone"/>
-
         <FrameLayout
             android:id="@+id/deleted_source"
             style="@style/TweetCard.Source.Deleted"
