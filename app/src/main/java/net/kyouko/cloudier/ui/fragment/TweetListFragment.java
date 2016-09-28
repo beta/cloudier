@@ -12,6 +12,7 @@ import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.Tweet;
 import net.kyouko.cloudier.ui.adapter.TimelineAdapter;
+import net.kyouko.cloudier.util.PreferenceUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,6 +73,19 @@ public class TweetListFragment extends Fragment {
             adapter.setTweetType(tweetType);
         }
         recyclerView.setAdapter(adapter);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (((LinearLayoutManager) recyclerView.getLayoutManager())
+                        .findLastVisibleItemPosition() >= timeline.tweets.size() - 3) {
+                    if (PreferenceUtil.with(getContext())
+                            .getBoolean(PreferenceUtil.PREF_TIMELINE_AUTO_LOAD_MORE)) {
+                        adapter.loadMore();
+                    }
+                }
+            }
+        });
     }
 
 

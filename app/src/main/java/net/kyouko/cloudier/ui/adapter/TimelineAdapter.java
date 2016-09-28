@@ -50,6 +50,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
     private int tweetType = Tweet.TYPE_ORIGINAL;
 
     private LoadMoreViewHolder loadMoreViewHolder;
+    private boolean isLoadingMore = false;
 
     private int defaultSourceCardColor;
     private int defaultTextColor;
@@ -145,34 +146,40 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
     private void bindLoadMoreViewHolder(final LoadMoreViewHolder holder) {
         loadMoreViewHolder = holder;
 
+        this.loadMoreViewHolder = holder;
         holder.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadMore(holder);
+                loadMore();
             }
         });
     }
 
 
-    private void loadMore(final LoadMoreViewHolder holder) {
-        holder.button.setClickable(false);
+    public void loadMore() {
+        if (isLoadingMore || loadMoreViewHolder == null) {
+            return;
+        }
 
-        holder.progress.setAlpha(0f);
-        holder.progress.setVisibility(View.VISIBLE);
+        isLoadingMore = true;
+        loadMoreViewHolder.button.setClickable(false);
 
-        holder.progress.animate()
+        loadMoreViewHolder.progress.setAlpha(0f);
+        loadMoreViewHolder.progress.setVisibility(View.VISIBLE);
+
+        loadMoreViewHolder.progress.animate()
                 .alpha(1f)
                 .setDuration(shortAnimationDuration)
                 .setListener(null);
 
-        holder.button.animate()
+        loadMoreViewHolder.button.animate()
                 .alpha(0f)
                 .setDuration(shortAnimationDuration)
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        holder.button.setVisibility(View.GONE);
-                        holder.button.setClickable(true);
+                        loadMoreViewHolder.button.setVisibility(View.GONE);
+                        loadMoreViewHolder.button.setClickable(true);
 
                         if (!hasTweetType) {
                             CloudierApplication.getBus().post(new LoadMoreTweetsEvent());
@@ -185,6 +192,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
 
 
     public void completeLoadingMore() {
+        isLoadingMore = false;
         if (loadMoreViewHolder != null) {
             loadMoreViewHolder.progress.setVisibility(View.GONE);
 

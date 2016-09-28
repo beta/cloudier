@@ -34,6 +34,7 @@ import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.Tweet;
 import net.kyouko.cloudier.model.TweetResult;
 import net.kyouko.cloudier.ui.adapter.TimelineAdapter;
+import net.kyouko.cloudier.util.PreferenceUtil;
 import net.kyouko.cloudier.util.RequestUtil;
 import net.kyouko.cloudier.util.TweetCardUtil;
 
@@ -143,6 +144,19 @@ public abstract class TimelineActivity extends AppCompatActivity {
 
         adapter = new TimelineAdapter(this, timeline);
         recyclerView.setAdapter(adapter);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (((LinearLayoutManager) recyclerView.getLayoutManager())
+                        .findLastVisibleItemPosition() >= timeline.tweets.size() - 3) {
+                    if (PreferenceUtil.with(TimelineActivity.this)
+                            .getBoolean(PreferenceUtil.PREF_TIMELINE_AUTO_LOAD_MORE)) {
+                        adapter.loadMore();
+                    }
+                }
+            }
+        });
     }
 
 

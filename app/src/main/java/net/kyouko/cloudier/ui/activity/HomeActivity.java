@@ -413,7 +413,7 @@ public class HomeActivity extends TimelineActivity {
             final boolean hasTweet = data.hasExtra("TWEET");
             if (hasTweet) {
                 PreferenceUtil pref = PreferenceUtil.with(this);
-                if (pref.getBoolean(PreferenceUtil.PREF_COMPOSER_JUMP_TO_TOP_AFTER_RETWEET)) {
+                if (pref.getBoolean(PreferenceUtil.PREF_TIMELINE_JUMP_TO_TOP_AFTER_RETWEET)) {
                     recyclerView.scrollToPosition(0);
                 }
 

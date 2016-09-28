@@ -35,8 +35,9 @@
     <string name="title.tab.following">收听</string>
     <string name="title.tab.followers">听众</string>
 
-    <string name="title.setting.composer">发表微博</string>
-    <string name="title.setting.composer.retweet_jump_to_top">转发微博后跳至时间线顶部</string>
+    <string name="title.setting.timeline">时间线</string>
+    <string name="title.setting.timeline.retweet_jump_to_top">转发微博后跳至时间线顶部</string>
+    <string name="title.setting.timeline.auto_load_more">自动加载更多微博</string>
     <string name="title.setting.image">图片</string>
     <string name="title.setting.image.source">图源</string>
     <string name="title.setting.image.quality">图片质量</string>

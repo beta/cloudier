@@ -2,13 +2,18 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:key="composer"
-        android:title="@string/title.setting.composer">
+        android:key="timeline"
+        android:title="@string/title.setting.timeline">
 
         <CheckBoxPreference
             android:defaultValue="true"
-            android:key="composer.retweet_jump_to_top"
-            android:title="@string/title.setting.composer.retweet_jump_to_top"/>
+            android:key="timeline.retweet_jump_to_top"
+            android:title="@string/title.setting.timeline.retweet_jump_to_top"/>
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="timeline.auto_load_more"
+            android:title="@string/title.setting.timeline.auto_load_more"/>
 
     </PreferenceCategory>
 
