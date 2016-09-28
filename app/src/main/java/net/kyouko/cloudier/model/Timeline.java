@@ -18,7 +18,12 @@ public class Timeline implements Serializable {
     public final static int PAGE_FLAG_DOWN = 1;
     public final static int PAGE_FLAG_UP = 2;
 
+    public final static int FLAG_HAS_MORE = 0;
+    public final static int FLAG_NO_MORE = 1;
 
+
+    @SerializedName("hasnext")
+    public int hasMoreTweetsFlag = FLAG_NO_MORE;
     @SerializedName("info")
     public List<Tweet> tweets = new ArrayList<>();
     @SerializedName("user")

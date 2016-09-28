@@ -49,7 +49,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
     private boolean hasTweetType = false;
     private int tweetType = Tweet.TYPE_ORIGINAL;
 
-    private boolean shouldShowLoadMore = true;
     private LoadMoreViewHolder loadMoreViewHolder;
     private boolean isLoadingMore = false;
 
@@ -158,12 +157,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
 
 
     public void loadMore() {
-        if (isLoadingMore || !shouldShowLoadMore) {
-            return;
-        }
-
-        boolean showLoadMore = timeline.tweets.size() >= 20;
-        if (!showLoadMore) {
+        if (isLoadingMore || timeline.hasMoreTweetsFlag == Timeline.FLAG_NO_MORE) {
             return;
         }
 
@@ -205,7 +199,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
     }
 
 
-    public void completeLoadingMore(boolean hasMore) {
+    public void completeLoadingMore() {
         isLoadingMore = false;
         if (loadMoreViewHolder != null) {
             loadMoreViewHolder.progress.setVisibility(View.GONE);
@@ -213,8 +207,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
             loadMoreViewHolder.button.setAlpha(1f);
             loadMoreViewHolder.button.setVisibility(View.VISIBLE);
         }
-
-        setShouldShowLoadMore(hasMore);
     }
 
 
@@ -237,7 +229,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
 
     @Override
     public int getItemViewType(int position) {
-        boolean showLoadMore = (shouldShowLoadMore && timeline.tweets.size() >= 20);
+        boolean showLoadMore = (timeline.hasMoreTweetsFlag == Timeline.FLAG_HAS_MORE);
         if (showComposer && position == 0) {
             return ITEM_TYPE_COMPOSER;
         } else if (showLoadMore && position == (getItemCount() - 1)) {
@@ -251,21 +243,13 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
     @Override
     public int getItemCount() {
         return (timeline.tweets.size() + (showComposer ? 1 : 0) +
-                ((shouldShowLoadMore && timeline.tweets.size() >= 20) ? 1 : 0));
+                ((timeline.hasMoreTweetsFlag == Timeline.FLAG_HAS_MORE) ? 1 : 0));
     }
 
 
     public void setTweetType(int tweetType) {
         this.tweetType = tweetType;
         this.hasTweetType = true;
-    }
-
-
-    public void setShouldShowLoadMore(boolean shouldShowLoadMore) {
-        this.shouldShowLoadMore = shouldShowLoadMore;
-        if (!shouldShowLoadMore) {
-            loadMoreViewHolder = null;
-        }
     }
 
 

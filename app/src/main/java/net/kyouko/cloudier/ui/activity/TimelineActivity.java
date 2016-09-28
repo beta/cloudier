@@ -172,6 +172,7 @@ public abstract class TimelineActivity extends AppCompatActivity {
         if (timeline.tweets.isEmpty()) {
             timeline.tweets.clear();
             timeline.tweets.addAll(latestTimeline.tweets);
+            timeline.hasMoreTweetsFlag = latestTimeline.hasMoreTweetsFlag;
         } else {
             if (timeline.tweets.isEmpty()) {
                 timeline.tweets.addAll(latestTimeline.tweets);
@@ -225,6 +226,7 @@ public abstract class TimelineActivity extends AppCompatActivity {
             } else {
                 timeline.tweets.clear();
                 timeline.tweets.addAll(latestTimeline.tweets);
+                timeline.hasMoreTweetsFlag = latestTimeline.hasMoreTweetsFlag;
             }
         }
 
@@ -236,6 +238,7 @@ public abstract class TimelineActivity extends AppCompatActivity {
 
     protected void onNoNewTweets(@StringRes int messageId) {
         Snackbar.make(coordinatorLayout, messageId, Snackbar.LENGTH_SHORT).show();
+        timeline.hasMoreTweetsFlag = Timeline.FLAG_NO_MORE;
     }
 
 
@@ -245,6 +248,7 @@ public abstract class TimelineActivity extends AppCompatActivity {
 
     protected void onNoMoreTweets(@StringRes int messageId) {
         Snackbar.make(coordinatorLayout, messageId, Snackbar.LENGTH_SHORT).show();
+        timeline.hasMoreTweetsFlag = Timeline.FLAG_NO_MORE;
     }
 
 

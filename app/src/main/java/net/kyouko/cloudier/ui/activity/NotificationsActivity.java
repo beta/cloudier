@@ -112,14 +112,15 @@ public class NotificationsActivity extends TimelineActivity {
         timelineCall.enqueue(new Callback<Timeline>() {
             @Override
             public void onResponse(Call<Timeline> call, Response<Timeline> response) {
+                adapter.completeLoadingMore();
+
                 if (response.body() != null && !response.body().tweets.isEmpty()) {
                     timeline.tweets.addAll(response.body().tweets);
                     timeline.users.putAll(response.body().users);
+                    timeline.hasMoreTweetsFlag = response.body().hasMoreTweetsFlag;
 
-                    adapter.completeLoadingMore(true);
                     adapter.notifyDataSetChanged();
                 } else {
-                    adapter.completeLoadingMore(false);
                     onNoMoreTweets(R.string.text_info_no_more_notifications);
                 }
             }
@@ -127,7 +128,7 @@ public class NotificationsActivity extends TimelineActivity {
 
             @Override
             public void onFailure(Call<Timeline> call, Throwable t) {
-                adapter.completeLoadingMore(true);
+                adapter.completeLoadingMore();
                 Snackbar.make(coordinatorLayout, R.string.text_error_failed_to_fetch_notifications,
                         Snackbar.LENGTH_SHORT)
                         .setAction(R.string.title_action_retry, new View.OnClickListener() {

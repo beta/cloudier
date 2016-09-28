@@ -94,8 +94,8 @@ public class TweetListFragment extends Fragment {
     }
 
 
-    public void completeLoadingMore(boolean hasMore) {
-        adapter.completeLoadingMore(hasMore);
+    public void completeLoadingMore() {
+        adapter.completeLoadingMore();
     }
 
 

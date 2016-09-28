@@ -366,6 +366,7 @@ public class UserActivity extends AppCompatActivity {
                     userTimeline.tweets.clear();
                     userTimeline.tweets.addAll(timeline.tweets);
                     userTimeline.users.putAll(timeline.users);
+                    userTimeline.hasMoreTweetsFlag = timeline.hasMoreTweetsFlag;
                     userTimelineFragment.refreshTweetList();
                 } else {
                     onFailure();
@@ -449,23 +450,24 @@ public class UserActivity extends AppCompatActivity {
         timelineCall.enqueue(new Callback<Timeline>() {
             @Override
             public void onResponse(Call<Timeline> call, Response<Timeline> response) {
+                userTimelineFragment.completeLoadingMore();
+
                 if (response.body() != null) {
                     Timeline timeline = response.body();
 
                     if (timeline.tweets.isEmpty()) {
+                        userTimeline.hasMoreTweetsFlag = Timeline.FLAG_NO_MORE;
                         Snackbar.make(coordinator, R.string.text_info_no_more_tweets,
                                 Snackbar.LENGTH_SHORT).show();
-                        userTimelineFragment.completeLoadingMore(false);
                     } else {
                         userTimeline.tweets.addAll(timeline.tweets);
                         userTimeline.users.putAll(timeline.users);
-
-                        userTimelineFragment.completeLoadingMore(true);
+                        userTimeline.hasMoreTweetsFlag = timeline.hasMoreTweetsFlag;
                     }
                 } else {
+                    userTimeline.hasMoreTweetsFlag = Timeline.FLAG_NO_MORE;
                     Snackbar.make(coordinator, R.string.text_info_no_more_tweets,
                             Snackbar.LENGTH_SHORT).show();
-                    userTimelineFragment.completeLoadingMore(false);
                 }
 
                 userTimelineFragment.refreshTweetList();
@@ -473,7 +475,7 @@ public class UserActivity extends AppCompatActivity {
 
 
             private void onFailure() {
-                userTimelineFragment.completeLoadingMore(true);
+                userTimelineFragment.completeLoadingMore();
                 userTimelineFragment.refreshTweetList();
 
                 Snackbar.make(coordinator, R.string.text_error_failed_to_fetch_timeline,

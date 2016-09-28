@@ -251,6 +251,7 @@ public class TweetDetailActivity extends AppCompatActivity implements
                 if (response.body() != null) {
                     commentsTimeline.tweets.addAll(response.body().tweets);
                     commentsTimeline.users.putAll(response.body().users);
+                    commentsTimeline.hasMoreTweetsFlag = response.body().hasMoreTweetsFlag;
                 }
 
                 commentsFragment.refreshTweetList();
@@ -280,21 +281,22 @@ public class TweetDetailActivity extends AppCompatActivity implements
         commentsCall.enqueue(new Callback<Timeline>() {
             @Override
             public void onResponse(Call<Timeline> call, Response<Timeline> response) {
+                commentsFragment.completeLoadingMore();
+
                 if (response.body() != null) {
                     if (response.body().tweets.isEmpty()) {
+                        commentsTimeline.hasMoreTweetsFlag = Timeline.FLAG_NO_MORE;
                         Snackbar.make(coordinatorLayout, R.string.text_info_no_more_comments,
                                 Snackbar.LENGTH_SHORT).show();
-                        commentsFragment.completeLoadingMore(false);
                     } else {
                         commentsTimeline.tweets.addAll(response.body().tweets);
                         commentsTimeline.users.putAll(response.body().users);
-
-                        commentsFragment.completeLoadingMore(true);
+                        commentsTimeline.hasMoreTweetsFlag = response.body().hasMoreTweetsFlag;
                     }
                 } else {
+                    commentsTimeline.hasMoreTweetsFlag = Timeline.FLAG_NO_MORE;
                     Snackbar.make(coordinatorLayout, R.string.text_info_no_more_comments,
                             Snackbar.LENGTH_SHORT).show();
-                    commentsFragment.completeLoadingMore(false);
                 }
 
                 commentsFragment.refreshTweetList();
@@ -302,7 +304,7 @@ public class TweetDetailActivity extends AppCompatActivity implements
 
             @Override
             public void onFailure(Call<Timeline> call, Throwable t) {
-                commentsFragment.completeLoadingMore(true);
+                commentsFragment.completeLoadingMore();
                 Snackbar.make(coordinatorLayout, R.string.text_error_failed_to_fetch_comments,
                         Snackbar.LENGTH_SHORT)
                         .setAction(R.string.title_action_retry, new View.OnClickListener() {
@@ -329,6 +331,7 @@ public class TweetDetailActivity extends AppCompatActivity implements
                 if (response.body() != null) {
                     retweetsTimeline.tweets.addAll(response.body().tweets);
                     retweetsTimeline.users.putAll(response.body().users);
+                    retweetsTimeline.hasMoreTweetsFlag = response.body().hasMoreTweetsFlag;
                 }
 
                 retweetsFragment.refreshTweetList();
@@ -358,21 +361,22 @@ public class TweetDetailActivity extends AppCompatActivity implements
         retweetsCall.enqueue(new Callback<Timeline>() {
             @Override
             public void onResponse(Call<Timeline> call, Response<Timeline> response) {
+                retweetsFragment.completeLoadingMore();
+
                 if (response.body() != null) {
                     if (response.body().tweets.isEmpty()) {
+                        retweetsTimeline.hasMoreTweetsFlag = Timeline.FLAG_NO_MORE;
                         Snackbar.make(coordinatorLayout, R.string.text_info_no_more_retweets,
                                 Snackbar.LENGTH_SHORT).show();
-                        retweetsFragment.completeLoadingMore(false);
                     } else {
                         retweetsTimeline.tweets.addAll(response.body().tweets);
                         retweetsTimeline.users.putAll(response.body().users);
-
-                        retweetsFragment.completeLoadingMore(true);
+                        retweetsTimeline.hasMoreTweetsFlag = response.body().hasMoreTweetsFlag;
                     }
                 } else {
+                    retweetsTimeline.hasMoreTweetsFlag = Timeline.FLAG_NO_MORE;
                     Snackbar.make(coordinatorLayout, R.string.text_info_no_more_retweets,
                             Snackbar.LENGTH_SHORT).show();
-                    retweetsFragment.completeLoadingMore(false);
                 }
 
                 retweetsFragment.refreshTweetList();
@@ -380,6 +384,7 @@ public class TweetDetailActivity extends AppCompatActivity implements
 
             @Override
             public void onFailure(Call<Timeline> call, Throwable t) {
+                retweetsFragment.completeLoadingMore();
                 Snackbar.make(coordinatorLayout, R.string.text_error_failed_to_fetch_retweets,
                         Snackbar.LENGTH_SHORT)
                         .setAction(R.string.title_action_retry, new View.OnClickListener() {
