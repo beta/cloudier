@@ -49,7 +49,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
     private boolean hasTweetType = false;
     private int tweetType = Tweet.TYPE_ORIGINAL;
 
-    private boolean showLoadMore = true;
+    private boolean shouldShowLoadMore = true;
     private LoadMoreViewHolder loadMoreViewHolder;
     private boolean isLoadingMore = false;
 
@@ -158,7 +158,12 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
 
 
     public void loadMore() {
-        if (isLoadingMore || !showLoadMore) {
+        if (isLoadingMore || !shouldShowLoadMore) {
+            return;
+        }
+
+        boolean showLoadMore = timeline.tweets.size() >= 20;
+        if (!showLoadMore) {
             return;
         }
 
@@ -209,7 +214,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
             loadMoreViewHolder.button.setVisibility(View.VISIBLE);
         }
 
-        setShowLoadMore(hasMore);
+        setShouldShowLoadMore(hasMore);
     }
 
 
@@ -232,6 +237,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
 
     @Override
     public int getItemViewType(int position) {
+        boolean showLoadMore = (shouldShowLoadMore && timeline.tweets.size() >= 20);
         if (showComposer && position == 0) {
             return ITEM_TYPE_COMPOSER;
         } else if (showLoadMore && position == (getItemCount() - 1)) {
@@ -245,7 +251,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
     @Override
     public int getItemCount() {
         return (timeline.tweets.size() + (showComposer ? 1 : 0) +
-                (showLoadMore && !timeline.tweets.isEmpty() ? 1 : 0));
+                ((shouldShowLoadMore && timeline.tweets.size() >= 20) ? 1 : 0));
     }
 
 
@@ -255,9 +261,9 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
     }
 
 
-    public void setShowLoadMore(boolean showLoadMore) {
-        this.showLoadMore = showLoadMore;
-        if (!showLoadMore) {
+    public void setShouldShowLoadMore(boolean shouldShowLoadMore) {
+        this.shouldShowLoadMore = shouldShowLoadMore;
+        if (!shouldShowLoadMore) {
             loadMoreViewHolder = null;
         }
     }
