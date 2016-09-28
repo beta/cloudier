@@ -358,8 +358,9 @@ public class ComposerActivity extends AppCompatActivity {
     private void playWordCountExceededAnimation() {
         ViewAnimator
                 .animate(wordCount)
-                .shake()
-                .duration(shortAnimationDuration)
+                .translationX(0, 25, -25, 0)
+                .repeatCount(2)
+                .duration(100)
                 .start();
     }
 
