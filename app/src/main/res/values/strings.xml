@@ -51,6 +51,7 @@
     <string name="text.setting.summary.github" translatable="false">https://github.com/beta/cloudier</string>
 
     <string name="text.label.follows_you">Follows you</string>
+    <string name="text.label.comment">comments</string>
 
     <string name="text.info.auth_success">Authorization succeeded</string>
     <string name="text.info.no_new_tweets">No new tweets</string>

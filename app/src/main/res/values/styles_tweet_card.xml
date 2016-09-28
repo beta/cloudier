@@ -40,6 +40,10 @@
         <item name="android:textAppearance">@style/PrimaryTitle</item>
     </style>
 
+    <style name="TweetCard.Header.Comment" parent="">
+        <item name="android:textAppearance">@style/SecondaryText</item>
+    </style>
+
     <style name="TweetCard.Header.Time" parent="">
         <item name="android:textAppearance">@style/SecondaryText</item>
     </style>

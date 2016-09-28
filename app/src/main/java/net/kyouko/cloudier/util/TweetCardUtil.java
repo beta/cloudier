@@ -152,6 +152,7 @@ public class TweetCardUtil {
 
     public static class Card extends MiniCard {
 
+        @BindView(R.id.comment) TextView comment;
         @BindView(R.id.username) TextView username;
         @BindView(R.id.space_below_content) View spaceBelowContent;
         @BindView(R.id.deleted_source) View deletedSourceCard;
@@ -199,6 +200,12 @@ public class TweetCardUtil {
                         CloudierApplication.getBus().post(new ViewTweetEvent(tweet, users, Card.this));
                     }
                 });
+            }
+
+            if (tweet.type == Tweet.TYPE_COMMENT) {
+                comment.setVisibility(View.VISIBLE);
+            } else {
+                comment.setVisibility(View.GONE);
             }
 
             username.setText(context.getString(R.string.text_pattern_username, tweet.username));

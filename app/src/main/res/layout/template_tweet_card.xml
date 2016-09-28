@@ -39,13 +39,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/nickname"
-                        style="@style/TweetCard.Header.Nickname"
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:transitionName="nickname"
-                        tools:text="beta"/>
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/nickname"
+                            style="@style/TweetCard.Header.Nickname"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:transitionName="nickname"
+                            tools:text="beta"/>
+
+                        <TextView
+                            android:id="@+id/comment"
+                            style="@style/TweetCard.Header.Comment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_tiny"
+                            android:text="@string/text.label.comment"
+                            android:visibility="gone"/>
+
+                    </LinearLayout>
 
                     <TextView
                         android:id="@+id/time"
