@@ -238,7 +238,6 @@ public abstract class TimelineActivity extends AppCompatActivity {
 
     protected void onNoNewTweets(@StringRes int messageId) {
         Snackbar.make(coordinatorLayout, messageId, Snackbar.LENGTH_SHORT).show();
-        timeline.hasMoreTweetsFlag = Timeline.FLAG_NO_MORE;
     }
 
 
