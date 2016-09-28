@@ -35,6 +35,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
     private final static int ITEM_TYPE_TWEET = 0;
     private final static int ITEM_TYPE_COMPOSER = 1;
     private final static int ITEM_TYPE_LOAD_MORE = 99;
+    private final static int ITEM_TYPE_LIST_END = 100;
 
 
     private Context context;
@@ -98,6 +99,10 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.template_load_more, parent, false);
             return new LoadMoreViewHolder(view);
+        } else if (viewType == ITEM_TYPE_LIST_END) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.template_list_end, parent, false);
+            return new ListEndViewHolder(view);
         }
 
         return null;
@@ -112,6 +117,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
                 break;
             case ITEM_TYPE_LOAD_MORE:
                 bindLoadMoreViewHolder((LoadMoreViewHolder) holder);
+                break;
+            case ITEM_TYPE_LIST_END:
                 break;
             case ITEM_TYPE_TWEET:
             default:
@@ -232,8 +239,12 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
         boolean showLoadMore = (timeline.hasMoreTweetsFlag == Timeline.FLAG_HAS_MORE);
         if (showComposer && position == 0) {
             return ITEM_TYPE_COMPOSER;
-        } else if (showLoadMore && position == (getItemCount() - 1)) {
-            return ITEM_TYPE_LOAD_MORE;
+        } else if (position == (getItemCount() - 1)) {
+            if (showLoadMore) {
+                return ITEM_TYPE_LOAD_MORE;
+            } else {
+                return ITEM_TYPE_LIST_END;
+            }
         } else {
             return ITEM_TYPE_TWEET;
         }
@@ -242,8 +253,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
 
     @Override
     public int getItemCount() {
-        return (timeline.tweets.size() + (showComposer ? 1 : 0) +
-                ((timeline.hasMoreTweetsFlag == Timeline.FLAG_HAS_MORE) ? 1 : 0));
+        return (timeline.tweets.size() + (showComposer ? 1 : 0) + 1);
     }
 
 
@@ -301,6 +311,15 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.BaseVi
             super(itemView);
 
             ButterKnife.bind(this, itemView);
+        }
+
+    }
+
+
+    public class ListEndViewHolder extends BaseViewHolder {
+
+        public ListEndViewHolder(View itemView) {
+            super(itemView);
         }
 
     }
