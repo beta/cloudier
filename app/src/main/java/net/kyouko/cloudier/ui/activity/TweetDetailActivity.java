@@ -176,7 +176,7 @@ public class TweetDetailActivity extends AppCompatActivity implements
         adapter.add(getString(R.string.title_tab_comments), commentsFragment);
 
         retweetsFragment = new TweetListFragment();
-        Bundle retweetArgs = new Bundle();
+        final Bundle retweetArgs = new Bundle();
         retweetArgs.putSerializable("TIMELINE", retweetsTimeline);
         retweetArgs.putInt("TYPE", Tweet.TYPE_RETWEET);
         retweetsFragment.setArguments(retweetArgs);
@@ -185,6 +185,27 @@ public class TweetDetailActivity extends AppCompatActivity implements
         viewPager.setAdapter(adapter);
 
         tabLayout.setupWithViewPager(viewPager);
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+            }
+
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 0) {
+                    commentsFragment.scrollToTop();
+                } else if (tab.getPosition() == 1) {
+                    retweetsFragment.scrollToTop();
+                }
+            }
+        });
     }
 
 
