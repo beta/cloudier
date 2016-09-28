@@ -32,6 +32,7 @@ import net.kyouko.cloudier.event.LoadMoreTweetsEvent;
 import net.kyouko.cloudier.event.LoadMoreUsersEvent;
 import net.kyouko.cloudier.event.RetweetTweetEvent;
 import net.kyouko.cloudier.event.ShareTweetEvent;
+import net.kyouko.cloudier.event.ShowTweetMenuEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.event.ViewUserEvent;
@@ -45,6 +46,7 @@ import net.kyouko.cloudier.ui.fragment.UserListFragment;
 import net.kyouko.cloudier.util.AuthUtil;
 import net.kyouko.cloudier.util.ImageUtil;
 import net.kyouko.cloudier.util.RequestUtil;
+import net.kyouko.cloudier.util.TweetCardUtil;
 
 import java.util.ArrayList;
 
@@ -631,6 +633,12 @@ public class UserActivity extends AppCompatActivity {
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.text_pattern_tweet_link, event.tweetId));
         startActivity(Intent.createChooser(intent, getString(R.string.text_info_share_tweet)));
+    }
+
+
+    @Subscribe
+    public void onShowTweetMenu(ShowTweetMenuEvent event) {
+        TweetCardUtil.showTweetMenu(this, event.tweet);
     }
 
 }

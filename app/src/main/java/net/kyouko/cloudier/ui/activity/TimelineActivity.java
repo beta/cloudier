@@ -25,12 +25,14 @@ import net.kyouko.cloudier.event.CommentTweetEvent;
 import net.kyouko.cloudier.event.LoadMoreTweetsEvent;
 import net.kyouko.cloudier.event.RetweetTweetEvent;
 import net.kyouko.cloudier.event.ShareTweetEvent;
+import net.kyouko.cloudier.event.ShowTweetMenuEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.event.ViewUserEvent;
 import net.kyouko.cloudier.model.Timeline;
 import net.kyouko.cloudier.model.Tweet;
 import net.kyouko.cloudier.ui.adapter.TimelineAdapter;
+import net.kyouko.cloudier.util.TweetCardUtil;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -252,14 +254,14 @@ public abstract class TimelineActivity extends AppCompatActivity {
     }
 
 
-    public void viewImages(ViewImageEvent event) {
+    protected void viewImages(ViewImageEvent event) {
         new ImageViewer.Builder(this, (ArrayList<String>) event.imageUrls)
                 .setStartPosition(event.startPosition)
                 .show();
     }
 
 
-    public void commentOrRetweetTweet(CommentTweetEvent event) {
+    protected void commentOrRetweetTweet(CommentTweetEvent event) {
         Intent intent = new Intent(this, ComposerActivity.class);
 
         int requestCode;
@@ -288,11 +290,16 @@ public abstract class TimelineActivity extends AppCompatActivity {
     }
 
 
-    public void shareTweet(ShareTweetEvent event) {
+    protected void shareTweet(ShareTweetEvent event) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.text_pattern_tweet_link, event.tweetId));
         startActivity(Intent.createChooser(intent, getString(R.string.text_info_share_tweet)));
+    }
+
+
+    protected void showTweetMenu(ShowTweetMenuEvent event) {
+        TweetCardUtil.showTweetMenu(this, event.tweet);
     }
 
 

@@ -1,7 +1,12 @@
 package net.kyouko.cloudier.util;
 
+import android.app.Service;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
@@ -17,6 +22,7 @@ import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.event.CommentTweetEvent;
 import net.kyouko.cloudier.event.RetweetTweetEvent;
 import net.kyouko.cloudier.event.ShareTweetEvent;
+import net.kyouko.cloudier.event.ShowTweetMenuEvent;
 import net.kyouko.cloudier.event.ViewImageEvent;
 import net.kyouko.cloudier.event.ViewTweetEvent;
 import net.kyouko.cloudier.event.ViewUserEvent;
@@ -246,6 +252,13 @@ public class TweetCardUtil {
                     CloudierApplication.getBus().post(new ShareTweetEvent(tweet.id));
                 }
             });
+
+            menuButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CloudierApplication.getBus().post(new ShowTweetMenuEvent(tweet));
+                }
+            });
         }
 
 
@@ -341,6 +354,46 @@ public class TweetCardUtil {
         MiniCard card = new MiniCard(cardView);
         card.displayTweet(tweet, users, clickable);
         return card;
+    }
+
+
+    public static void showTweetMenu(final Context context, final SourceTweet tweet) {
+        List<CharSequence> selections = new ArrayList<>();
+        final List<Runnable> actions = new ArrayList<>();
+
+        selections.add(context.getString(R.string.title_action_copy_tweet));
+        actions.add(new Runnable() {
+            @Override
+            public void run() {
+                ClipboardManager clipboardManager =
+                        (ClipboardManager) context.getSystemService(Service.CLIPBOARD_SERVICE);
+                clipboardManager.setPrimaryClip(ClipData.newPlainText(
+                        context.getString(R.string.text_description_tweet), tweet.originalContent));
+                MessageUtil.showToast(context, context.getString(R.string.text_info_tweet_copied));
+            }
+        });
+
+        selections.add(context.getString(R.string.title_action_copy_tweet_link));
+        actions.add(new Runnable() {
+            @Override
+            public void run() {
+                ClipboardManager clipboardManager =
+                        (ClipboardManager) context.getSystemService(Service.CLIPBOARD_SERVICE);
+                clipboardManager.setPrimaryClip(ClipData.newPlainText(
+                        context.getString(R.string.text_description_tweet_link),
+                        context.getString(R.string.text_pattern_tweet_link, tweet.id)));
+                MessageUtil.showToast(context, context.getString(R.string.text_info_tweet_link_copied));
+            }
+        });
+
+        new AlertDialog.Builder(context)
+                .setItems(selections.toArray(new CharSequence[0]), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        actions.get(which).run();
+                    }
+                })
+                .show();
     }
 
 }
