@@ -94,12 +94,13 @@ public class TweetCardUtil {
         public void displayTweet(final SourceTweet tweet, final HashMap<String, String> users,
                                  boolean clickable) {
             if (clickable) {
-                wrapper.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
+                View.OnClickListener viewTweetListener = new View.OnClickListener() {
+                    @Override public void onClick(View v) {
                         CloudierApplication.getBus().post(new ViewTweetEvent(tweet, users));
                     }
-                });
+                };
+                wrapper.setOnClickListener(viewTweetListener);
+                content.setOnClickListener(viewTweetListener);
             }
 
             avatar.setImageURI(ImageUtil.getInstance(activity).parseImageUrl(tweet.avatarUrl));
