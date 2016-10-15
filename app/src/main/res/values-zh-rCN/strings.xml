@@ -42,6 +42,7 @@
     <string name="title.setting.image.source">图源</string>
     <string name="title.setting.image.quality">图片质量</string>
     <string name="title.setting.avatar.quality">头像质量</string>
+    <string name="title.setting.image.hosting_service">图床服务</string>
     <string name="title.setting.misc">杂项</string>
     <string name="title.setting.misc.use_chrome_custom_tabs">使用 Chrome Custom Tabs 打开链接</string>
     <string name="title.setting.about">关于</string>

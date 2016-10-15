@@ -27,6 +27,7 @@ public class PreferenceUtil {
     public final static String PREF_IMAGE_SOURCE = "image.source";
     public final static String PREF_IMAGE_QUALITY = "image.quality";
     public final static String PREF_AVATAR_QUALITY = "image.avatar.quality";
+    public final static String PREF_IMAGE_HOSTING_SERVICE = "image.hosting_service";
 
     public final static String PREF_MISC_USE_CHROME_CUSTOM_TABS = "misc.use_chrome_custom_tabs";
 

@@ -5,5 +5,5 @@ package net.kyouko.cloudier.model;
  *
  * @author beta
  */
-public class ImgurResponseModel extends ImageHostingResponse {
+public class ItorrResponseModel extends ImageHostingResponse {
 }

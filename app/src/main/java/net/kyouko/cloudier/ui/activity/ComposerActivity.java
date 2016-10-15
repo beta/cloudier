@@ -41,7 +41,7 @@ import com.squareup.picasso.Picasso;
 
 import net.kyouko.cloudier.R;
 import net.kyouko.cloudier.model.Account;
-import net.kyouko.cloudier.model.ImgurResponseModel;
+import net.kyouko.cloudier.model.ImageHostingResponse;
 import net.kyouko.cloudier.model.SourceTweet;
 import net.kyouko.cloudier.model.Tweet;
 import net.kyouko.cloudier.model.TweetResult;
@@ -51,6 +51,7 @@ import net.kyouko.cloudier.util.AuthUtil;
 import net.kyouko.cloudier.util.DateTimeUtil;
 import net.kyouko.cloudier.util.FileUtil;
 import net.kyouko.cloudier.util.ImageUtil;
+import net.kyouko.cloudier.util.PreferenceUtil;
 import net.kyouko.cloudier.util.RequestUtil;
 
 import java.io.File;
@@ -527,6 +528,9 @@ public class ComposerActivity extends AppCompatActivity {
             uploadImageView.delete.setVisibility(View.GONE);
         }
 
+        final String imageHostingService = PreferenceUtil.with(this)
+                .getString(PreferenceUtil.PREF_IMAGE_HOSTING_SERVICE);
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -580,13 +584,17 @@ public class ComposerActivity extends AppCompatActivity {
                                 .compressToFile(imageFile);
                         RequestBody imageBody = RequestBody.create(MediaType.parse("image/jpeg"),
                                 compressedImageFile);
-                        Call<ImgurResponseModel> uploadImageCall = RequestUtil.getImgurApiInstance()
-                                .uploadImage(imageBody);
+                        Call<ImageHostingResponse> uploadImageCall;
+                        if (imageHostingService.equals(ImageUtil.IMAGE_HOSTING_SERVICE_IMGUR)) {
+                            uploadImageCall = RequestUtil.getImgurApiInstance().uploadImage(imageBody);
+                        } else {
+                            uploadImageCall = RequestUtil.getItorrApiInstance().uploadImage(imageBody);
+                        }
 
                         try {
-                            Response<ImgurResponseModel> response = uploadImageCall.execute();
+                            Response<ImageHostingResponse> response = uploadImageCall.execute();
                             if (response.body() != null) {
-                                String imgurUrl = response.body().data.imageUrl;
+                                String imgurUrl = response.body().imageUrl;
 
                                 Call<UploadImageResult> uploadImageFromUrlCall =
                                         RequestUtil.getApiInstance().uploadImageFromUrl(

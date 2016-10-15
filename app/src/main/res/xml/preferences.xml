@@ -48,6 +48,15 @@
             android:summary="@string/text.setting.summary.current_value"
             android:title="@string/title.setting.avatar.quality"/>
 
+        <ListPreference
+            android:defaultValue="@string/settings_image_hosting_service_default"
+            android:dialogTitle="@string/title.setting.image.hosting_service"
+            android:entries="@array/settings_image_hosting_service_entries"
+            android:entryValues="@array/settings_image_hosting_service_values"
+            android:key="image.hosting_service"
+            android:summary="@string/text.setting.summary.current_value"
+            android:title="@string/title.setting.image.hosting_service"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory

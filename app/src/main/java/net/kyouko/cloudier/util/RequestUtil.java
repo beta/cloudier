@@ -8,10 +8,13 @@ import com.google.gson.GsonBuilder;
 import net.kyouko.cloudier.Config;
 import net.kyouko.cloudier.api.BooleanConverter;
 import net.kyouko.cloudier.api.CustomConverterFactory;
+import net.kyouko.cloudier.api.ImageUrlConverter;
 import net.kyouko.cloudier.api.ImgurApi;
+import net.kyouko.cloudier.api.ItorrApi;
 import net.kyouko.cloudier.api.MapDeserializer;
 import net.kyouko.cloudier.api.TencentWeiboApi;
 import net.kyouko.cloudier.model.Account;
+import net.kyouko.cloudier.model.ImageHostingResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,6 +32,7 @@ public class RequestUtil {
 
     private static TencentWeiboApi apiInstance;
     private static ImgurApi imgurApiInstance;
+    private static ItorrApi itorrApiInstance;
 
     private static Map<String, String> constantParams;
     private static Map<String, String> oAuthParams;
@@ -123,6 +127,24 @@ public class RequestUtil {
     }
 
 
+    /**
+     * Returns an instance of {@link ItorrApi} for performing API requests.
+     *
+     * @return an instance of {@link ItorrApi} for performing API requests.
+     */
+    public static ItorrApi getItorrApiInstance() {
+        if (itorrApiInstance == null) {
+            synchronized (RequestUtil.class) {
+                if (itorrApiInstance == null) {
+                    itorrApiInstance = createItorrApiInstance();
+                }
+            }
+        }
+
+        return itorrApiInstance;
+    }
+
+
     private static TencentWeiboApi createApiInstance() {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(boolean.class, new BooleanConverter())
@@ -141,12 +163,30 @@ public class RequestUtil {
 
 
     private static ImgurApi createImgurApiInstance() {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(ImageHostingResponse.class, new ImageUrlConverter())
+                .create();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.imgur.com/")
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
 
         return retrofit.create(ImgurApi.class);
+    }
+
+
+    private static ItorrApi createItorrApiInstance() {
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapter(ImageHostingResponse.class, new ImageUrlConverter())
+                .create();
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://x.mouto.org/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        return retrofit.create(ItorrApi.class);
     }
 
 }

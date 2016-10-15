@@ -1,7 +1,7 @@
 package net.kyouko.cloudier.api;
 
 import net.kyouko.cloudier.Config;
-import net.kyouko.cloudier.model.ImgurResponseModel;
+import net.kyouko.cloudier.model.ImageHostingResponse;
 
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -18,6 +18,6 @@ public interface ImgurApi {
     @POST("3/image")
     @Multipart
     @Headers("Authorization: Client-ID " + Config.IMGUR_CLIENT_ID)
-    Call<ImgurResponseModel> uploadImage(@Part("image") RequestBody image);
+    Call<ImageHostingResponse> uploadImage(@Part("image") RequestBody image);
 
 }

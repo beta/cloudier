@@ -24,6 +24,9 @@ public class ImageUtil {
     public final static String AVATAR_QUALITY_HIGH = "180";
     public final static String AVATAR_QUALITY_ORIGINAL = "0";
 
+    public final static String IMAGE_HOSTING_SERVICE_ITORR = "ITORR";
+    public final static String IMAGE_HOSTING_SERVICE_IMGUR = "IMGUR";
+
 
     private static ImageUtil instance;
 

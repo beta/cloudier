@@ -42,6 +42,7 @@
     <string name="title.setting.image.source">Image source</string>
     <string name="title.setting.image.quality">Image quality</string>
     <string name="title.setting.avatar.quality">Avatar quality</string>
+    <string name="title.setting.image.hosting_service">Image hosting service</string>
     <string name="title.setting.misc">Misc</string>
     <string name="title.setting.misc.use_chrome_custom_tabs">Open links in Chrome Custom Tabs</string>
     <string name="title.setting.about">About</string>

@@ -13,4 +13,9 @@
         <item>高质量</item>
     </string-array>
 
+    <string-array name="settings_image_hosting_service_entries">
+        <item>偷揉图床</item>
+        <item>Imgur</item>
+    </string-array>
+
 </resources>
