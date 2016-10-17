@@ -91,6 +91,9 @@
     <string name="text.error.failed_to_follow_user">收听失败</string>
     <string name="text.error.failed_to_unfollow_user">取消收听失败</string>
     <string name="text.error.failed_to_delete_tweet">删除失败</string>
+    <string name="text.error.failed_to_read_image_file">无法读取图片文件</string>
+    <string name="text.error.failed_to_upload_image_to_hosting_service">无法将图片上传到图床</string>
+    <string name="text.error.failed_to_upload_image_to_tencent_weibo">无法将图片上传到腾讯微博</string>
 
     <string name="text.hint.composer_content">有什么新鲜事？</string>
     <string name="text.hint.composer_content.comment">说点什么吧。</string>

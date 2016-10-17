@@ -94,6 +94,9 @@
     <string name="text.error.failed_to_follow_user">Failed to follow user</string>
     <string name="text.error.failed_to_unfollow_user">Failed to unfollow user</string>
     <string name="text.error.failed_to_delete_tweet">Failed to delete tweet</string>
+    <string name="text.error.failed_to_read_image_file">Failed to read image file</string>
+    <string name="text.error.failed_to_upload_image_to_hosting_service">Failed to upload image to the image hosting service</string>
+    <string name="text.error.failed_to_upload_image_to_tencent_weibo">Failed to upload image to Tencent Weibo</string>
 
     <string name="text.hint.composer_content">What\'s happening?</string>
     <string name="text.hint.composer_content.comment">What do you think?</string>

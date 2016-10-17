@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -583,7 +584,15 @@ public class ComposerActivity extends AppCompatActivity {
                         }
 
                         if (imageFile == null) {
-                            continue;
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onFailedToUploadImages(
+                                            R.string.text_error_failed_to_read_image_file,
+                                            isRetweet);
+                                }
+                            });
+                            return;
                         }
 
                         File compressedImageFile = new Compressor.Builder(ComposerActivity.this)
@@ -602,17 +611,30 @@ public class ComposerActivity extends AppCompatActivity {
                             uploadImageCall = RequestUtil.getItorrApiInstance().uploadImage(imageBody);
                         }
 
+                        Response<ImageHostingResponse> response;
                         try {
-                            Response<ImageHostingResponse> response = uploadImageCall.execute();
-                            if (response.body() != null) {
-                                String imgurUrl = response.body().imageUrl;
+                            response = uploadImageCall.execute();
+                        } catch (IOException e) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    onFailedToUploadImages(
+                                            R.string.text_error_failed_to_upload_image_to_hosting_service,
+                                            isRetweet);
+                                }
+                            });
+                            return;
+                        }
+                        if (response.body() != null) {
+                            String imgurUrl = response.body().imageUrl;
 
-                                Call<UploadImageResult> uploadImageFromUrlCall =
-                                        RequestUtil.getApiInstance().uploadImageFromUrl(
-                                                RequestUtil.getConstantParams(),
-                                                RequestUtil.getOAuthParams(ComposerActivity.this),
-                                                imgurUrl
-                                        );
+                            Call<UploadImageResult> uploadImageFromUrlCall =
+                                    RequestUtil.getApiInstance().uploadImageFromUrl(
+                                            RequestUtil.getConstantParams(),
+                                            RequestUtil.getOAuthParams(ComposerActivity.this),
+                                            imgurUrl
+                                    );
+                            try {
                                 Response<UploadImageResult> uploadResponse =
                                         uploadImageFromUrlCall.execute();
                                 if (uploadResponse.body() != null) {
@@ -629,25 +651,30 @@ public class ComposerActivity extends AppCompatActivity {
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            onFailedToUploadImages(isRetweet);
+                                            onFailedToUploadImages(
+                                                    R.string.text_error_failed_to_upload_image_to_tencent_weibo,
+                                                    isRetweet);
                                         }
                                     });
                                     return;
                                 }
-                            } else {
+                            } catch (IOException e) {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        onFailedToUploadImages(isRetweet);
+                                        onFailedToUploadImages(
+                                                R.string.text_error_failed_to_upload_image_to_tencent_weibo,
+                                                isRetweet);
                                     }
                                 });
-                                return;
                             }
-                        } catch (IOException e) {
+                        } else {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    onFailedToUploadImages(isRetweet);
+                                    onFailedToUploadImages(
+                                            R.string.text_error_failed_to_upload_image_to_hosting_service,
+                                            isRetweet);
                                 }
                             });
                             return;
@@ -664,11 +691,15 @@ public class ComposerActivity extends AppCompatActivity {
     }
 
 
-    private void onFailedToUploadImages(final boolean isRetweet) {
+    private void onFailedToUploadImages(@StringRes int messageResId, final boolean isRetweet) {
+        onFailedToUploadImages(getString(messageResId), isRetweet);
+    }
+
+
+    private void onFailedToUploadImages(String message, final boolean isRetweet) {
         content.setEnabled(true);
 
-        Snackbar.make(coordinatorLayout, R.string.text_error_failed_to_upload_images,
-                Snackbar.LENGTH_SHORT)
+        Snackbar.make(coordinatorLayout, message, Snackbar.LENGTH_LONG)
                 .setAction(R.string.title_action_retry,
                         new View.OnClickListener() {
                             @Override
