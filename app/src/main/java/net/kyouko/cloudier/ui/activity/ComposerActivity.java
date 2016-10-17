@@ -499,6 +499,7 @@ public class ComposerActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_PICKER && resultCode == RESULT_OK && data != null) {
+            imageUrls.clear();
             ArrayList<Image> selectedImages =
                     data.getParcelableArrayListExtra(ImagePickerActivity.INTENT_EXTRA_SELECTED_IMAGES);
             if (selectedImages.size() == 1) {
@@ -522,8 +523,6 @@ public class ComposerActivity extends AppCompatActivity {
 
 
     private void uploadImages(final boolean isRetweet) {
-        imageUrls.clear();
-
         for (UploadImageView uploadImageView : uploadImageViews) {
             uploadImageView.delete.setVisibility(View.GONE);
         }
@@ -539,6 +538,18 @@ public class ComposerActivity extends AppCompatActivity {
                         Uri imageUri = imageUris.get(i);
 
                         final UploadImageView uploadImageView = uploadImageViews.get(i);
+
+                        if (imageUrls.size() - 1 >= i) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    uploadImageView.progress.setVisibility(View.GONE);
+                                    uploadImageView.success.setVisibility(View.VISIBLE);
+                                }
+                            });
+                            continue;
+                        }
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
