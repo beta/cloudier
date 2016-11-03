@@ -9,8 +9,8 @@ android {
         applicationId "net.kyouko.cloudier"
         minSdkVersion 21
         targetSdkVersion 24
-        versionCode 0
-        versionName "0.0.16"
+        versionCode 1
+        versionName "1.0.0"
     }
 
     buildTypes {
