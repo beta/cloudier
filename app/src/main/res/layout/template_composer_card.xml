@@ -157,27 +157,11 @@
             </FrameLayout>
 
             <FrameLayout
-                android:id="@+id/button_add_friend"
-                style="@style/TweetCard.Actions.Action"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="@dimen/spacing_small"
-                android:layout_toEndOf="@+id/button_add_image">
-
-                <ImageView
-                    style="@style/TweetCard.Actions.Action.Icon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_person_black_54alpha_24dp"/>
-
-            </FrameLayout>
-
-            <FrameLayout
                 android:id="@+id/button_add_topic"
                 style="@style/TweetCard.Actions.Action"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_toEndOf="@+id/button_add_friend">
+                android:layout_toEndOf="@+id/button_add_image">
 
                 <ImageView
                     style="@style/TweetCard.Actions.Action.Icon"
