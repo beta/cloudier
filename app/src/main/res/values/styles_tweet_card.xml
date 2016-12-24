@@ -60,6 +60,7 @@
         <item name="android:layout_marginStart">@dimen/spacing_normal</item>
         <item name="android:layout_marginEnd">@dimen/spacing_normal</item>
         <item name="android:textAppearance">@style/PrimaryText</item>
+        <item name="android:lineSpacingExtra">@dimen/spacing_minimum</item>
     </style>
 
     <style name="TweetCard.Content.Mini" parent="">
@@ -73,6 +74,7 @@
         <item name="android:layout_marginEnd">@dimen/spacing_normal</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:textAppearance">@style/PrimaryText</item>
+        <item name="android:lineSpacingExtra">@dimen/spacing_minimum</item>
         <item name="android:gravity">top|start</item>
         <item name="android:hint">@string/text.hint.composer_content</item>
     </style>
@@ -131,6 +133,7 @@
         <item name="android:layout_marginStart">@dimen/spacing_normal</item>
         <item name="android:layout_marginEnd">@dimen/spacing_normal</item>
         <item name="android:textAppearance">@style/PrimaryText</item>
+        <item name="android:lineSpacingExtra">@dimen/spacing_minimum</item>
     </style>
 
     <style name="TweetCard.Source.Image" parent="TweetCard.Image">
