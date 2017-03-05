@@ -3,7 +3,6 @@
 
     <style name="PrimaryText" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/black_87alpha</item>
-        <item name="android:textSize">15sp</item>
     </style>
 
     <style name="PrimaryTitle" parent="PrimaryText">
