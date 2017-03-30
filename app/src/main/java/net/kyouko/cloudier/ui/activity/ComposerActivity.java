@@ -152,6 +152,10 @@ public class ComposerActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
+        if (!AuthUtil.hasAuthorized(this)) {
+            AuthUtil.startAuth(this);
+        }
+
         fetchComposerType();
 
         initView();
