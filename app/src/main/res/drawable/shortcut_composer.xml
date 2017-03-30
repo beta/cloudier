@@ -5,17 +5,17 @@
     <item>
         <shape android:shape="oval">
             <size
-                android:width="24dp"
-                android:height="24dp"/>
-            <solid android:color="@color/light_blue_500"/>
+                android:width="44dp"
+                android:height="44dp"/>
+            <solid android:color="@color/grey_100"/>
         </shape>
     </item>
 
     <item
-        android:drawable="@drawable/ic_create_white_24dp"
-        android:top="8dp"
-        android:bottom="8dp"
-        android:left="8dp"
-        android:right="8dp"/>
+        android:drawable="@drawable/ic_create_light_blue_500_24dp"
+        android:top="14dp"
+        android:bottom="14dp"
+        android:left="14dp"
+        android:right="14dp"/>
 
 </layer-list>
