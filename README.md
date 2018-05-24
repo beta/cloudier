@@ -1,9 +1,3 @@
-## 停止更新
-
-自 2017 年 10 月 26 日开始，腾讯微博的 OAuth 2.0 服务已经基本不可用，无法正常完成用户授权，因此 Cloudier 将停止维护和更新。在此向所有使用 Cloudier 以及帮助我测试和反馈的朋友们表示感谢。
-
-- - -
-
 # <img src="http://i.imgur.com/O20n2Xs.png" width="32px" height="32px"/> Cloudier
 
 [![Gitter](https://badges.gitter.im/betakuang/cloudier.svg)](https://gitter.im/betakuang/cloudier?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Telegram Group](https://img.shields.io/badge/chat-in%20Telegram-03A9F4.svg)](https://telegram.me/cloudier)
