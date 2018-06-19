@@ -16,10 +16,15 @@ import net.kyouko.cloudier.api.TencentWeiboApi;
 import net.kyouko.cloudier.model.Account;
 import net.kyouko.cloudier.model.ImageHostingResponse;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.RequestBody;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -152,8 +157,21 @@ public class RequestUtil {
                 .registerTypeAdapter(Map.class, new MapDeserializer())
                 .create();
 
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new Interceptor() {
+                    @Override
+                    public Response intercept(Chain chain) throws IOException {
+                        Request request = chain.request().newBuilder()
+                                .header("Accept", Config.HTTP_ACCEPT)
+                                .build();
+                        return chain.proceed(request);
+                    }
+                })
+                .build();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://open.t.qq.com/")
+                .client(client)
                 .addConverterFactory(CustomConverterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();

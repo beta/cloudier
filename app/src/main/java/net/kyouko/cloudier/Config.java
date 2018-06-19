@@ -12,4 +12,7 @@ public class Config {
 
     public final static String IMGUR_CLIENT_ID = "c86073c171c3fca";
 
+    public final static String HTTP_ACCEPT = "text/html,application/xhtml+xml,application/xml;" +
+            "q=0.9,image/webp,image/apng,*/*;q=0.8";
+
 }
