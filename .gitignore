@@ -1,0 +1,16 @@
+# Editor configs.
+.vscode/
+.idea/
+
+# Dart, Pub and Flutter.
+.pub/
+.packages
+packages
+.flutter-plugins
+
+# Binary.
+build/
+ios/.generated/
+
+# macOS.
+.DS_Store
